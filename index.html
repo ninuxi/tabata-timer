@@ -158,44 +158,18 @@
             100% { transform: scale(1); }
         }
         .music-container {
-            margin: 20px 0;
-            padding: 20px;
-            background: #000000;
-            border: 3px solid #00ff00;
-            border-radius: 15px;
-        }
-        .music-title {
+            margin-top: 30px;
             text-align: center;
+        }
+        .music-container a {
             color: #ffd700;
-            font-size: 1.1rem;
-            font-weight: 900;
-            margin-bottom: 15px;
-            text-transform: uppercase;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 0 8px;
+            transition: color 0.3s ease;
         }
-        .music-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-        }
-        #spotifyBtn {
-            background: #1db954;
-            color: #000000;
-            border: 2px solid #ffff00;
-        }
-        #appleBtn {
-            background: #ff6b35;
-            color: #000000;
-            border: 2px solid #ffff00;
-        }
-        #youtubeBtn {
-            background: #ff0000;
-            color: #ffffff;
-            border: 2px solid #ffff00;
-        }
-        #tidalBtn {
-            background: #00d4ff;
-            color: #000000;
-            border: 2px solid #ffff00;
+        .music-container a:hover {
+            color: #00ff00;
         }
         @media (max-width: 480px) {
             body {
@@ -295,23 +269,16 @@
             <button type="button" id="importPresetBtn">⬆️ Importa</button>
         </div>
 
-        <!-- Playlist Musicali -->
-        <div class="music-container">
-            <div class="music-title">🎵 PLAYLIST ALLENAMENTO</div>
-            <div class="music-buttons">
-                <button type="button" id="spotifyBtn">🟢 Spotify</button>
-                <button type="button" id="appleBtn">🎵 Apple</button>
-                <button type="button" id="youtubeBtn">📺 YouTube</button>
-                <button type="button" id="tidalBtn">🌊 Tidal</button>
-            </div>
-        </div>
-
-        <div id="round">Round: 1/8</div>
-        <div id="status">PREMERE AVVIA</div>
-        <div id="timer" class="work">--</div>
-
         <button id="startBtn">▶️ AVVIA TIMER</button>
         <button id="stopBtn">⏹️ STOP</button>
+
+        <!-- Playlist Musicali -->
+        <div class="music-container">
+            <a href="https://open.spotify.com/search/workout%20playlist" target="_blank">Spotify</a> |
+            <a href="https://music.apple.com/search?term=workout" target="_blank">Apple Music</a> |
+            <a href="https://www.youtube.com/results?search_query=workout+music+playlist" target="_blank">YouTube</a> |
+            <a href="https://tidal.com/browse/search?q=workout" target="_blank">Tidal</a>
+        </div>
     </div>
 
     <script>
@@ -530,23 +497,6 @@
             statusDisplay.textContent = "⏹️ FERMATO";
             if (speechSynth) speechSynth.cancel();
         }
-
-        // Funzionalità playlist musicali
-        document.getElementById('spotifyBtn').addEventListener('click', function() {
-            window.open('https://open.spotify.com/search/workout%20playlist', '_blank');
-        });
-        
-        document.getElementById('appleBtn').addEventListener('click', function() {
-            window.open('https://music.apple.com/search?term=workout', '_blank');
-        });
-        
-        document.getElementById('youtubeBtn').addEventListener('click', function() {
-            window.open('https://www.youtube.com/results?search_query=workout+music+playlist', '_blank');
-        });
-        
-        document.getElementById('tidalBtn').addEventListener('click', function() {
-            window.open('https://tidal.com/browse/search?q=workout', '_blank');
-        });
     </script>
 </body>
 </html>
