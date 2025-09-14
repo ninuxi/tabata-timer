@@ -223,20 +223,6 @@
                 min-width: unset;
             }
         }
-        #round, #status {
-            font-size: 1.3rem;
-            margin: 15px 0;
-            font-weight: 500;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .work { 
-            color: #ff6b6b; 
-            text-shadow: 0 4px 20px rgba(255,107,107,0.4);
-        }
-        .rest { 
-            color: #4ecdc4; 
-            text-shadow: 0 4px 20px rgba(78,205,196,0.4);
-        }
     </style>
 </head>
 <body>
@@ -268,6 +254,10 @@
             <input type="file" id="importPresetInput" accept="application/json" style="display:none">
             <button type="button" id="importPresetBtn">⬆️ Importa</button>
         </div>
+
+        <div id="round">Round: 1/8</div>
+        <div id="status">PREMERE AVVIA</div>
+        <div id="timer">--</div>
 
         <button id="startBtn">▶️ AVVIA TIMER</button>
         <button id="stopBtn">⏹️ STOP</button>
