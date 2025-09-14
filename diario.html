@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Diario Progressi Tabata</title>
+<style>
+ :root { --bg:#0b0b0b; --panel:#141414; --accent:#00ff00; --accent2:#ff6b35; --accent3:#ffd700; --text:#f8f8f8; }
+ * { box-sizing:border-box; }
+ body { margin:0; font-family:Arial, sans-serif; background:var(--bg); color:var(--text); padding:20px 16px 90px; }
+ h1 { font-family:'Impact','Bebas Neue','Oswald',sans-serif; letter-spacing:2px; font-size:1.9rem; margin:10px 0 4px; color:var(--accent3); text-align:center; }
+ p.subtitle { text-align:center; font-size:0.8rem; color:#aaa; margin:0 0 20px; }
+ .board { max-width:1100px; margin:0 auto; }
+ table { width:100%; border-collapse:collapse; font-size:0.7rem; background:var(--panel); border:2px solid var(--accent); }
+ th, td { border:1px solid #222; padding:6px 5px; text-align:left; }
+ th { background:#111; font-weight:600; font-size:0.65rem; letter-spacing:1px; color:var(--accent3); position:sticky; top:0; }
+ td input, td textarea { width:100%; background:#000; color:var(--text); border:1px solid #333; padding:3px 4px; font-size:0.65rem; font-family:inherit; resize:vertical; }
+ td input:focus, td textarea:focus { outline:1px solid var(--accent); }
+ .controls { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 18px; }
+ button, a.btn { background:var(--accent3); color:#000; font-weight:800; font-family:'Impact','Bebas Neue','Oswald',sans-serif; border:2px solid var(--accent); padding:10px 18px; border-radius:40px; cursor:pointer; font-size:0.7rem; letter-spacing:1px; text-decoration:none; }
+ button:hover, a.btn:hover { background:var(--accent); }
+ .footer-note { font-size:0.55rem; color:#777; margin-top:25px; text-align:center; }
+ .flex-between { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center; }
+ .mini { font-size:0.55rem; color:#888; }
+ .sticky-tools { position:fixed; left:0; right:0; bottom:0; background:#000; border-top:2px solid var(--accent); padding:10px 14px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+ @media (max-width:650px){ th, td { font-size:0.6rem; } button, a.btn { font-size:0.6rem; } }
+ @media print { .sticky-tools, .controls, .no-print { display:none !important; } body { padding:0; } table { border:1px solid #000; } td input, td textarea { border:none; background:#fff; color:#000; } th { color:#000; background:#eee; } }
+</style>
+</head>
+<body>
+    <h1>DIARIO PROGRESSI</h1>
+    <p class="subtitle">Monitora percezione, energia e note sulle sessioni – Salvataggio locale automatico</p>
+    <div class="board">
+        <div class="controls">
+            <button id="addRowBtn">➕ Aggiungi Riga</button>
+            <button id="resetBtn">♻️ Svuota Diario</button>
+            <button id="exportCsvBtn">⬇️ Esporta CSV</button>
+            <button id="importBtn">⬆️ Importa JSON</button>
+            <input type="file" id="importFile" accept="application/json" style="display:none" />
+            <button id="printBtn">🖨️ Stampa</button>
+            <a class="btn" href="index.html">⏱️ Timer</a>
+            <a class="btn" href="programma.html">📄 Programma</a>
+        </div>
+        <div class="flex-between mini">
+            <div><strong>Consiglio:</strong> compila subito dopo la sessione per dati più accurati.</div>
+            <div>RPE = intensità percepita (1 facile – 10 massimo)</div>
+        </div>
+        <table id="logTable">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Settimana</th>
+                    <th>Sessione</th>
+                    <th>Focus</th>
+                    <th>Esercizio più difficile</th>
+                    <th>RPE</th>
+                    <th>Energia (1-5)</th>
+                    <th>Note tecniche</th>
+                    <th>Progressi / Adattamenti</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        <div class="footer-note">Dati salvati solo nel tuo browser (localStorage). Esporta periodicamente per backup.</div>
+    </div>
+
+    <div class="sticky-tools no-print">
+        <button id="quickTodayBtn">📅 Oggi in riga selezionata</button>
+        <button id="duplicateRowBtn">🧬 Duplica Riga</button>
+        <button id="deleteRowBtn">🗑️ Elimina Riga</button>
+    </div>
+
+<script>
+const STORAGE_KEY = 'tabataDiarioV1';
+let selectedRowIndex = null;
+
+const tableBody = document.getElementById('tableBody');
+const addRowBtn = document.getElementById('addRowBtn');
+const resetBtn = document.getElementById('resetBtn');
+const exportCsvBtn = document.getElementById('exportCsvBtn');
+const importBtn = document.getElementById('importBtn');
+const importFile = document.getElementById('importFile');
+const printBtn = document.getElementById('printBtn');
+const quickTodayBtn = document.getElementById('quickTodayBtn');
+const duplicateRowBtn = document.getElementById('duplicateRowBtn');
+const deleteRowBtn = document.getElementById('deleteRowBtn');
+
+function loadData(){
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw){ addEmptyRow(); return; }
+    try {
+        const rows = JSON.parse(raw);
+        rows.forEach(r => addRow(r));
+    } catch(e){
+        console.warn('Dati corrotti, reset.');
+        addEmptyRow();
+    }
+}
+
+function saveData(){
+    const data = [...tableBody.querySelectorAll('tr')].map(tr => {
+        const inputs = tr.querySelectorAll('input, textarea');
+        return {
+            data: inputs[0].value.trim(),
+            settimana: inputs[1].value.trim(),
+            sessione: inputs[2].value.trim(),
+            focus: inputs[3].value.trim(),
+            difficile: inputs[4].value.trim(),
+            rpe: inputs[5].value.trim(),
+            energia: inputs[6].value.trim(),
+            note: inputs[7].value.trim(),
+            progressi: inputs[8].value.trim()
+        };
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function addRow(prefill={}){
+    const tr = document.createElement('tr');
+    tr.innerHTML = [
+        `<input type="date" value="${prefill.data||''}">`,
+        `<input type="text" placeholder="1" value="${prefill.settimana||''}">`,
+        `<input type="text" placeholder="1" value="${prefill.sessione||''}">`,
+        `<input type="text" placeholder="Upper/Core" value="${prefill.focus||''}">`,
+        `<input type="text" placeholder="—" value="${prefill.difficile||''}">`,
+        `<input type="number" min="1" max="10" placeholder="7" value="${prefill.rpe||''}">`,
+        `<input type="number" min="1" max="5" placeholder="4" value="${prefill.energia||''}">`,
+        `<textarea rows="1" placeholder="Note tecnica...">${prefill.note||''}</textarea>`,
+        `<textarea rows="1" placeholder="Progressi...">${prefill.progressi||''}</textarea>`
+    ].map(c=>`<td>${c}</td>`).join('');
+
+    tr.addEventListener('click', () => {
+        [...tableBody.querySelectorAll('tr')].forEach(r=>r.classList.remove('selected'));
+        tr.classList.add('selected');
+        selectedRowIndex = [...tableBody.children].indexOf(tr);
+    });
+
+    tableBody.appendChild(tr);
+}
+
+function addEmptyRow(){ addRow({}); }
+
+addRowBtn.addEventListener('click', () => { addEmptyRow(); saveData(); });
+resetBtn.addEventListener('click', () => {
+    if(confirm('Sicuro di cancellare tutto il diario?')){
+        localStorage.removeItem(STORAGE_KEY);
+        tableBody.innerHTML='';
+        addEmptyRow();
+    }
+});
+
+exportCsvBtn.addEventListener('click', () => {
+    const headers = ['Data','Settimana','Sessione','Focus','Esercizio_difficile','RPE','Energia','Note','Progressi'];
+    const rows = [...tableBody.querySelectorAll('tr')].map(tr => {
+        return [...tr.querySelectorAll('input, textarea')].map(el => '"'+(el.value.replace(/"/g,'""'))+'"').join(',');
+    });
+    const csv = [headers.join(',')].concat(rows).join('\n');
+    const blob = new Blob([csv], {type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download='diario_tabata.csv'; a.click();
+    URL.revokeObjectURL(url);
+});
+
+importBtn.addEventListener('click', () => importFile.click());
+importFile.addEventListener('change', e => {
+    const file = e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+        try {
+            const data = JSON.parse(ev.target.result);
+            if(!Array.isArray(data)) throw new Error('Formato non valido');
+            tableBody.innerHTML='';
+            data.forEach(r => addRow(r));
+            saveData();
+        } catch(err){
+            alert('File JSON non valido');
+        }
+    };
+    reader.readAsText(file);
+});
+
+printBtn.addEventListener('click', () => window.print());
+
+quickTodayBtn.addEventListener('click', () => {
+    if(selectedRowIndex===null){ alert('Seleziona una riga prima.'); return; }
+    const tr = tableBody.children[selectedRowIndex];
+    const dateInput = tr.querySelector('input[type="date"]');
+    const today = new Date();
+    const iso = today.toISOString().slice(0,10);
+    dateInput.value = iso;
+    saveData();
+});
+
+duplicateRowBtn.addEventListener('click', () => {
+    if(selectedRowIndex===null){ alert('Seleziona una riga da duplicare.'); return; }
+    const tr = tableBody.children[selectedRowIndex];
+    const inputs = tr.querySelectorAll('input, textarea');
+    const cloneData = {
+        data: inputs[0].value,
+        settimana: inputs[1].value,
+        sessione: inputs[2].value,
+        focus: inputs[3].value,
+        difficile: inputs[4].value,
+        rpe: inputs[5].value,
+        energia: inputs[6].value,
+        note: inputs[7].value,
+        progressi: inputs[8].value
+    };
+    addRow(cloneData);
+    saveData();
+});
+
+deleteRowBtn.addEventListener('click', () => {
+    if(selectedRowIndex===null){ alert('Seleziona una riga da eliminare.'); return; }
+    if(!confirm('Eliminare la riga selezionata?')) return;
+    tableBody.removeChild(tableBody.children[selectedRowIndex]);
+    selectedRowIndex = null;
+    saveData();
+});
+
+// Autosave al cambiamento
+ tableBody.addEventListener('input', () => saveData());
+
+loadData();
+</script>
+</body>
+</html>

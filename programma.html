@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Programma Tabata Calisthenics</title>
+<style>
+    :root {
+        --bg:#0a0a0a; --panel:#111; --accent:#00ff00; --accent2:#ff6b35; --accent3:#ffd700; --text:#fdfdfd; --muted:#888;
+        --font-heading:'Impact','Bebas Neue','Oswald',sans-serif; --font-body: 'Arial','Helvetica',sans-serif;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:var(--font-body); background:var(--bg); color:var(--text); line-height:1.4; padding:0 0 80px; }
+    header { padding:25px 18px 10px; text-align:center; }
+    header h1 { margin:0 0 8px; font-family:var(--font-heading); font-size:2rem; letter-spacing:2px; color:var(--accent3); }
+    header .subtitle { font-size:0.95rem; color:var(--accent3); font-weight:600; }
+    header .meta { margin-top:10px; font-size:0.8rem; color:var(--muted); }
+    .wrapper { max-width:900px; margin:0 auto; padding:0 18px; }
+    .notice { background:#181818; border:2px solid var(--accent); padding:12px 14px; border-radius:14px; font-size:0.9rem; margin:15px 0 30px; }
+
+    .session { margin:45px 0 55px; position:relative; }
+    .session h2 { margin:0 0 10px; font-family:var(--font-heading); font-size:1.6rem; letter-spacing:1px; color:var(--accent); }
+    .session .tagline { font-size:0.85rem; text-transform:uppercase; color:var(--accent3); font-weight:700; letter-spacing:1px; margin-bottom:14px; }
+
+    .block { background:#141414; border:2px solid #222; padding:18px 18px 12px; border-radius:18px; margin:25px 0; }
+    .block h3 { margin:0 0 12px; font-size:1.05rem; letter-spacing:1px; font-family:var(--font-heading); color:var(--accent2); }
+    .block ul { list-style:none; padding:0; margin:0; }
+    .block ul li { padding:6px 4px 6px 4px; border-bottom:1px solid #222; font-size:0.9rem; line-height:1.35; }
+    .block ul li:last-child { border-bottom:none; }
+    .block ul li strong { color:var(--accent3); }
+
+    .tabata-grid { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin-top:10px; }
+    .exercise { background:#181818; border:1px solid #262626; padding:12px 12px 10px; border-radius:14px; font-size:0.8rem; display:flex; flex-direction:column; gap:6px; }
+    .exercise h4 { margin:0; font-size:0.9rem; font-family:var(--font-heading); color:var(--accent); letter-spacing:1px; }
+    .exercise .desc { font-size:0.7rem; color:var(--muted); line-height:1.25; }
+    .image-slot { border:1px dashed #333; border-radius:8px; min-height:70px; display:flex; align-items:center; justify-content:center; font-size:0.65rem; color:#555; font-style:italic; }
+
+    .tools { position:fixed; bottom:0; left:0; right:0; background:#000; border-top:2px solid var(--accent); padding:10px 14px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+    .tools button, .tools a { background:var(--accent3); color:#000; font-weight:800; font-family:var(--font-heading); border:2px solid var(--accent); padding:10px 18px; border-radius:40px; cursor:pointer; font-size:0.8rem; letter-spacing:1px; text-decoration:none; }
+    .tools button:hover, .tools a:hover { background:var(--accent); }
+
+    .print-note { font-size:0.65rem; color:var(--muted); margin-top:4px; text-align:center; }
+
+    footer { text-align:center; font-size:0.65rem; color:#666; margin:40px 0 120px; }
+
+    @media (max-width:600px){
+        header h1 { font-size:1.55rem; }
+        .tabata-grid { grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); }
+    }
+
+    /* Stampa */
+    @media print {
+        body { background:#fff; color:#000; font-family:Arial, sans-serif; }
+        header, .tools { position:static; background:#fff; border:none; }
+        .tools { display:none !important; }
+        .block, .exercise { background:#fff; border:1px solid #ccc; }
+        .image-slot { color:#999; }
+        a { color:#000; text-decoration:none; }
+        footer { margin:30px 0 0; }
+        .session { page-break-inside:avoid; }
+    }
+</style>
+</head>
+<body>
+    <header>
+        <h1>PROGRAMMA TABATA CALISTHENICS</h1>
+        <div class="subtitle">30 minuti x 4 volte a settimana • Over 45 friendly</div>
+        <div class="meta">Attrezzi: elastici vari • 2 pesetti da 2 kg • Obiettivo: forza funzionale, postura, tonicità</div>
+        <div class="notice">Formato: Tabata 20" lavoro / 10" recupero • 8 round = 4 minuti a blocco • Ripeti il blocco 5 volte = 20' di lavoro attivo (+ riscaldamento e stretching)</div>
+    </header>
+    <div class="wrapper">
+        <!-- SESSIONE 1 -->
+        <section class="session" id="sessione-1">
+            <h2>🧩 Sessione 1 — Upper Body + Core</h2>
+            <div class="tagline">Lunedì / Giovedì • Focus: spinta, tirata, core, postura</div>
+            <div class="block">
+                <h3>Riscaldamento (5')</h3>
+                <ul>
+                    <li><strong>Jumping Jacks</strong> — 1'</li>
+                    <li><strong>Rotazioni braccia</strong> — 1'</li>
+                    <li><strong>Cat-Cow Stretch</strong> — 1'</li>
+                    <li><strong>Plank dinamico</strong> (mani ↔ avambracci) — 2'</li>
+                </ul>
+            </div>
+            <div class="block">
+                <h3>Tabata (x5 blocchi)</h3>
+                <div class="tabata-grid">
+                    <div class="exercise">
+                        <h4>1. Push-up</h4>
+                        <div class="desc">Versione ginocchia o piedi • Mantieni il corpo in linea</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                    <div class="exercise">
+                        <h4>2. Plank → Downward Dog</h4>
+                        <div class="desc">Transizione controllata • Spingi i fianchi indietro e ritorna</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                    <div class="exercise">
+                        <h4>3. Renegade Row</h4>
+                        <div class="desc">Stabilizza il bacino • Alterna tirate con pesetti</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                    <div class="exercise">
+                        <h4>4. Superman Hold</h4>
+                        <div class="desc">Isometria dorsale • Braccia e gambe sollevate</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <h3>Stretching Finale (5')</h3>
+                <ul>
+                    <li><strong>Allungamento pettorali</strong> — 1'/lato</li>
+                    <li><strong>Child’s Pose</strong> — 2'</li>
+                    <li><strong>Stretch tricipiti</strong> — 1'/lato</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SESSIONE 2 -->
+        <section class="session" id="sessione-2">
+            <h2>🧩 Sessione 2 — Lower Body + Mobilità</h2>
+            <div class="tagline">Martedì / Venerdì • Focus: gambe, anche, equilibrio</div>
+            <div class="block">
+                <h3>Riscaldamento (5')</h3>
+                <ul>
+                    <li><strong>High Knees</strong> — 1'</li>
+                    <li><strong>Affondi camminati</strong> — 2'</li>
+                    <li><strong>Hip Circles</strong> — 1'/lato</li>
+                    <li><strong>Mobilità caviglie</strong> — 1'</li>
+                </ul>
+            </div>
+            <div class="block">
+                <h3>Tabata (x5 blocchi)</h3>
+                <div class="tabata-grid">
+                    <div class="exercise">
+                        <h4>1. Squat Jump</h4>
+                        <div class="desc">O versione lenta controllata • Atterra morbido</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                    <div class="exercise">
+                        <h4>2. Glute Bridge (elastico)</h4>
+                        <div class="desc">Spinta talloni • Apri ginocchia contro l'elastico</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                    <div class="exercise">
+                        <h4>3. Lateral Lunge (elastico)</h4>
+                        <div class="desc">Affondo laterale ampio • Ginocchia in linea</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                    <div class="exercise">
+                        <h4>4. Single Leg Deadlift</h4>
+                        <div class="desc">Stabilità e controllo • Schiena neutra</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <h3>Stretching Finale (5')</h3>
+                <ul>
+                    <li><strong>Piegamento avanti gambe tese</strong> — 2'</li>
+                    <li><strong>Figure-Four Stretch</strong> — 1'/lato</li>
+                    <li><strong>Stretch quadricipite</strong> — 1'/lato</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SESSIONE 3 -->
+        <section class="session" id="sessione-3">
+            <h2>🧩 Sessione 3 — Full Body Funzionale</h2>
+            <div class="tagline">Giovedì / Sabato • Focus: total body, core, stabilità</div>
+            <div class="block">
+                <h3>Riscaldamento (5')</h3>
+                <ul>
+                    <li><strong>Skip basso</strong> — 1'</li>
+                    <li><strong>Torso Twist</strong> — 1'</li>
+                    <li><strong>Bear Crawl sul posto</strong> — 2'</li>
+                    <li><strong>World's Greatest Stretch</strong> — 1'/lato</li>
+                </ul>
+            </div>
+            <div class="block">
+                <h3>Tabata (x5 blocchi)</h3>
+                <div class="tabata-grid">
+                    <div class="exercise">
+                        <h4>1. Burpee (modificato)</h4>
+                        <div class="desc">Senza salto se necessario • Movimento controllato</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                    <div class="exercise">
+                        <h4>2. Mountain Climber lento</h4>
+                        <div class="desc">Ginocchio al petto alternato • Bacino stabile</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                    <div class="exercise">
+                        <h4>3. Skater Hop / Step</h4>
+                        <div class="desc">Propulsione laterale o passo ampio low impact</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                    <div class="exercise">
+                        <h4>4. Hollow Body Hold</h4>
+                        <div class="desc">Addome in tenuta • Forma a banana stabile</div>
+                        <div class="image-slot">Spazio immagine</div>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <h3>Stretching Finale (5')</h3>
+                <ul>
+                    <li><strong>Cobra Stretch</strong> — 2'</li>
+                    <li><strong>Butterfly Stretch</strong> — 2'</li>
+                    <li><strong>Respirazione diaframmatica</strong> — 1'</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer>
+            <p>Disclaimer: consultare un professionista prima di iniziare nuovi programmi di allenamento. Adatta sempre l'intensità al tuo livello.</p>
+        </footer>
+    </div>
+
+    <div class="tools no-print">
+        <button id="printBtn">🖨️ Stampa / PDF</button>
+        <button id="downloadPdfBtn">⬇️ Scarica PDF (beta)</button>
+        <a href="index.html">⏱️ Torna al Timer</a>
+    </div>
+
+<script>
+// Pulsante stampa nativo
+const printBtn = document.getElementById('printBtn');
+printBtn.addEventListener('click', () => window.print());
+
+// Placeholder download PDF (richiederà libreria futura)
+const downloadBtn = document.getElementById('downloadPdfBtn');
+downloadBtn.addEventListener('click', () => {
+    alert('Funzione PDF avanzato in arrivo. Usa per ora Stampa / Salva come PDF.');
+});
+</script>
+</body>
+</html>

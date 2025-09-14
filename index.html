@@ -269,6 +269,11 @@
             <a href="https://www.youtube.com/results?search_query=workout+music+playlist" target="_blank">YouTube</a> |
             <a href="https://tidal.com/browse/search?q=workout" target="_blank">Tidal</a>
         </div>
+        <div class="music-container" style="margin-top:18px; font-size:0.75rem; line-height:1.4;">
+            <a data-translate-key="linkProgram" href="programma.html">📄 Programma</a> |
+            <a data-translate-key="linkProgramText" href="programma_testo.html">🧾 Testo</a> |
+            <a data-translate-key="linkDiary" href="diario.html">📝 Diario</a>
+        </div>
     </div>
 
     <script>
@@ -326,6 +331,14 @@
                 importError: "Errore durante l'importazione del preset."
             }
         };
+
+        // Aggiunta traduzioni link extra
+        translations.en.linkProgram = "📄 Program";
+        translations.en.linkProgramText = "🧾 Plain Text";
+        translations.en.linkDiary = "📝 Diary";
+        translations.it.linkProgram = "📄 Programma";
+        translations.it.linkProgramText = "🧾 Testo";
+        translations.it.linkDiary = "📝 Diario";
 
         const userLang = navigator.language.startsWith('en') ? 'en' : 'it';
         let currentStrings = translations[userLang];
