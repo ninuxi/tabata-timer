@@ -151,6 +151,13 @@
                 <input type="number" id="totalRounds" value="8" min="1">
             </div>
         </div>
+        <div style="margin: 10px 0; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+            <button type="button" class="preset-btn" data-preset="1">Tabata 1</button>
+            <button type="button" class="preset-btn" data-preset="2">Tabata 2</button>
+            <button type="button" class="preset-btn" data-preset="3">Tabata 3</button>
+            <button type="button" id="savePresetBtn">💾 Salva Preset</button>
+            <button type="button" id="loadPresetBtn">📂 Carica Preset</button>
+        </div>
 
         <div id="round">Round: 1/8</div>
         <div id="status">PREMERE AVVIA</div>
@@ -175,6 +182,52 @@
         const timerDisplay = document.getElementById('timer');
         const roundDisplay = document.getElementById('round');
         const statusDisplay = document.getElementById('status');
+        const presetBtns = document.querySelectorAll('.preset-btn');
+        const savePresetBtn = document.getElementById('savePresetBtn');
+        const loadPresetBtn = document.getElementById('loadPresetBtn');
+
+        // Preset predefiniti
+        const tabataPresets = {
+            1: { work: 20, rest: 10, rounds: 8 },
+            2: { work: 30, rest: 15, rounds: 6 },
+            3: { work: 40, rest: 20, rounds: 4 }
+        };
+
+        // Carica preset rapido
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const p = tabataPresets[btn.dataset.preset];
+                if (p) {
+                    document.getElementById('workTime').value = p.work;
+                    document.getElementById('restTime').value = p.rest;
+                    document.getElementById('totalRounds').value = p.rounds;
+                }
+            });
+        });
+
+        // Salva preset personalizzato su localStorage
+        savePresetBtn.addEventListener('click', () => {
+            const preset = {
+                work: parseInt(document.getElementById('workTime').value) || 20,
+                rest: parseInt(document.getElementById('restTime').value) || 10,
+                rounds: parseInt(document.getElementById('totalRounds').value) || 8
+            };
+            localStorage.setItem('tabataCustomPreset', JSON.stringify(preset));
+            alert('Preset salvato!');
+        });
+
+        // Carica preset personalizzato da localStorage
+        loadPresetBtn.addEventListener('click', () => {
+            const preset = JSON.parse(localStorage.getItem('tabataCustomPreset'));
+            if (preset) {
+                document.getElementById('workTime').value = preset.work;
+                document.getElementById('restTime').value = preset.rest;
+                document.getElementById('totalRounds').value = preset.rounds;
+                alert('Preset caricato!');
+            } else {
+                alert('Nessun preset salvato.');
+            }
+        });
 
         startBtn.addEventListener('click', startTimer);
         stopBtn.addEventListener('click', stopTimer);
