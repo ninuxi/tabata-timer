@@ -157,6 +157,10 @@
             <button type="button" class="preset-btn" data-preset="3">Tabata 3</button>
             <button type="button" id="savePresetBtn">💾 Salva Preset</button>
             <button type="button" id="loadPresetBtn">📂 Carica Preset</button>
+            <button type="button" id="exportPresetBtn">⬇️ Esporta Preset</button>
+            <label for="importPresetInput" style="display:none"></label>
+            <input type="file" id="importPresetInput" accept="application/json" style="display:none">
+            <button type="button" id="importPresetBtn">⬆️ Importa Preset</button>
         </div>
 
         <div id="round">Round: 1/8</div>
@@ -182,9 +186,61 @@
         const timerDisplay = document.getElementById('timer');
         const roundDisplay = document.getElementById('round');
         const statusDisplay = document.getElementById('status');
-        const presetBtns = document.querySelectorAll('.preset-btn');
-        const savePresetBtn = document.getElementById('savePresetBtn');
-        const loadPresetBtn = document.getElementById('loadPresetBtn');
+    const presetBtns = document.querySelectorAll('.preset-btn');
+    const savePresetBtn = document.getElementById('savePresetBtn');
+    const loadPresetBtn = document.getElementById('loadPresetBtn');
+    const exportPresetBtn = document.getElementById('exportPresetBtn');
+    const importPresetBtn = document.getElementById('importPresetBtn');
+    const importPresetInput = document.getElementById('importPresetInput');
+        // Esporta preset personalizzato in file JSON
+        exportPresetBtn.addEventListener('click', () => {
+            const preset = localStorage.getItem('tabataCustomPreset');
+            if (!preset) {
+                alert('Nessun preset personalizzato da esportare.');
+                return;
+            }
+            const blob = new Blob([preset], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tabata-preset.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Importa preset personalizzato da file JSON
+        importPresetBtn.addEventListener('click', () => {
+            importPresetInput.click();
+        });
+
+        importPresetInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const preset = JSON.parse(e.target.result);
+                    if (
+                        typeof preset.work === 'number' &&
+                        typeof preset.rest === 'number' &&
+                        typeof preset.rounds === 'number'
+                    ) {
+                        localStorage.setItem('tabataCustomPreset', JSON.stringify(preset));
+                        document.getElementById('workTime').value = preset.work;
+                        document.getElementById('restTime').value = preset.rest;
+                        document.getElementById('totalRounds').value = preset.rounds;
+                        alert('Preset importato e caricato!');
+                    } else {
+                        alert('File preset non valido.');
+                    }
+                } catch (err) {
+                    alert('Errore durante l\'importazione del preset.');
+                }
+            };
+            reader.readAsText(file);
+        });
 
         // Preset predefiniti
         const tabataPresets = {
