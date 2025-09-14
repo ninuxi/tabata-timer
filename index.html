@@ -227,19 +227,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>⏱️ CRONOMETRO TABATA</h1>
+        <h1 data-translate-key="title">⏱️ CRONOMETRO TABATA</h1>
 
         <div class="controls">
             <div class="control-group">
-                <label>⏳ Lavoro (sec):</label>
+                <label data-translate-key="workLabel">⏳ Lavoro (sec):</label>
                 <input type="number" id="workTime" value="20" min="1">
             </div>
             <div class="control-group">
-                <label>🛌 Recupero (sec):</label>
+                <label data-translate-key="restLabel">🛌 Recupero (sec):</label>
                 <input type="number" id="restTime" value="10" min="1">
             </div>
             <div class="control-group">
-                <label>🔁 Round totali:</label>
+                <label data-translate-key="roundsLabel">🔁 Round totali:</label>
                 <input type="number" id="totalRounds" value="8" min="1">
             </div>
         </div>
@@ -247,20 +247,20 @@
             <button type="button" class="preset-btn" data-preset="1">Tabata 20-10</button>
             <button type="button" class="preset-btn" data-preset="2">Tabata 30-15</button>
             <button type="button" class="preset-btn" data-preset="3">Tabata 40-20</button>
-            <button type="button" id="savePresetBtn">💾 Salva</button>
-            <button type="button" id="loadPresetBtn">📂 Carica</button>
-            <button type="button" id="exportPresetBtn">⬇️ Esporta</button>
+            <button type="button" id="savePresetBtn" data-translate-key="savePreset">💾 Salva</button>
+            <button type="button" id="loadPresetBtn" data-translate-key="loadPreset">📂 Carica</button>
+            <button type="button" id="exportPresetBtn" data-translate-key="exportPreset">⬇️ Esporta</button>
             <label for="importPresetInput" style="display:none"></label>
             <input type="file" id="importPresetInput" accept="application/json" style="display:none">
-            <button type="button" id="importPresetBtn">⬆️ Importa</button>
+            <button type="button" id="importPresetBtn" data-translate-key="importPreset">⬆️ Importa</button>
         </div>
 
-        <div id="round">Round: 1/8</div>
-        <div id="status">PREMERE AVVIA</div>
+        <div id="round" data-translate-key="roundInitial">Round: 1/8</div>
+        <div id="status" data-translate-key="statusInitial">PREMERE AVVIA</div>
         <div id="timer">--</div>
 
-        <button id="startBtn">▶️ AVVIA TIMER</button>
-        <button id="stopBtn">⏹️ STOP</button>
+        <button id="startBtn" data-translate-key="startBtn">▶️ AVVIA TIMER</button>
+        <button id="stopBtn" data-translate-key="stopBtn">⏹️ STOP</button>
 
         <!-- Playlist Musicali -->
         <div class="music-container">
@@ -272,8 +272,77 @@
     </div>
 
     <script>
+        const translations = {
+            en: {
+                title: "⏱️ TABATA TIMER",
+                workLabel: "⏳ Work (sec):",
+                restLabel: "🛌 Rest (sec):",
+                roundsLabel: "🔁 Total Rounds:",
+                savePreset: "💾 Save",
+                loadPreset: "📂 Load",
+                exportPreset: "⬇️ Export",
+                importPreset: "⬆️ Import",
+                startBtn: "▶️ START TIMER",
+                stopBtn: "⏹️ STOP",
+                statusInitial: "PRESS START",
+                roundInitial: "Round: 1/8",
+                statusWork: "🔥 WORK",
+                statusRest: "💤 REST",
+                statusStopped: "⏹️ STOPPED",
+                sessionComplete: "🎉 SESSION COMPLETE!",
+                greatWork: "Great job!",
+                presetSaved: "Preset saved!",
+                presetLoaded: "Preset loaded!",
+                noPresetSaved: "No saved preset found.",
+                presetExported: "No custom preset to export.",
+                presetImported: "Preset imported and loaded!",
+                invalidPresetFile: "Invalid preset file.",
+                importError: "Error importing preset."
+            },
+            it: {
+                title: "⏱️ CRONOMETRO TABATA",
+                workLabel: "⏳ Lavoro (sec):",
+                restLabel: "🛌 Recupero (sec):",
+                roundsLabel: "🔁 Round totali:",
+                savePreset: "💾 Salva",
+                loadPreset: "📂 Carica",
+                exportPreset: "⬇️ Esporta",
+                importPreset: "⬆️ Importa",
+                startBtn: "▶️ AVVIA TIMER",
+                stopBtn: "⏹️ STOP",
+                statusInitial: "PREMERE AVVIA",
+                roundInitial: "Round: 1/8",
+                statusWork: "🔥 LAVORO",
+                statusRest: "💤 RECUPERO",
+                statusStopped: "⏹️ FERMATO",
+                sessionComplete: "🎉 SESSIONE COMPLETATA!",
+                greatWork: "Ottimo lavoro!",
+                presetSaved: "Preset salvato!",
+                presetLoaded: "Preset caricato!",
+                noPresetSaved: "Nessun preset salvato.",
+                presetExported: "Nessun preset personalizzato da esportare.",
+                presetImported: "Preset importato e caricato!",
+                invalidPresetFile: "File preset non valido.",
+                importError: "Errore durante l'importazione del preset."
+            }
+        };
+
+        const userLang = navigator.language.startsWith('en') ? 'en' : 'it';
+        let currentStrings = translations[userLang];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.getAttribute('data-translate-key');
+                if (currentStrings[key]) {
+                    el.innerHTML = currentStrings[key];
+                }
+            });
+            document.documentElement.lang = userLang;
+        });
+
         let workTime = 20;
         let restTime = 10;
+// ... existing code ...
         let totalRounds = 8;
         let currentRound = 1;
         let isWorkPhase = true;
@@ -296,7 +365,7 @@
         exportPresetBtn.addEventListener('click', () => {
             const preset = localStorage.getItem('tabataCustomPreset');
             if (!preset) {
-                alert('Nessun preset personalizzato da esportare.');
+                alert(currentStrings.presetExported);
                 return;
             }
             const blob = new Blob([preset], { type: 'application/json' });
@@ -331,12 +400,12 @@
                         document.getElementById('workTime').value = preset.work;
                         document.getElementById('restTime').value = preset.rest;
                         document.getElementById('totalRounds').value = preset.rounds;
-                        alert('Preset importato e caricato!');
+                        alert(currentStrings.presetImported);
                     } else {
-                        alert('File preset non valido.');
+                        alert(currentStrings.invalidPresetFile);
                     }
                 } catch (err) {
-                    alert('Errore durante l\'importazione del preset.');
+                    alert(currentStrings.importError);
                 }
             };
             reader.readAsText(file);
@@ -369,7 +438,7 @@
                 rounds: parseInt(document.getElementById('totalRounds').value) || 8
             };
             localStorage.setItem('tabataCustomPreset', JSON.stringify(preset));
-            alert('Preset salvato!');
+            alert(currentStrings.presetSaved);
         });
 
         // Carica preset personalizzato da localStorage
@@ -379,9 +448,9 @@
                 document.getElementById('workTime').value = preset.work;
                 document.getElementById('restTime').value = preset.rest;
                 document.getElementById('totalRounds').value = preset.rounds;
-                alert('Preset caricato!');
+                alert(currentStrings.presetLoaded);
             } else {
-                alert('Nessun preset salvato.');
+                alert(currentStrings.noPresetSaved);
             }
         });
 
@@ -431,7 +500,7 @@
         function updateDisplay() {
             timerDisplay.textContent = countdown;
             timerDisplay.className = isWorkPhase ? 'work' : 'rest';
-            statusDisplay.textContent = isWorkPhase ? '🔥 LAVORO' : '💤 RECUPERO';
+            statusDisplay.textContent = isWorkPhase ? currentStrings.statusWork : currentStrings.statusRest;
             roundDisplay.textContent = `Round: ${currentRound}/${totalRounds}`;
         }
 
@@ -467,14 +536,15 @@
 
         function endSession() {
             clearInterval(timer);
-            timerDisplay.textContent = "✅ FINE!";
+            timerDisplay.textContent = "✅";
             timerDisplay.className = "";
-            statusDisplay.textContent = "🎉 SESSIONE COMPLETATA!";
+            statusDisplay.textContent = currentStrings.sessionComplete;
             playBeep(2000, 1000);
 
             if (speechSynth) {
                 speechSynth.cancel();
-                const utterance = new SpeechSynthesisUtterance("Sessione completata. Ottimo lavoro!");
+                const utterance = new SpeechSynthesisUtterance(`${currentStrings.sessionComplete} ${currentStrings.greatWork}`);
+                utterance.lang = userLang;
                 utterance.rate = 1.1;
                 utterance.pitch = 1.2;
                 speechSynth.speak(utterance);
@@ -484,7 +554,7 @@
         function stopTimer() {
             clearInterval(timer);
             timerDisplay.textContent = "--";
-            statusDisplay.textContent = "⏹️ FERMATO";
+            statusDisplay.textContent = currentStrings.statusStopped;
             if (speechSynth) speechSynth.cancel();
         }
     </script>
