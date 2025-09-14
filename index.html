@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset        input[type="number"] {
+            width: 80px;
+            padding: 8px 12px;
+            font-size: 1rem;
+            background: #000000;
+            border: 2px solid #00ff00;
+            color: #ffd700;
+            text-align: center;
+            border-radius: 10px;
+            margin: 0 5px;
+            font-weight: bold;
+        }   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>⏱️ Tabata Timer</title>
     <style>
         * {
             box-sizing: border-box;
         }
         body {
-            font-family: 'Comic Sans MS', 'Arial Black', 'Impact', cursive, sans-serif;
+            font-family: 'Impact', 'Arial Black', 'Bebas Neue', 'Oswald', sans-serif;
             text-align: center;
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 25%, #39b54a 50%, #00a651 75%, #ffd700 100%);
+            background: #ff6b35;
             color: white;
             padding: 10px;
             margin: 0;
@@ -23,21 +33,18 @@
         .container {
             width: 100%;
             max-width: 420px;
-            background: rgba(0,0,0,0.4);
+            background: #000000;
             padding: 25px 20px;
             border-radius: 25px;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 8px 32px rgba(255,255,0,0.4), 0 0 20px rgba(0,255,0,0.3);
-            border: 2px solid #ffd700;
+            border: 3px solid #ffd700;
         }
         h1 {
             color: #ffff00;
             margin-bottom: 25px;
-            text-shadow: 0 0 15px #ffff00, 0 0 25px #ff6b35;
             font-size: 1.8rem;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
         .controls {
             margin: 20px 0;
@@ -46,11 +53,10 @@
             gap: 12px;
         }
         .control-group {
-            background: rgba(0,0,0,0.6);
+            background: #000000;
             padding: 15px 12px;
             border-radius: 15px;
             border: 2px solid #00ff00;
-            box-shadow: 0 0 10px #00ff00;
         }
         .control-group label {
             display: block;
@@ -58,7 +64,6 @@
             margin-bottom: 8px;
             font-weight: 700;
             color: #ffff00;
-            text-shadow: 0 0 5px #ffff00;
         }
         input {
             width: 100%;
@@ -70,11 +75,9 @@
             font-size: 1.1rem;
             font-weight: 900;
             text-align: center;
-            box-shadow: 0 0 10px #ff6b35;
         }
         input:focus {
             outline: none;
-            box-shadow: 0 0 15px #ffff00, 0 0 25px #00ff00;
             border-color: #ffff00;
         }
         .preset-container {
@@ -92,21 +95,18 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 900;
-            background: linear-gradient(45deg, #ff6b35, #ffd700);
+            background: #ffd700;
             color: #000000;
             border: 2px solid #00ff00;
-            text-shadow: 0 0 5px #ffff00;
-            box-shadow: 0 0 10px #ff6b35;
             text-transform: uppercase;
         }
         .preset-btn:hover, button:hover {
-            background: linear-gradient(45deg, #00ff00, #ffff00);
+            background: #00ff00;
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(255,255,0,0.6);
             border-color: #ff6b35;
         }
         #startBtn {
-            background: linear-gradient(45deg, #00ff00, #39b54a);
+            background: #00ff00;
             color: #000000;
             font-size: 1.1rem;
             padding: 18px 40px;
@@ -114,12 +114,11 @@
             width: auto;
             min-width: 140px;
             border: 3px solid #ffff00;
-            box-shadow: 0 0 20px #00ff00;
             font-weight: 900;
             text-transform: uppercase;
         }
         #stopBtn {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            background: #ff6b35;
             color: #000000;
             font-size: 1.1rem;
             padding: 18px 40px;
@@ -127,7 +126,6 @@
             width: auto;
             min-width: 140px;
             border: 3px solid #ffff00;
-            box-shadow: 0 0 20px #ff6b35;
             font-weight: 900;
             text-transform: uppercase;
         }
@@ -135,7 +133,6 @@
             font-size: 4.5rem;
             margin: 25px 0;
             font-weight: 900;
-            text-shadow: 0 0 30px #ffff00, 0 0 40px #00ff00;
             line-height: 1;
             text-transform: uppercase;
             letter-spacing: 3px;
@@ -144,24 +141,61 @@
             font-size: 1.3rem;
             margin: 15px 0;
             font-weight: 900;
-            text-shadow: 0 0 10px #ffff00;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         .work { 
             color: #ff6b35; 
-            text-shadow: 0 0 20px #ff6b35, 0 0 30px #ffd700;
             animation: pulse 1s infinite;
         }
         .rest { 
             color: #00ff00; 
-            text-shadow: 0 0 20px #00ff00, 0 0 30px #39b54a;
             animation: pulse 1s infinite;
         }
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
+        }
+        .music-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: #000000;
+            border: 3px solid #00ff00;
+            border-radius: 15px;
+        }
+        .music-title {
+            text-align: center;
+            color: #ffd700;
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        .music-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+        #spotifyBtn {
+            background: #1db954;
+            color: #000000;
+            border: 2px solid #ffff00;
+        }
+        #appleBtn {
+            background: #ff6b35;
+            color: #000000;
+            border: 2px solid #ffff00;
+        }
+        #youtubeBtn {
+            background: #ff0000;
+            color: #ffffff;
+            border: 2px solid #ffff00;
+        }
+        #tidalBtn {
+            background: #00d4ff;
+            color: #000000;
+            border: 2px solid #ffff00;
         }
         @media (max-width: 480px) {
             body {
@@ -259,6 +293,17 @@
             <label for="importPresetInput" style="display:none"></label>
             <input type="file" id="importPresetInput" accept="application/json" style="display:none">
             <button type="button" id="importPresetBtn">⬆️ Importa</button>
+        </div>
+
+        <!-- Playlist Musicali -->
+        <div class="music-container">
+            <div class="music-title">🎵 PLAYLIST ALLENAMENTO</div>
+            <div class="music-buttons">
+                <button type="button" id="spotifyBtn">🟢 Spotify</button>
+                <button type="button" id="appleBtn">🎵 Apple</button>
+                <button type="button" id="youtubeBtn">📺 YouTube</button>
+                <button type="button" id="tidalBtn">🌊 Tidal</button>
+            </div>
         </div>
 
         <div id="round">Round: 1/8</div>
@@ -485,6 +530,23 @@
             statusDisplay.textContent = "⏹️ FERMATO";
             if (speechSynth) speechSynth.cancel();
         }
+
+        // Funzionalità playlist musicali
+        document.getElementById('spotifyBtn').addEventListener('click', function() {
+            window.open('https://open.spotify.com/search/workout%20playlist', '_blank');
+        });
+        
+        document.getElementById('appleBtn').addEventListener('click', function() {
+            window.open('https://music.apple.com/search?term=workout', '_blank');
+        });
+        
+        document.getElementById('youtubeBtn').addEventListener('click', function() {
+            window.open('https://www.youtube.com/results?search_query=workout+music+playlist', '_blank');
+        });
+        
+        document.getElementById('tidalBtn').addEventListener('click', function() {
+            window.open('https://tidal.com/browse/search?q=workout', '_blank');
+        });
     </script>
 </body>
 </html>
