@@ -1,65 +1,69 @@
 # ⏱️ Tabata Timer
 
-Una collezione completa di timer per allenamenti Tabata, disponibile in versione web e Python.
+A complete collection of timers for Tabata workouts, available in web and Python versions.
 
-## 🌐 Versione Web
-**[Accedi al Timer Online](https://ninuxi.github.io/tabata-timer/)**
+**Languages**: **English** | [Italiano](README.it.md)
 
-Timer Tabata moderno e responsive con:
-- ✨ Design moderno ottimizzato per mobile
-- 🔊 Sintesi vocale per countdown
-- 📱 Layout responsive per tutti i dispositivi
-- 🎯 Preset rapidi (Tabata 1, 2, 3)
-- 💾 Salvataggio/caricamento preset personalizzati
-- 📤 Esportazione/importazione preset tramite file JSON
-- 🔔 Segnali audio per cambio fase
+## 🌐 Web Version
+**[Access the Online Timer](https://ninuxi.github.io/tabata-timer/)**
 
-## 🐍 Versioni Python
+A modern and responsive Tabata timer with:
+- ✨ Modern design optimized for mobile
+- 🔊 Voice synthesis for countdowns
+- 📱 Responsive layout for all devices
+- 🎯 Quick presets (Tabata 20/10, 30/15, 40/20)
+- 💾 Save/load custom presets
+- 📤 Export/import presets via JSON file
+- 🔔 Audio cues for phase changes
+- 🇮🇹/🇬🇧 Multi-language support (IT/EN) with auto-detection
 
-### `tabata_fisso.py` - Timer Base
-Timer Tabata classico con impostazioni predefinite:
-- **20 secondi** di lavoro
-- **10 secondi** di recupero  
-- **8 round** totali
-- Segnali audio per ogni fase
-- Compatibile Windows/Mac/Linux
+## 🐍 Python Versions
+
+### `tabata_fisso.py` - Basic Timer
+A classic Tabata timer with default settings:
+- **20 seconds** of work
+- **10 seconds** of rest
+- **8 total rounds**
+- Audio signals for each phase
+- Compatible with Windows/Mac/Linux
 
 ```bash
 python tabata_fisso.py
 ```
 
-### `tabata_personalizzabile.py` - Timer Avanzato
-Timer con parametri personalizzabili e sintesi vocale:
-- ⚙️ Personalizzazione completa (lavoro/recupero/round)
-- 🎙️ Sintesi vocale per countdown finale
-- 🔊 Beep differenziati per ogni fase
-- 🌍 Supporto multipiattaforma completo
+### `tabata_personalizzabile.py` - Advanced Timer
+A timer with customizable parameters and voice synthesis:
+- ⚙️ Full customization (work/rest/rounds)
+- 🎙️ Voice synthesis for the final countdown
+- 🔊 Differentiated beeps for each phase
+- 🌍 Full cross-platform support
 
 ```bash
 python tabata_personalizzabile.py
 ```
 
-## 🚀 Come Usare
+## 🚀 How to Use
 
 ### Web
-1. Vai su https://ninuxi.github.io/tabata-timer/
-2. Personalizza i tempi di lavoro, recupero e numero di round
-3. Usa i preset rapidi o salva le tue configurazioni
-4. Premi "AVVIA TIMER" per iniziare
+1. Go to https://ninuxi.github.io/tabata-timer/
+2. Customize the work, rest, and number of rounds.
+3. Use the quick presets or save your own configurations.
+4. Press "START TIMER" to begin.
 
 ### Python
-1. Clona il repository: `git clone https://github.com/ninuxi/tabata-timer.git`
-2. Esegui il timer desiderato: `python tabata_fisso.py` o `python tabata_personalizzabile.py`
+1. Clone the repository: `git clone https://github.com/ninuxi/tabata-timer.git`
+2. Run the desired timer: `python tabata_fisso.py` or `python tabata_personalizzabile.py`
 
-## 📋 Caratteristiche
+## 📋 Features
 
-- **Timer Preciso**: Countdown accurato al secondo
-- **Segnali Audio**: Beep distintivi per lavoro/recupero/fine
-- **Interfaccia Intuitiva**: Design pulito e facile da usare
-- **Responsive Design**: Ottimizzato per desktop, tablet e smartphone
-- **Preset Manager**: Salvataggio e condivisione configurazioni
-- **Cross-Platform**: Funziona su Windows, Mac, Linux e browser web
+- **Accurate Timer**: Second-accurate countdown.
+- **Audio Cues**: Distinctive beeps for work/rest/end.
+- **Intuitive Interface**: Clean and easy-to-use design.
+- **Responsive Design**: Optimized for desktop, tablet, and smartphone.
+- **Preset Manager**: Save and share configurations.
+- **Cross-Platform**: Works on Windows, Mac, Linux, and web browsers.
+- **Multi-language**: Automatic language detection (Italian/English).
 
 ---
 
-*Perfetto per allenamenti HIIT, Tabata e interval training! 💪*
+*Perfect for HIIT, Tabata, and interval training workouts! 💪*
