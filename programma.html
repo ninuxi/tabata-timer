@@ -33,7 +33,9 @@
     .exercise { background:#181818; border:1px solid #262626; padding:12px 12px 10px; border-radius:14px; font-size:0.8rem; display:flex; flex-direction:column; gap:6px; }
     .exercise h4 { margin:0; font-size:0.9rem; font-family:var(--font-heading); color:var(--accent); letter-spacing:1px; }
     .exercise .desc { font-size:0.7rem; color:var(--muted); line-height:1.25; }
-    .image-slot { border:1px dashed #333; border-radius:8px; min-height:70px; display:flex; align-items:center; justify-content:center; font-size:0.65rem; color:#555; font-style:italic; }
+    .image-slot { border:1px solid #222; border-radius:10px; aspect-ratio:4/3; position:relative; overflow:hidden; background:#0f0f0f; }
+    .image-slot img { width:100%; height:100%; object-fit:cover; display:block; }
+    .image-slot figcaption { position:absolute; left:0; right:0; bottom:0; background:rgba(0,0,0,0.55); font-size:0.55rem; padding:3px 4px; text-align:center; letter-spacing:1px; color:var(--accent3); }
 
     .tools { position:fixed; bottom:0; left:0; right:0; background:#000; border-top:2px solid var(--accent); padding:10px 14px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
     .tools button, .tools a { background:var(--accent3); color:#000; font-weight:800; font-family:var(--font-heading); border:2px solid var(--accent); padding:10px 18px; border-radius:40px; cursor:pointer; font-size:0.8rem; letter-spacing:1px; text-decoration:none; }
@@ -88,22 +90,34 @@
                     <div class="exercise">
                         <h4>1. Push-up</h4>
                         <div class="desc">Versione ginocchia o piedi • Mantieni il corpo in linea</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Push-up.png" alt="Push-up versione ginocchia o piedi" loading="lazy">
+                            <figcaption>Push-up</figcaption>
+                        </figure>
                     </div>
                     <div class="exercise">
                         <h4>2. Plank → Downward Dog</h4>
                         <div class="desc">Transizione controllata • Spingi i fianchi indietro e ritorna</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Plank_to_Downward_Dog_Flow.png" alt="Plank verso Downward Dog transizione controllata" loading="lazy">
+                            <figcaption>Plank → Downward Dog</figcaption>
+                        </figure>
                     </div>
                     <div class="exercise">
                         <h4>3. Renegade Row</h4>
                         <div class="desc">Stabilizza il bacino • Alterna tirate con pesetti</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Renegade_Row_con_pesetti.png" alt="Renegade Row con pesetti alternati" loading="lazy">
+                            <figcaption>Renegade Row</figcaption>
+                        </figure>
                     </div>
                     <div class="exercise">
                         <h4>4. Superman Hold</h4>
                         <div class="desc">Isometria dorsale • Braccia e gambe sollevate</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Superman_Hold.png" alt="Superman Hold isometria dorsale" loading="lazy">
+                            <figcaption>Superman Hold</figcaption>
+                        </figure>
                     </div>
                 </div>
             </div>
@@ -136,22 +150,34 @@
                     <div class="exercise">
                         <h4>1. Squat Jump</h4>
                         <div class="desc">O versione lenta controllata • Atterra morbido</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/jumping_jacks.png" alt="Squat Jump / alternativa controllata" loading="lazy">
+                            <figcaption>Squat Jump</figcaption>
+                        </figure>
                     </div>
                     <div class="exercise">
                         <h4>2. Glute Bridge (elastico)</h4>
                         <div class="desc">Spinta talloni • Apri ginocchia contro l'elastico</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Plank_dinamico.png" alt="Glute Bridge con elastico" loading="lazy">
+                            <figcaption>Glute Bridge</figcaption>
+                        </figure>
                     </div>
                     <div class="exercise">
                         <h4>3. Lateral Lunge (elastico)</h4>
                         <div class="desc">Affondo laterale ampio • Ginocchia in linea</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Rotazioni_braccia.png" alt="Lateral Lunge con elastico" loading="lazy">
+                            <figcaption>Lateral Lunge</figcaption>
+                        </figure>
                     </div>
                     <div class="exercise">
                         <h4>4. Single Leg Deadlift</h4>
                         <div class="desc">Stabilità e controllo • Schiena neutra</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Allungamento_pettorali_su_stipite.png" alt="Single Leg Deadlift equilibrio" loading="lazy">
+                            <figcaption>Single Leg Deadlift</figcaption>
+                        </figure>
                     </div>
                 </div>
             </div>
@@ -184,22 +210,34 @@
                     <div class="exercise">
                         <h4>1. Burpee (modificato)</h4>
                         <div class="desc">Senza salto se necessario • Movimento controllato</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Child’s_Pose.png" alt="Burpee modificato senza salto" loading="lazy">
+                            <figcaption>Burpee (mod)</figcaption>
+                        </figure>
                     </div>
                     <div class="exercise">
                         <h4>2. Mountain Climber lento</h4>
                         <div class="desc">Ginocchio al petto alternato • Bacino stabile</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Cat-Cow_Stretch.png" alt="Mountain Climber lento" loading="lazy">
+                            <figcaption>Mountain Climber lento</figcaption>
+                        </figure>
                     </div>
                     <div class="exercise">
                         <h4>3. Skater Hop / Step</h4>
                         <div class="desc">Propulsione laterale o passo ampio low impact</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Stretch_tricipiti_dietro_la_testa.png" alt="Skater Hop / Step" loading="lazy">
+                            <figcaption>Skater Hop / Step</figcaption>
+                        </figure>
                     </div>
                     <div class="exercise">
                         <h4>4. Hollow Body Hold</h4>
                         <div class="desc">Addome in tenuta • Forma a banana stabile</div>
-                        <div class="image-slot">Spazio immagine</div>
+                        <figure class="image-slot">
+                            <img src="img/Rotazioni_braccia.png" alt="Hollow Body Hold" loading="lazy">
+                            <figcaption>Hollow Body Hold</figcaption>
+                        </figure>
                     </div>
                 </div>
             </div>
