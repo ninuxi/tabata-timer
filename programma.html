@@ -47,6 +47,25 @@
     .media-grid figure img { width:100%; height:100%; object-fit:cover; display:block; }
     .media-grid figure figcaption { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,.55); font-size:0.5rem; padding:2px 3px; text-align:center; letter-spacing:1px; color:var(--accent3); }
 
+    /* Mini Timers */
+    .mini-timer { margin:16px 0 4px; background:#101010; border:2px solid #222; border-radius:16px; padding:12px 14px 14px; font-size:0.72rem; position:relative; }
+    .mini-timer h4 { margin:0 0 4px; font-family:var(--font-heading); font-size:0.9rem; letter-spacing:1px; color:var(--accent2); display:flex; align-items:center; gap:6px; }
+    .mini-timer .time-display { font-family:var(--font-heading); font-size:1.7rem; letter-spacing:2px; color:var(--accent3); margin:2px 0 2px; }
+    .mini-timer .phase, .mini-timer .label { font-size:0.6rem; letter-spacing:1px; text-transform:uppercase; color:var(--accent); font-weight:700; }
+    .mini-timer .segments { display:flex; gap:4px; margin-top:8px; }
+    .mini-timer .segments div { flex:1; height:10px; background:#181818; border:1px solid #222; border-radius:4px; position:relative; overflow:hidden; }
+    .mini-timer .segments div.active { border-color:var(--accent2); box-shadow:0 0 0 1px var(--accent2) inset; }
+    .mini-timer .segments div span { position:absolute; left:0; top:0; bottom:0; width:0%; background:linear-gradient(90deg,var(--accent2),var(--accent3)); transition:width .35s linear; }
+    .mini-timer .controls { margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+    .mini-timer button { flex:1; background:var(--accent3); color:#000; font-weight:700; font-size:0.6rem; border:2px solid var(--accent); border-radius:20px; cursor:pointer; padding:6px 8px; letter-spacing:1px; text-transform:uppercase; }
+    .mini-timer button:hover { background:var(--accent); }
+    .mini-timer .meta-line, .mini-timer .round-info { font-size:0.53rem; margin-top:5px; color:var(--muted); letter-spacing:1px; }
+    .mini-timer.done { border-color:var(--accent); }
+    @media (max-width:600px){
+        .mini-timer .time-display { font-size:1.4rem; }
+        .mini-timer h4 { font-size:0.8rem; }
+    }
+
     .tools { position:fixed; bottom:0; left:0; right:0; background:#000; border-top:2px solid var(--accent); padding:10px 14px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
     .tools button, .tools a { background:var(--accent3); color:#000; font-weight:800; font-family:var(--font-heading); border:2px solid var(--accent); padding:10px 18px; border-radius:40px; cursor:pointer; font-size:0.8rem; letter-spacing:1px; text-decoration:none; }
     .tools button:hover, .tools a:hover { background:var(--accent); }
@@ -114,9 +133,33 @@
                         </figure>
                     </div>
                 </details>
+                <div class="mini-timer warmup" id="warmup-1" data-segments="60,60,60,120" data-labels="Jumping Jacks|Rotazioni braccia|Cat-Cow|Plank dinamico">
+                    <h4>⏱️ Warm-up Timer (5')</h4>
+                    <div class="time-display" data-role="display">05:00</div>
+                    <div class="label" data-role="label">Pronto</div>
+                    <div class="segments" data-role="segments"></div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line" data-role="current-seg">Segmento: —</div>
+                </div>
             </div>
             <div class="block">
                 <h3>Tabata (x5 blocchi)</h3>
+                <div class="mini-timer tabata" id="tabata-1" data-work="20" data-rest="10" data-rounds="8" data-blocks="5">
+                    <h4>🔥 Mini Tabata (20"/10" x8 x5)</h4>
+                    <div class="time-display" data-role="display">20:00</div>
+                    <div class="phase" data-role="phase">Pronto</div>
+                    <div class="round-info" data-role="round">Round: - / 8 • Blocco: - / 5</div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line">Totale stimato: 20'</div>
+                </div>
                 <div class="tabata-grid">
                     <div class="exercise">
                         <h4>1. Push-up</h4>
@@ -191,9 +234,33 @@
                     <li><strong>Hip Circles</strong> — 1'/lato</li>
                     <li><strong>Mobilità caviglie</strong> — 1'</li>
                 </ul>
+                <div class="mini-timer warmup" id="warmup-2" data-segments="60,120,60,60" data-labels="High Knees|Affondi camminati|Hip Circles|Mobilità caviglie">
+                    <h4>⏱️ Warm-up Timer (5')</h4>
+                    <div class="time-display" data-role="display">05:00</div>
+                    <div class="label" data-role="label">Pronto</div>
+                    <div class="segments" data-role="segments"></div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line" data-role="current-seg">Segmento: —</div>
+                </div>
             </div>
             <div class="block">
                 <h3>Tabata (x5 blocchi)</h3>
+                <div class="mini-timer tabata" id="tabata-2" data-work="20" data-rest="10" data-rounds="8" data-blocks="5">
+                    <h4>🔥 Mini Tabata (20"/10" x8 x5)</h4>
+                    <div class="time-display" data-role="display">20:00</div>
+                    <div class="phase" data-role="phase">Pronto</div>
+                    <div class="round-info" data-role="round">Round: - / 8 • Blocco: - / 5</div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line">Totale stimato: 20'</div>
+                </div>
                 <div class="tabata-grid">
                     <div class="exercise">
                         <h4>1. Squat Jump</h4>
@@ -251,9 +318,33 @@
                     <li><strong>Bear Crawl sul posto</strong> — 2'</li>
                     <li><strong>World's Greatest Stretch</strong> — 1'/lato</li>
                 </ul>
+                <div class="mini-timer warmup" id="warmup-3" data-segments="60,60,120,60" data-labels="Skip basso|Torso Twist|Bear Crawl|World's Greatest">
+                    <h4>⏱️ Warm-up Timer (5')</h4>
+                    <div class="time-display" data-role="display">05:00</div>
+                    <div class="label" data-role="label">Pronto</div>
+                    <div class="segments" data-role="segments"></div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line" data-role="current-seg">Segmento: —</div>
+                </div>
             </div>
             <div class="block">
                 <h3>Tabata (x5 blocchi)</h3>
+                <div class="mini-timer tabata" id="tabata-3" data-work="20" data-rest="10" data-rounds="8" data-blocks="5">
+                    <h4>🔥 Mini Tabata (20"/10" x8 x5)</h4>
+                    <div class="time-display" data-role="display">20:00</div>
+                    <div class="phase" data-role="phase">Pronto</div>
+                    <div class="round-info" data-role="round">Round: - / 8 • Blocco: - / 5</div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line">Totale stimato: 20'</div>
+                </div>
                 <div class="tabata-grid">
                     <div class="exercise">
                         <h4>1. Burpee (modificato)</h4>
@@ -320,6 +411,118 @@ const downloadBtn = document.getElementById('downloadPdfBtn');
 downloadBtn.addEventListener('click', () => {
     alert('Funzione PDF avanzato in arrivo. Usa per ora Stampa / Salva come PDF.');
 });
+
+// Mini Timer Logic
+(function(){
+    function format(sec){ const m=Math.floor(sec/60), s=sec%60; return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
+    const warmups = document.querySelectorAll('.mini-timer.warmup');
+    warmups.forEach(timerEl => {
+        const segStr = timerEl.getAttribute('data-segments');
+        const labelStr = timerEl.getAttribute('data-labels')||'';
+        const segments = segStr.split(',').map(n=>parseInt(n.trim(),10));
+        const labels = labelStr.split('|');
+        const total = segments.reduce((a,b)=>a+b,0);
+        const display = timerEl.querySelector('[data-role="display"]');
+        const labelEl = timerEl.querySelector('[data-role="label"]');
+        const segContainer = timerEl.querySelector('[data-role="segments"]');
+        const currentSegInfo = timerEl.querySelector('[data-role="current-seg"]');
+        let currentSeg = 0, segRemaining = segments[0];
+        let running=false, paused=false, interval; let remainingTotal = total;
+        // Build visual segments
+        segments.forEach(()=>{
+            const d=document.createElement('div');
+            const span=document.createElement('span');
+            d.appendChild(span); segContainer.appendChild(d);
+        });
+        const segDivs = Array.from(segContainer.children);
+        function updateVisual(){
+            display.textContent = format(remainingTotal);
+            segDivs.forEach((d,i)=>{
+                d.classList.toggle('active', i===currentSeg && running);
+                const elapsed = segments[i] - (i===currentSeg?segRemaining:segments[i]);
+                const percent = Math.min(100, (elapsed/segments[i])*100);
+                d.firstChild.style.width = percent+'%';
+            });
+            currentSegInfo.textContent = currentSeg < segments.length ? `Segmento: ${currentSeg+1}/${segments.length}${labels[currentSeg]? ' • '+labels[currentSeg]:''}` : 'Completato';
+        }
+        function tick(){
+            if(!running || paused) return;
+            segRemaining--; remainingTotal--;
+            if(segRemaining<=0){
+                currentSeg++;
+                if(currentSeg>=segments.length){
+                    running=false; labelEl.textContent='Fatto'; timerEl.classList.add('done');
+                    updateVisual(); clearInterval(interval); return;
+                }
+                segRemaining = segments[currentSeg];
+            }
+            labelEl.textContent = labels[currentSeg] || 'In corso';
+            updateVisual();
+        }
+        updateVisual();
+        timerEl.addEventListener('click', (e)=>{
+            const act = e.target.getAttribute('data-action'); if(!act) return;
+            if(act==='start' && !running){ running=true; paused=false; labelEl.textContent = labels[currentSeg]||'Inizio'; interval=setInterval(tick,1000); updateVisual(); }
+            else if(act==='pause' && running){ paused=!paused; labelEl.textContent = paused? 'Pausa' : (labels[currentSeg]||'Riprendi'); }
+            else if(act==='reset'){ running=false; paused=false; clearInterval(interval); currentSeg=0; segRemaining=segments[0]; remainingTotal=total; labelEl.textContent='Pronto'; timerEl.classList.remove('done'); segDivs.forEach(d=>d.firstChild.style.width='0%'); updateVisual(); }
+        });
+    });
+
+    // Tabata timers
+    const tabatas = document.querySelectorAll('.mini-timer.tabata');
+    tabatas.forEach(el=>{
+        const work = parseInt(el.getAttribute('data-work'),10)||20;
+        const rest = parseInt(el.getAttribute('data-rest'),10)||10;
+        const rounds = parseInt(el.getAttribute('data-rounds'),10)||8;
+        const blocks = parseInt(el.getAttribute('data-blocks'),10)||5;
+        const display = el.querySelector('[data-role="display"]');
+        const phaseEl = el.querySelector('[data-role="phase"]');
+        const roundInfo = el.querySelector('[data-role="round"]');
+        let currentRound=1, currentBlock=1, isWork=true, remaining = work;
+        let running=false, paused=false, interval;
+        const totalSeconds = (work+rest)*rounds*blocks - rest*blocks; // no rest after last round each block
+        function update(){
+            // compute approximate remaining global time
+            const roundsLeftInBlock = (rounds - currentRound) + (isWork?0:1); // if in rest add rest time remainder effectively
+            let remainingInCurrent = remaining;
+            let future = 0;
+            if(isWork){ future += rest; }
+            // remaining rounds in block
+            future += (rounds - currentRound)* (work+rest);
+            // remaining blocks after this block
+            future += (blocks - currentBlock) * (rounds*(work+rest) - rest);
+            const totalRem = remainingInCurrent + future;
+            display.textContent = format(totalRem);
+            phaseEl.textContent = isWork ? 'Lavoro' : 'Recupero';
+            roundInfo.textContent = `Round: ${currentRound} / ${rounds} • Blocco: ${currentBlock} / ${blocks}`;
+        }
+        function advancePhase(){
+            if(isWork){ // go to rest
+                isWork=false; remaining=rest;
+            } else {
+                // finished rest -> next round
+                isWork=true; remaining=work; currentRound++;
+                if(currentRound>rounds){
+                    currentBlock++; currentRound=1; isWork=true; remaining=work;
+                    if(currentBlock>blocks){
+                        running=false; phaseEl.textContent='Completato'; el.classList.add('done'); clearInterval(interval); return;
+                    }
+                }
+            }
+        }
+        function tick(){
+            if(!running || paused) return; remaining--; if(remaining<=0){ advancePhase(); } update(); }
+        function start(){ if(!running){ running=true; paused=false; update(); interval=setInterval(tick,1000);} }
+        function pause(){ if(running){ paused=!paused; phaseEl.textContent = paused? 'Pausa' : (isWork? 'Lavoro':'Recupero'); } }
+        function reset(){ running=false; paused=false; clearInterval(interval); currentRound=1; currentBlock=1; isWork=true; remaining=work; el.classList.remove('done'); phaseEl.textContent='Pronto'; roundInfo.textContent='Round: - / '+rounds+' • Blocco: - / '+blocks; display.textContent=format(totalSeconds); }
+        // init
+        display.textContent = format(totalSeconds);
+        el.addEventListener('click', e=>{
+            const act = e.target.getAttribute('data-action'); if(!act) return;
+            if(act==='start') start(); else if(act==='pause') pause(); else if(act==='reset') reset();
+        });
+    });
+})();
 </script>
 </body>
 </html>
