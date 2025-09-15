@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset        input[type="number"] {
-            width: 80px;
-            padding: 8px 12px;
-            font-size: 1rem;
-            background: #000000;
-            border: 2px solid #00ff00;
-            color: #ffd700;
-            text-align: center;
-            border-radius: 10px;
-            margin: 0 5px;
-            font-weight: bold;
-        }   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>⏱️ Tabata Timer</title>
     <style>
         * {
@@ -80,14 +70,14 @@
             outline: none;
             border-color: #ffff00;
         }
-        .preset-container {
-            margin: 20px 0;
+        .preset-container, .group-body {
+            margin: 10px 0 0;
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             justify-content: center;
         }
-        .preset-btn, button {
+        .preset-btn, button, .link-chip {
             padding: 12px 20px;
             font-size: 0.9rem;
             border: none;
@@ -100,7 +90,7 @@
             border: 2px solid #00ff00;
             text-transform: uppercase;
         }
-        .preset-btn:hover, button:hover {
+        .preset-btn:hover, button:hover, .link-chip:hover {
             background: #00ff00;
             transform: translateY(-3px) scale(1.05);
             border-color: #ff6b35;
@@ -157,19 +147,48 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-        .music-container {
-            margin-top: 30px;
-            text-align: center;
+        /* Accordion panels */
+        details.panel {
+            background:#000000;
+            border:2px solid #00ff00;
+            border-radius:22px;
+            padding:14px 16px 12px;
+            margin:14px 0;
         }
-        .music-container a {
-            color: #ffd700;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin: 0 8px;
-            transition: color 0.3s ease;
+        details.panel[open] { border-color:#ffd700; }
+        details.panel summary {
+            list-style:none;
+            cursor:pointer;
+            font-weight:900;
+            letter-spacing:2px;
+            font-size:0.8rem;
+            color:#ffff00;
+            display:flex;
+            align-items:center;
+            gap:8px;
+            text-transform:uppercase;
         }
-        .music-container a:hover {
-            color: #00ff00;
+        details.panel summary::-webkit-details-marker { display:none; }
+        details.panel summary:before {
+            content:'▸';
+            display:inline-block;
+            transform:rotate(0deg);
+            transition:transform .25s ease;
+            font-size:0.9rem;
+            color:#00ff00;
+        }
+        details.panel[open] summary:before { transform:rotate(90deg); }
+        .chip-links { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:10px; }
+        .link-chip { text-decoration:none; display:inline-block; }
+        .music-links a { text-decoration:none; }
+        .music-links { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:10px; }
+        .music-links a { background:#111; color:#ffd700; padding:8px 14px; border-radius:18px; font-size:0.7rem; font-weight:700; border:2px solid #00ff00; letter-spacing:1px; text-transform:uppercase; }
+        .music-links a:hover { background:#00ff00; color:#000; border-color:#ff6b35; transform:translateY(-2px); }
+        @media (max-width:480px){
+            details.panel { padding:12px 14px 10px; }
+            details.panel summary { font-size:0.7rem; }
+            .preset-btn, button, .link-chip { font-size:0.75rem; padding:10px 14px; }
+            .music-links a { font-size:0.6rem; padding:6px 10px; }
         }
         @media (max-width: 480px) {
             body {
@@ -228,15 +247,7 @@
 <body>
     <div class="container">
         <h1 data-translate-key="title">⏱️ CRONOMETRO TABATA</h1>
-        <div style="margin:0 0 15px;">
-            <div style="width:100%; height:6px; background:linear-gradient(90deg,#00ff00 0%, #ffff00 50%, #ff6b35 100%); border-radius:4px; margin:0 auto 10px; filter:brightness(1.2);"></div>
-            <div data-translate-key="resourcesTitle" style="font-size:0.75rem; letter-spacing:2px; font-weight:800; color:#ffd700; margin-bottom:6px; text-transform:uppercase;">Risorse</div>
-            <div class="music-container" id="main-links" style="margin-top:0; margin-bottom:10px; font-size:0.95rem; font-weight:900; letter-spacing:1px;">
-                <a data-translate-key="linkProgram" href="programma.html" target="_blank" rel="noopener noreferrer" style="color:#00ff00;">📄 Programma</a> |
-                <a data-translate-key="linkProgramText" href="programma_testo.html" target="_blank" rel="noopener noreferrer" style="color:#00ff00;">🧾 Testo</a> |
-                <a data-translate-key="linkDiary" href="diario.html" target="_blank" rel="noopener noreferrer" style="color:#00ff00;">📝 Diario</a>
-            </div>
-        </div>
+        <!-- Pannelli collassabili -->
 
         <div class="controls">
             <div class="control-group">
@@ -252,17 +263,48 @@
                 <input type="number" id="totalRounds" value="8" min="1">
             </div>
         </div>
-        <div class="preset-container">
-            <button type="button" class="preset-btn" data-preset="1">Tabata 20-10</button>
-            <button type="button" class="preset-btn" data-preset="2">Tabata 30-15</button>
-            <button type="button" class="preset-btn" data-preset="3">Tabata 40-20</button>
-            <button type="button" id="savePresetBtn" data-translate-key="savePreset">💾 Salva</button>
-            <button type="button" id="loadPresetBtn" data-translate-key="loadPreset">📂 Carica</button>
-            <button type="button" id="exportPresetBtn" data-translate-key="exportPreset">⬇️ Esporta</button>
-            <label for="importPresetInput" style="display:none"></label>
-            <input type="file" id="importPresetInput" accept="application/json" style="display:none">
-            <button type="button" id="importPresetBtn" data-translate-key="importPreset">⬆️ Importa</button>
-        </div>
+        <details class="panel" open>
+            <summary data-translate-key="presetTitle">Preset Rapidi</summary>
+            <div class="group-body">
+                <button type="button" class="preset-btn" data-preset="1">Tabata 20-10</button>
+                <button type="button" class="preset-btn" data-preset="2">Tabata 30-15</button>
+                <button type="button" class="preset-btn" data-preset="3">Tabata 40-20</button>
+            </div>
+        </details>
+        <details class="panel">
+            <summary data-translate-key="customPresetTitle">Preset Personalizzato</summary>
+            <div class="group-body">
+                <button type="button" id="savePresetBtn" data-translate-key="savePreset">💾 Salva</button>
+                <button type="button" id="loadPresetBtn" data-translate-key="loadPreset">📂 Carica</button>
+            </div>
+        </details>
+        <details class="panel">
+            <summary data-translate-key="transferTitle">Importa / Esporta</summary>
+            <div class="group-body">
+                <button type="button" id="exportPresetBtn" data-translate-key="exportPreset">⬇️ Esporta</button>
+                <label for="importPresetInput" style="display:none"></label>
+                <input type="file" id="importPresetInput" accept="application/json" style="display:none">
+                <button type="button" id="importPresetBtn" data-translate-key="importPreset">⬆️ Importa</button>
+            </div>
+        </details>
+        <details class="panel">
+            <summary data-translate-key="resourcesGroupTitle">Programma & Diario</summary>
+            <div class="chip-links">
+                <a class="link-chip" data-translate-key="linkProgram" href="programma.html" target="_blank" rel="noopener noreferrer">📄 Programma</a>
+                <a class="link-chip" data-translate-key="linkProgramText" href="programma_testo.html" target="_blank" rel="noopener noreferrer">🧾 Testo</a>
+                <a class="link-chip" data-translate-key="linkDiary" href="diario.html" target="_blank" rel="noopener noreferrer">📝 Diario</a>
+            </div>
+        </details>
+        <details class="panel">
+            <summary data-translate-key="musicTitle">Playlist Musica</summary>
+            <div class="music-links">
+                <a href="https://open.spotify.com/search/workout%20playlist" target="_blank" rel="noopener noreferrer">Spotify</a>
+                <a href="https://music.apple.com/search?term=workout" target="_blank" rel="noopener noreferrer">Apple Music</a>
+                <a href="https://www.youtube.com/results?search_query=workout+music+playlist" target="_blank" rel="noopener noreferrer">YouTube</a>
+                <a href="https://tidal.com/browse/search?q=workout" target="_blank" rel="noopener noreferrer">Tidal</a>
+                <a href="https://soundcloud.com/search?q=workout%20mix" target="_blank" rel="noopener noreferrer">SoundCloud</a>
+            </div>
+        </details>
 
         <div id="round" data-translate-key="roundInitial">Round: 1/8</div>
         <div id="status" data-translate-key="statusInitial">PREMERE AVVIA</div>
@@ -271,13 +313,7 @@
         <button id="startBtn" data-translate-key="startBtn">▶️ AVVIA TIMER</button>
         <button id="stopBtn" data-translate-key="stopBtn">⏹️ STOP</button>
 
-        <!-- Playlist Musicali -->
-        <div class="music-container" style="margin-top:10px; font-size:0.7rem; opacity:0.85;">
-            <a href="https://open.spotify.com/search/workout%20playlist" target="_blank" rel="noopener noreferrer">Spotify</a> |
-            <a href="https://music.apple.com/search?term=workout" target="_blank" rel="noopener noreferrer">Apple Music</a> |
-            <a href="https://www.youtube.com/results?search_query=workout+music+playlist" target="_blank" rel="noopener noreferrer">YouTube</a> |
-            <a href="https://tidal.com/browse/search?q=workout" target="_blank" rel="noopener noreferrer">Tidal</a>
-        </div>
+        <!-- Fine pannelli -->
     </div>
 
     <script>
@@ -335,6 +371,18 @@
                 importError: "Errore durante l'importazione del preset."
             }
         };
+
+        // Nuove chiavi pannelli / accordion
+        translations.en.presetTitle = "Quick Presets";
+        translations.it.presetTitle = "Preset Rapidi";
+        translations.en.customPresetTitle = "Custom Preset";
+        translations.it.customPresetTitle = "Preset Personalizzato";
+        translations.en.transferTitle = "Import / Export";
+        translations.it.transferTitle = "Importa / Esporta";
+        translations.en.resourcesGroupTitle = "Program & Diary";
+        translations.it.resourcesGroupTitle = "Programma & Diario";
+        translations.en.musicTitle = "Music Playlists";
+        translations.it.musicTitle = "Playlist Musica";
 
         // Aggiunta traduzioni link extra
         translations.en.linkProgram = "📄 Program";
