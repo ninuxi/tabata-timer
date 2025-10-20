@@ -3,226 +3,586 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Diario Progressi Tabata</title>
+<meta name="theme-color" content="#00ff00">
+<link rel="manifest" href="manifest.json">
+<title>Diario Allenamenti Tabata</title>
 <style>
- :root { --bg:#0b0b0b; --panel:#141414; --accent:#00ff00; --accent2:#ff6b35; --accent3:#ffd700; --text:#f8f8f8; }
- * { box-sizing:border-box; }
- body { margin:0; font-family:Arial, sans-serif; background:var(--bg); color:var(--text); padding:20px 16px 90px; }
- h1 { font-family:'Impact','Bebas Neue','Oswald',sans-serif; letter-spacing:2px; font-size:1.9rem; margin:10px 0 4px; color:var(--accent3); text-align:center; }
- p.subtitle { text-align:center; font-size:0.8rem; color:#aaa; margin:0 0 20px; }
- .board { max-width:1100px; margin:0 auto; }
- table { width:100%; border-collapse:collapse; font-size:0.7rem; background:var(--panel); border:2px solid var(--accent); }
- th, td { border:1px solid #222; padding:6px 5px; text-align:left; }
- th { background:#111; font-weight:600; font-size:0.65rem; letter-spacing:1px; color:var(--accent3); position:sticky; top:0; }
- td input, td textarea { width:100%; background:#000; color:var(--text); border:1px solid #333; padding:3px 4px; font-size:0.65rem; font-family:inherit; resize:vertical; }
- td input:focus, td textarea:focus { outline:1px solid var(--accent); }
- .controls { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 18px; }
- button, a.btn { background:var(--accent3); color:#000; font-weight:800; font-family:'Impact','Bebas Neue','Oswald',sans-serif; border:2px solid var(--accent); padding:10px 18px; border-radius:40px; cursor:pointer; font-size:0.7rem; letter-spacing:1px; text-decoration:none; }
- button:hover, a.btn:hover { background:var(--accent); }
- .footer-note { font-size:0.55rem; color:#777; margin-top:25px; text-align:center; }
- .flex-between { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center; }
- .mini { font-size:0.55rem; color:#888; }
- .sticky-tools { position:fixed; left:0; right:0; bottom:0; background:#000; border-top:2px solid var(--accent); padding:10px 14px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
- @media (max-width:650px){ th, td { font-size:0.6rem; } button, a.btn { font-size:0.6rem; } }
- @media print { .sticky-tools, .controls, .no-print { display:none !important; } body { padding:0; } table { border:1px solid #000; } td input, td textarea { border:none; background:#fff; color:#000; } th { color:#000; background:#eee; } }
+:root { 
+    --bg:#0b0b0b; --panel:#141414; --accent:#00ff00; --accent2:#ff6b35; 
+    --accent3:#ffd700; --text:#f8f8f8; --border:#333;
+    --font-heading:'Impact','Bebas Neue','Oswald',sans-serif;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Arial, sans-serif; background:var(--bg); color:var(--text); padding:20px 16px 90px; line-height:1.4; }
+
+h1 { 
+    font-family:var(--font-heading); letter-spacing:2px; font-size:2rem; 
+    margin:10px 0 8px; color:var(--accent3); text-align:center; 
+}
+.subtitle { text-align:center; font-size:0.85rem; color:#aaa; margin:0 0 20px; }
+
+.container { max-width:1200px; margin:0 auto; }
+
+/* Stats Cards */
+.stats-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); 
+    gap:12px; margin:20px 0;
+}
+.stat-card {
+    background:var(--panel); border:2px solid var(--accent); border-radius:12px;
+    padding:16px; text-align:center;
+}
+.stat-card .label { font-size:0.75rem; color:#999; text-transform:uppercase; letter-spacing:1px; }
+.stat-card .value { 
+    font-size:2rem; font-family:var(--font-heading); color:var(--accent3); 
+    margin:8px 0;
+}
+.stat-card .subtext { font-size:0.7rem; color:#666; }
+
+/* Calendar */
+.calendar-container {
+    background:var(--panel); border:2px solid var(--border); border-radius:12px;
+    padding:16px; margin:20px 0;
+}
+.calendar-header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border);
+}
+.calendar-header h2 {
+    font-family:var(--font-heading); font-size:1.3rem; color:var(--accent3);
+}
+.calendar-nav button {
+    background:var(--accent); color:#000; border:none; padding:8px 16px;
+    border-radius:20px; cursor:pointer; font-weight:700; margin:0 4px;
+}
+.calendar-nav button:hover { background:var(--accent3); }
+.calendar-grid {
+    display:grid; grid-template-columns:repeat(7,1fr); gap:4px;
+}
+.calendar-day {
+    aspect-ratio:1; background:#111; border:1px solid var(--border);
+    border-radius:8px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; padding:4px;
+    font-size:0.75rem; position:relative; cursor:pointer;
+}
+.calendar-day:hover { border-color:var(--accent); }
+.calendar-day.header {
+    background:var(--panel); font-weight:700; color:var(--accent3);
+    cursor:default;
+}
+.calendar-day.other-month { opacity:0.3; }
+.calendar-day.today { border:2px solid var(--accent3); background:#1a1a1a; }
+.calendar-day.has-workout {
+    background:linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    color:#000; font-weight:700;
+}
+.calendar-day .workout-badge {
+    position:absolute; top:2px; right:2px; width:8px; height:8px;
+    background:var(--accent3); border-radius:50%;
+}
+
+/* Workout List */
+.workout-list {
+    background:var(--panel); border:2px solid var(--border); border-radius:12px;
+    padding:16px; margin:20px 0;
+}
+.workout-list h2 {
+    font-family:var(--font-heading); font-size:1.3rem; color:var(--accent3);
+    margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border);
+}
+.workout-item {
+    background:#111; border:1px solid var(--border); border-radius:8px;
+    padding:12px; margin:8px 0; display:flex; justify-content:space-between;
+    align-items:center; transition:all 0.2s;
+}
+.workout-item:hover { border-color:var(--accent); transform:translateX(4px); }
+.workout-info {
+    flex:1;
+}
+.workout-date {
+    font-size:0.7rem; color:var(--accent3); font-weight:700;
+    text-transform:uppercase; letter-spacing:1px;
+}
+.workout-details {
+    font-size:0.8rem; color:#ccc; margin:4px 0;
+}
+.workout-stats {
+    display:flex; gap:12px; font-size:0.7rem; color:#888;
+}
+.workout-actions {
+    display:flex; gap:8px;
+}
+.workout-actions button {
+    background:transparent; border:1px solid var(--border);
+    color:var(--text); padding:6px 12px; border-radius:16px;
+    cursor:pointer; font-size:0.65rem; transition:all 0.2s;
+}
+.workout-actions button:hover { border-color:var(--accent); background:var(--accent); color:#000; }
+
+/* Controls */
+.controls {
+    display:flex; flex-wrap:wrap; gap:10px; margin:20px 0;
+    justify-content:center;
+}
+button, a.btn {
+    background:var(--accent3); color:#000; font-weight:800;
+    font-family:var(--font-heading); border:2px solid var(--accent);
+    padding:10px 18px; border-radius:40px; cursor:pointer;
+    font-size:0.75rem; letter-spacing:1px; text-decoration:none;
+    transition:all 0.3s; display:inline-block;
+}
+button:hover, a.btn:hover { background:var(--accent); transform:translateY(-2px); }
+button.secondary {
+    background:#333; border-color:#555;
+}
+button.secondary:hover {
+    background:#444;
+}
+
+/* Empty State */
+.empty-state {
+    text-align:center; padding:40px 20px; color:#666;
+}
+.empty-state .icon { font-size:4rem; margin-bottom:16px; }
+.empty-state h3 { font-size:1.2rem; color:#888; margin-bottom:8px; }
+.empty-state p { font-size:0.85rem; }
+
+@media (max-width:768px){
+    .stats-grid { grid-template-columns:repeat(2,1fr); }
+    .calendar-day { font-size:0.65rem; }
+    .workout-item { flex-direction:column; align-items:flex-start; gap:8px; }
+    .workout-actions { width:100%; justify-content:flex-end; }
+}
 </style>
 </head>
 <body>
-    <h1>DIARIO PROGRESSI</h1>
-    <p class="subtitle">Monitora percezione, energia e note sulle sessioni – Salvataggio locale automatico</p>
-    <div class="board">
-        <div class="controls">
-            <button id="addRowBtn">➕ Aggiungi Riga</button>
-            <button id="resetBtn">♻️ Svuota Diario</button>
-            <button id="exportCsvBtn">⬇️ Esporta CSV</button>
-            <button id="importBtn">⬆️ Importa JSON</button>
-            <input type="file" id="importFile" accept="application/json" style="display:none" />
-            <button id="printBtn">🖨️ Stampa</button>
-            <a class="btn" href="index.html">⏱️ Timer</a>
-            <a class="btn" href="programma.html">📄 Programma</a>
-        </div>
-        <div class="flex-between mini">
-            <div><strong>Consiglio:</strong> compila subito dopo la sessione per dati più accurati.</div>
-            <div>RPE = intensità percepita (1 facile – 10 massimo)</div>
-        </div>
-        <table id="logTable">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Settimana</th>
-                    <th>Sessione</th>
-                    <th>Focus</th>
-                    <th>Esercizio più difficile</th>
-                    <th>RPE</th>
-                    <th>Energia (1-5)</th>
-                    <th>Note tecniche</th>
-                    <th>Progressi / Adattamenti</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
-        <div class="footer-note">Dati salvati solo nel tuo browser (localStorage). Esporta periodicamente per backup.</div>
-    </div>
+<!-- Language Selector -->
+<div style="position:fixed;top:10px;right:10px;z-index:9999;display:flex;gap:6px;">
+    <button id="langIT" style="background:#00ff00;color:#000;border:2px solid #00ff00;padding:6px 12px;border-radius:20px;cursor:pointer;font-weight:700;font-size:0.7rem;">🇮🇹 IT</button>
+    <button id="langEN" style="background:#333;color:#fff;border:2px solid #555;padding:6px 12px;border-radius:20px;cursor:pointer;font-weight:700;font-size:0.7rem;">🇬🇧 EN</button>
+</div>
 
-    <div class="sticky-tools no-print">
-        <button id="quickTodayBtn">📅 Oggi in riga selezionata</button>
-        <button id="duplicateRowBtn">🧬 Duplica Riga</button>
-        <button id="deleteRowBtn">🗑️ Elimina Riga</button>
+    <div class="container">
+        <h1 data-i18n="title">📅 DIARIO ALLENAMENTI</h1>
+        <p class="subtitle" data-i18n="subtitle">Tracciamento automatico • Calendario visuale • Esporta su Google Calendar</p>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="label" data-i18n="totalWorkouts">Totale Workout</div>
+                <div class="value" id="totalWorkouts">0</div>
+                <div class="subtext" data-i18n="completedSessions">sessioni completate</div>
+            </div>
+            <div class="stat-card">
+                <div class="label" data-i18n="thisWeek">Questa Settimana</div>
+                <div class="value" id="weekWorkouts">0</div>
+                <div class="subtext" data-i18n="weekGoal">su 4 obiettivo</div>
+            </div>
+            <div class="stat-card">
+                <div class="label" data-i18n="streak">Streak</div>
+                <div class="value" id="streakDays">0</div>
+                <div class="subtext" data-i18n="consecutiveDays">giorni consecutivi</div>
+            </div>
+            <div class="stat-card">
+                <div class="label" data-i18n="totalRounds">Round Totali</div>
+                <div class="value" id="totalRounds">0</div>
+                <div class="subtext" data-i18n="completedRounds">round completati</div>
+            </div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <h2 id="calendarMonth">Ottobre 2025</h2>
+                <div class="calendar-nav">
+                    <button id="prevMonth">◀</button>
+                    <button id="todayBtn" data-i18n="today">Oggi</button>
+                    <button id="nextMonth">▶</button>
+                </div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button id="exportGoogleBtn" data-i18n="exportGoogle">📅 Google Calendar</button>
+            <button id="exportIcalBtn" data-i18n="exportIcal">📆 iCal/Outlook</button>
+            <button id="exportJsonBtn" data-i18n="exportJson">⬇️ JSON</button>
+            <button class="secondary" id="clearDataBtn" data-i18n="clearData">🗑️ Cancella</button>
+        </div>
+
+        <!-- Workout List -->
+        <div class="workout-list">
+            <h2 data-i18n="recentWorkouts">📝 Ultimi Allenamenti</h2>
+            <div id="workoutListContainer"></div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="controls" style="margin-top:40px;">
+            <a class="btn" href="index.html" data-i18n="timer">⏱️ Timer</a>
+            <a class="btn" href="programma.html" data-i18n="program">📄 Programma</a>
+        </div>
     </div>
 
 <script>
-const STORAGE_KEY = 'tabataDiarioV1';
-let selectedRowIndex = null;
+const HISTORY_KEY = 'tabataHistory';
+let currentDate = new Date();
+let workoutHistory = [];
 
-const tableBody = document.getElementById('tableBody');
-const addRowBtn = document.getElementById('addRowBtn');
-const resetBtn = document.getElementById('resetBtn');
-const exportCsvBtn = document.getElementById('exportCsvBtn');
-const importBtn = document.getElementById('importBtn');
-const importFile = document.getElementById('importFile');
-const printBtn = document.getElementById('printBtn');
-const quickTodayBtn = document.getElementById('quickTodayBtn');
-const duplicateRowBtn = document.getElementById('duplicateRowBtn');
-const deleteRowBtn = document.getElementById('deleteRowBtn');
+function loadData() {
+    const historyRaw = localStorage.getItem(HISTORY_KEY);
+    if (historyRaw) workoutHistory = JSON.parse(historyRaw);
+    updateStats();
+    renderCalendar();
+    renderWorkoutList();
+}
 
-function loadData(){
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw){ addEmptyRow(); return; }
-    try {
-        const rows = JSON.parse(raw);
-        rows.forEach(r => addRow(r));
-    } catch(e){
-        console.warn('Dati corrotti, reset.');
-        addEmptyRow();
+function updateStats() {
+    const stats = calculateStats();
+    document.getElementById('totalWorkouts').textContent = stats.total;
+    document.getElementById('weekWorkouts').textContent = stats.thisWeek;
+    document.getElementById('streakDays').textContent = stats.streak;
+    document.getElementById('totalRounds').textContent = stats.totalRounds;
+}
+
+function calculateStats() {
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0,0,0,0);
+    
+    const thisWeek = workoutHistory.filter(w => {
+        const wDate = new Date(w.completedAt || w.date);
+        return wDate >= startOfWeek && w.completed;
+    }).length;
+    
+    const totalRounds = workoutHistory.reduce((sum, w) => sum + (w.rounds || 0), 0);
+    
+    // Calculate streak
+    let streak = 0;
+    const sortedWorkouts = [...workoutHistory]
+        .filter(w => w.completed)
+        .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
+    
+    if (sortedWorkouts.length > 0) {
+        const uniqueDays = new Set();
+        sortedWorkouts.forEach(w => {
+            const date = new Date(w.completedAt);
+            uniqueDays.add(date.toDateString());
+        });
+        
+        const sortedDays = Array.from(uniqueDays).sort((a, b) => new Date(b) - new Date(a));
+        let checkDate = new Date();
+        checkDate.setHours(0,0,0,0);
+        
+        for (const dayStr of sortedDays) {
+            const day = new Date(dayStr);
+            if (day.toDateString() === checkDate.toDateString()) {
+                streak++;
+                checkDate.setDate(checkDate.getDate() - 1);
+            } else break;
+        }
+    }
+    
+    return {
+        total: workoutHistory.filter(w => w.completed).length,
+        thisWeek,
+        streak,
+        totalRounds
+    };
+}
+
+function renderCalendar() {
+    const grid = document.getElementById('calendarGrid');
+    grid.innerHTML = '';
+    
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    const monthNames = translations[currentLang].monthNames;
+    document.getElementById('calendarMonth').textContent = `${monthNames[month]} ${year}`;
+    
+    const days = translations[currentLang].dayNames;
+    days.forEach(day => {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day header';
+        dayEl.textContent = day;
+        grid.appendChild(dayEl);
+    });
+    
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startDay = firstDay.getDay();
+    
+    const prevMonthDays = new Date(year, month, 0).getDate();
+    for (let i = startDay - 1; i >= 0; i--) {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day other-month';
+        dayEl.textContent = prevMonthDays - i;
+        grid.appendChild(dayEl);
+    }
+    
+    const today = new Date();
+    for (let day = 1; day <= lastDay.getDate(); day++) {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day';
+        dayEl.textContent = day;
+        
+        const dayDate = new Date(year, month, day);
+        
+        if (dayDate.toDateString() === today.toDateString()) {
+            dayEl.classList.add('today');
+        }
+        
+        const hasWorkout = workoutHistory.some(w => {
+            const wDate = new Date(w.completedAt || w.date);
+            return wDate.toDateString() === dayDate.toDateString() && w.completed;
+        });
+        
+        if (hasWorkout) {
+            dayEl.classList.add('has-workout');
+            const badge = document.createElement('div');
+            badge.className = 'workout-badge';
+            dayEl.appendChild(badge);
+        }
+        
+        dayEl.addEventListener('click', () => showDayWorkouts(dayDate));
+        grid.appendChild(dayEl);
+    }
+    
+    const remainingDays = 42 - (startDay + lastDay.getDate());
+    for (let i = 1; i <= remainingDays; i++) {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'calendar-day other-month';
+        dayEl.textContent = i;
+        grid.appendChild(dayEl);
     }
 }
 
-function saveData(){
-    const data = [...tableBody.querySelectorAll('tr')].map(tr => {
-        const inputs = tr.querySelectorAll('input, textarea');
-        return {
-            data: inputs[0].value.trim(),
-            settimana: inputs[1].value.trim(),
-            sessione: inputs[2].value.trim(),
-            focus: inputs[3].value.trim(),
-            difficile: inputs[4].value.trim(),
-            rpe: inputs[5].value.trim(),
-            energia: inputs[6].value.trim(),
-            note: inputs[7].value.trim(),
-            progressi: inputs[8].value.trim()
-        };
+function showDayWorkouts(date) {
+    const workouts = workoutHistory.filter(w => {
+        const wDate = new Date(w.completedAt || w.date);
+        return wDate.toDateString() === date.toDateString() && w.completed;
     });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-function addRow(prefill={}){
-    const tr = document.createElement('tr');
-    tr.innerHTML = [
-        `<input type="date" value="${prefill.data||''}">`,
-        `<input type="text" placeholder="1" value="${prefill.settimana||''}">`,
-        `<input type="text" placeholder="1" value="${prefill.sessione||''}">`,
-        `<input type="text" placeholder="Upper/Core" value="${prefill.focus||''}">`,
-        `<input type="text" placeholder="—" value="${prefill.difficile||''}">`,
-        `<input type="number" min="1" max="10" placeholder="7" value="${prefill.rpe||''}">`,
-        `<input type="number" min="1" max="5" placeholder="4" value="${prefill.energia||''}">`,
-        `<textarea rows="1" placeholder="Note tecnica...">${prefill.note||''}</textarea>`,
-        `<textarea rows="1" placeholder="Progressi...">${prefill.progressi||''}</textarea>`
-    ].map(c=>`<td>${c}</td>`).join('');
-
-    tr.addEventListener('click', () => {
-        [...tableBody.querySelectorAll('tr')].forEach(r=>r.classList.remove('selected'));
-        tr.classList.add('selected');
-        selectedRowIndex = [...tableBody.children].indexOf(tr);
-    });
-
-    tableBody.appendChild(tr);
-}
-
-function addEmptyRow(){ addRow({}); }
-
-addRowBtn.addEventListener('click', () => { addEmptyRow(); saveData(); });
-resetBtn.addEventListener('click', () => {
-    if(confirm('Sicuro di cancellare tutto il diario?')){
-        localStorage.removeItem(STORAGE_KEY);
-        tableBody.innerHTML='';
-        addEmptyRow();
+    
+    const locale = currentLang === 'it' ? 'it-IT' : 'en-US';
+    if (workouts.length === 0) {
+        alert(`${translations[currentLang].noWorkout} ${date.toLocaleDateString(locale)}`);
+    } else {
+        const details = workouts.map(w => 
+            `⏱️ ${w.work}"/${w.rest}" x ${w.rounds} round\\n` +
+            `⏰ ${new Date(w.completedAt).toLocaleTimeString(locale)}`
+        ).join('\\n\\n');
+        alert(`${translations[currentLang].workoutsOn} ${date.toLocaleDateString(locale)}:\\n\\n${details}`);
     }
+}
+
+function renderWorkoutList() {
+    const container = document.getElementById('workoutListContainer');
+    
+    const completedWorkouts = workoutHistory
+        .filter(w => w.completed)
+        .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt))
+        .slice(0, 20);
+    
+    if (completedWorkouts.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="icon">🏋️</div>
+                <h3>${translations[currentLang].noWorkoutYet}</h3>
+                <p>${translations[currentLang].completeFirst}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const locale = currentLang === 'it' ? 'it-IT' : 'en-US';
+    container.innerHTML = completedWorkouts.map((workout, index) => {
+        const date = new Date(workout.completedAt);
+        const dateStr = date.toLocaleDateString(locale, { 
+            weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' 
+        });
+        const timeStr = date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
+        
+        return `
+            <div class="workout-item">
+                <div class="workout-info">
+                    <div class="workout-date">${dateStr} • ${timeStr}</div>
+                    <div class="workout-details">
+                        ⏱️ Tabata ${workout.work}"/${workout.rest}" • ${workout.rounds} round
+                    </div>
+                    <div class="workout-stats">
+                        <span>💪 #${completedWorkouts.length - index}</span>
+                        <span>🔥 ${(workout.work * workout.rounds / 60).toFixed(1)} min attivi</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+document.getElementById('prevMonth').addEventListener('click', () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderCalendar();
 });
 
-exportCsvBtn.addEventListener('click', () => {
-    const headers = ['Data','Settimana','Sessione','Focus','Esercizio_difficile','RPE','Energia','Note','Progressi'];
-    const rows = [...tableBody.querySelectorAll('tr')].map(tr => {
-        return [...tr.querySelectorAll('input, textarea')].map(el => '"'+(el.value.replace(/"/g,'""'))+'"').join(',');
+document.getElementById('nextMonth').addEventListener('click', () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderCalendar();
+});
+
+document.getElementById('todayBtn').addEventListener('click', () => {
+    currentDate = new Date();
+    renderCalendar();
+});
+
+function generateICS(workouts) {
+    let ics = 'BEGIN:VCALENDAR\\nVERSION:2.0\\nPRODID:-//Tabata Timer//IT\\nCALSCALE:GREGORIAN\\n';
+    workouts.forEach(w => {
+        const date = new Date(w.completedAt);
+        const dateStr = date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        ics += `BEGIN:VEVENT\\nUID:${w.completedAt}@tabata\\nDTSTAMP:${dateStr}\\nDTSTART:${dateStr}\\n`;
+        ics += `SUMMARY:Tabata ${w.work}/${w.rest} x${w.rounds}\\nEND:VEVENT\\n`;
     });
-    const csv = [headers.join(',')].concat(rows).join('\n');
-    const blob = new Blob([csv], {type:'text/csv'});
+    ics += 'END:VCALENDAR';
+    return ics;
+}
+
+document.getElementById('exportGoogleBtn').addEventListener('click', () => {
+    const workouts = workoutHistory.filter(w => w.completed);
+    if (workouts.length === 0) return alert(translations[currentLang].noWorkouts);
+    const w = workouts[workouts.length - 1];
+    const date = new Date(w.completedAt);
+    const dateStr = date.toISOString().replace(/[-:.]/g, '').split('Z')[0];
+    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Tabata ${w.work}/${w.rest}&dates=${dateStr}/${dateStr}&details=Tabata: ${w.rounds} round`;
+    window.open(url, '_blank');
+});
+
+document.getElementById('exportIcalBtn').addEventListener('click', () => {
+    const workouts = workoutHistory.filter(w => w.completed);
+    if (workouts.length === 0) return alert(translations[currentLang].noWorkouts);
+    const ics = generateICS(workouts);
+    const blob = new Blob([ics], { type: 'text/calendar' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download='diario_tabata.csv'; a.click();
+    a.href = url;
+    a.download = 'tabata-workouts.ics';
+    a.click();
     URL.revokeObjectURL(url);
 });
 
-importBtn.addEventListener('click', () => importFile.click());
-importFile.addEventListener('change', e => {
-    const file = e.target.files[0]; if(!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-        try {
-            const data = JSON.parse(ev.target.result);
-            if(!Array.isArray(data)) throw new Error('Formato non valido');
-            tableBody.innerHTML='';
-            data.forEach(r => addRow(r));
-            saveData();
-        } catch(err){
-            alert('File JSON non valido');
-        }
-    };
-    reader.readAsText(file);
+document.getElementById('exportJsonBtn').addEventListener('click', () => {
+    const json = JSON.stringify(workoutHistory, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tabata-history.json';
+    a.click();
+    URL.revokeObjectURL(url);
 });
 
-printBtn.addEventListener('click', () => window.print());
-
-quickTodayBtn.addEventListener('click', () => {
-    if(selectedRowIndex===null){ alert('Seleziona una riga prima.'); return; }
-    const tr = tableBody.children[selectedRowIndex];
-    const dateInput = tr.querySelector('input[type="date"]');
-    const today = new Date();
-    const iso = today.toISOString().slice(0,10);
-    dateInput.value = iso;
-    saveData();
+document.getElementById('clearDataBtn').addEventListener('click', () => {
+    if (!confirm(translations[currentLang].deleteAll)) return;
+    localStorage.removeItem(HISTORY_KEY);
+    workoutHistory = [];
+    loadData();
 });
-
-duplicateRowBtn.addEventListener('click', () => {
-    if(selectedRowIndex===null){ alert('Seleziona una riga da duplicare.'); return; }
-    const tr = tableBody.children[selectedRowIndex];
-    const inputs = tr.querySelectorAll('input, textarea');
-    const cloneData = {
-        data: inputs[0].value,
-        settimana: inputs[1].value,
-        sessione: inputs[2].value,
-        focus: inputs[3].value,
-        difficile: inputs[4].value,
-        rpe: inputs[5].value,
-        energia: inputs[6].value,
-        note: inputs[7].value,
-        progressi: inputs[8].value
-    };
-    addRow(cloneData);
-    saveData();
-});
-
-deleteRowBtn.addEventListener('click', () => {
-    if(selectedRowIndex===null){ alert('Seleziona una riga da eliminare.'); return; }
-    if(!confirm('Eliminare la riga selezionata?')) return;
-    tableBody.removeChild(tableBody.children[selectedRowIndex]);
-    selectedRowIndex = null;
-    saveData();
-});
-
-// Autosave al cambiamento
- tableBody.addEventListener('input', () => saveData());
 
 loadData();
+window.addEventListener('storage', (e) => {
+    if (e.key === HISTORY_KEY) loadData();
+});
+
+// Multilingual System
+const translations = {
+    it: {
+        title: '📅 DIARIO ALLENAMENTI',
+        subtitle: 'Tracciamento automatico • Calendario visuale • Esporta su Google Calendar',
+        totalWorkouts: 'Totale Workout',
+        completedSessions: 'sessioni completate',
+        thisWeek: 'Questa Settimana',
+        weekGoal: 'su 4 obiettivo',
+        streak: 'Streak',
+        consecutiveDays: 'giorni consecutivi',
+        totalRounds: 'Round Totali',
+        completedRounds: 'round completati',
+        today: 'Oggi',
+        exportGoogle: '📅 Google Calendar',
+        exportIcal: '📆 iCal/Outlook',
+        exportJson: '⬇️ JSON',
+        clearData: '🗑️ Cancella',
+        recentWorkouts: '📝 Ultimi Allenamenti',
+        timer: '⏱️ Timer',
+        program: '📄 Programma',
+        noWorkout: 'Nessun allenamento il',
+        workoutsOn: 'Allenamenti del',
+        noWorkoutYet: 'Nessun allenamento ancora',
+        completeFirst: 'Completa il tuo primo workout dal timer!',
+        deleteAll: 'Cancellare TUTTI gli allenamenti?',
+        noWorkouts: 'Nessun allenamento',
+        monthNames: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
+        dayNames: ['Dom','Lun','Mar','Mer','Gio','Ven','Sab']
+    },
+    en: {
+        title: '📅 WORKOUT DIARY',
+        subtitle: 'Auto-tracking • Visual calendar • Export to Google Calendar',
+        totalWorkouts: 'Total Workouts',
+        completedSessions: 'completed sessions',
+        thisWeek: 'This Week',
+        weekGoal: 'out of 4 goal',
+        streak: 'Streak',
+        consecutiveDays: 'consecutive days',
+        totalRounds: 'Total Rounds',
+        completedRounds: 'completed rounds',
+        today: 'Today',
+        exportGoogle: '📅 Google Calendar',
+        exportIcal: '📆 iCal/Outlook',
+        exportJson: '⬇️ JSON',
+        clearData: '🗑️ Clear',
+        recentWorkouts: '📝 Recent Workouts',
+        timer: '⏱️ Timer',
+        program: '📄 Program',
+        noWorkout: 'No workout on',
+        workoutsOn: 'Workouts on',
+        noWorkoutYet: 'No workouts yet',
+        completeFirst: 'Complete your first workout from the timer!',
+        deleteAll: 'Delete ALL workouts?',
+        noWorkouts: 'No workouts',
+        monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+        dayNames: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+    }
+};
+
+let currentLang = localStorage.getItem('tabataLang') || 'it';
+
+function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('tabataLang', lang);
+    
+    // Update buttons
+    document.getElementById('langIT').style.background = lang === 'it' ? '#00ff00' : '#333';
+    document.getElementById('langIT').style.borderColor = lang === 'it' ? '#00ff00' : '#555';
+    document.getElementById('langEN').style.background = lang === 'en' ? '#00ff00' : '#333';
+    document.getElementById('langEN').style.borderColor = lang === 'en' ? '#00ff00' : '#555';
+    
+    // Update all elements with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+    
+    // Re-render calendar with translated months/days
+    renderCalendar();
+}
+
+document.getElementById('langIT').addEventListener('click', () => setLanguage('it'));
+document.getElementById('langEN').addEventListener('click', () => setLanguage('en'));
+
+// Initialize
+setLanguage(currentLang);
 </script>
 </body>
 </html>

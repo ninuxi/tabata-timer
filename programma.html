@@ -129,19 +129,25 @@
 </style>
 </head>
 <body>
+    <!-- Language Selector -->
+    <div style="position:fixed;top:10px;right:10px;z-index:9999;display:flex;gap:6px;">
+        <button id="langIT" style="background:#00ff00;color:#000;border:2px solid #00ff00;padding:6px 12px;border-radius:20px;cursor:pointer;font-weight:700;font-size:0.7rem;">🇮🇹 IT</button>
+        <button id="langEN" style="background:#333;color:#fff;border:2px solid #555;padding:6px 12px;border-radius:20px;cursor:pointer;font-weight:700;font-size:0.7rem;">🇬🇧 EN</button>
+    </div>
+
     <header>
-        <h1>PROGRAMMA TABATA CALISTHENICS</h1>
-        <div class="subtitle">30 minuti x 4 volte a settimana • Over 45 friendly</div>
-        <div class="meta">Attrezzi: elastici vari • 2 pesetti da 2 kg • Obiettivo: forza funzionale, postura, tonicità</div>
-        <div class="notice">Formato: Tabata 20" lavoro / 10" recupero • 8 round = 4 minuti a blocco • Ripeti il blocco 5 volte = 20' di lavoro attivo (+ riscaldamento e stretching)</div>
+        <h1 data-i18n="title">PROGRAMMA TABATA CALISTHENICS</h1>
+        <div class="subtitle" data-i18n="subtitle">30 minuti x 4 volte a settimana</div>
+        <div class="meta" data-i18n="meta">Attrezzi: elastici vari • 2 pesetti da 2 kg • Obiettivo: forza funzionale, postura, tonicità</div>
+        <div class="notice" data-i18n="notice">Formato: Tabata 20" lavoro / 10" recupero • 8 round = 4 minuti a blocco • Ripeti il blocco 5 volte = 20' di lavoro attivo (+ riscaldamento e stretching)</div>
     </header>
     <div class="wrapper">
         <!-- SESSIONE 1 -->
         <section class="session" id="sessione-1">
-            <h2>🧩 Sessione 1 — Upper Body + Core</h2>
-            <div class="tagline">Lunedì / Giovedì • Focus: spinta, tirata, core, postura</div>
+            <h2 data-i18n="session1">🧩 Sessione 1 — Upper Body + Core</h2>
+            <div class="tagline" data-i18n="session1tag">Lunedì / Giovedì • Focus: spinta, tirata, core, postura</div>
             <div class="block">
-                <h3>Riscaldamento (5')</h3>
+                <h3 data-i18n="warmup">Riscaldamento (5')</h3>
                 <ul>
                     <li><strong>Jumping Jacks</strong> — 1'</li>
                     <li><strong>Rotazioni braccia</strong> — 1'</li>
@@ -260,10 +266,10 @@
 
         <!-- SESSIONE 2 -->
         <section class="session" id="sessione-2">
-            <h2>🧩 Sessione 2 — Lower Body + Mobilità</h2>
-            <div class="tagline">Martedì / Venerdì • Focus: gambe, anche, equilibrio</div>
+            <h2 data-i18n="session2">🧩 Sessione 2 — Lower Body + Mobilità</h2>
+            <div class="tagline" data-i18n="session2tag">Martedì / Venerdì • Focus: gambe, anche, equilibrio</div>
             <div class="block">
-                <h3>Riscaldamento (5')</h3>
+                <h3 data-i18n="warmup">Riscaldamento (5')</h3>
                 <ul>
                     <li><strong>High Knees</strong> — 1'</li>
                     <li><strong>Affondi camminati</strong> — 2'</li>
@@ -382,10 +388,10 @@
 
         <!-- SESSIONE 3 -->
         <section class="session" id="sessione-3">
-            <h2>🧩 Sessione 3 — Full Body Funzionale</h2>
-            <div class="tagline">Giovedì / Sabato • Focus: total body, core, stabilità</div>
+            <h2 data-i18n="session3">🧩 Sessione 3 — Full Body Funzionale</h2>
+            <div class="tagline" data-i18n="session3tag">Giovedì / Sabato • Focus: total body, core, stabilità</div>
             <div class="block">
-                <h3>Riscaldamento (5')</h3>
+                <h3 data-i18n="warmup">Riscaldamento (5')</h3>
                 <ul>
                     <li><strong>Skip basso</strong> — 1'</li>
                     <li><strong>Torso Twist</strong> — 1'</li>
@@ -499,6 +505,155 @@
                         </figure>
                     </div>
                 </details>
+            </div>
+        </section>
+
+        <!-- SESSIONE 4 -->
+        <section class="session" id="sessione-4">
+            <h2 data-i18n="session4">🧩 Sessione 4 — Cardio Power</h2>
+            <div class="tagline" data-i18n="session4tag">Mercoledì / Sabato • Focus: resistenza, coordinazione, agilità</div>
+            <div class="block">
+                <h3 data-i18n="warmup">Riscaldamento (5')</h3>
+                <ul>
+                    <li><strong>Marcia sul posto</strong> — 1'</li>
+                    <li><strong>Cerchi braccia avanti/indietro</strong> — 1'</li>
+                    <li><strong>Affondi alterni dinamici</strong> — 2'</li>
+                    <li><strong>Jumping Jacks graduali</strong> — 1'</li>
+                </ul>
+            </div>
+            <div class="block">
+                <h3>Tabata (x5 blocchi)</h3>
+                <div class="mini-timer tabata" id="tabata-4" data-work="20" data-rest="10" data-rounds="8" data-blocks="5">
+                    <h4>🔥 Mini Tabata (20"/10" x8 x5)</h4>
+                    <div class="time-display" data-role="display">20:00</div>
+                    <div class="phase" data-role="phase">Pronto</div>
+                    <div class="round-info" data-role="round">Round: - / 8 • Blocco: - / 5</div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line">Totale stimato: 20'</div>
+                </div>
+                <div class="tabata-grid">
+                    <div class="exercise">
+                        <h4>1. High Knees</h4>
+                        <div class="desc">Ginocchia al petto alternate • Ritmo sostenuto</div>
+                        <figure class="image-slot">
+                            <img src="img/high-knees.jpg" alt="High Knees ginocchia alte" loading="lazy">
+                            <figcaption>High Knees</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>2. Burpee Base</h4>
+                        <div class="desc">Versione semplificata • Mantieni il ritmo</div>
+                        <figure class="image-slot">
+                            <img src="img/burpee-senza-salto-finale.png" alt="Burpee modificato" loading="lazy">
+                            <figcaption>Burpee Base</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>3. Skater Hop</h4>
+                        <div class="desc">Salti laterali alternati • Stabilità monopodalica</div>
+                        <figure class="image-slot">
+                            <img src="img/skater-hop.jpg" alt="Skater Hop laterale" loading="lazy">
+                            <figcaption>Skater Hop</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>4. Mountain Climber</h4>
+                        <div class="desc">Versione moderata • Controllo del core</div>
+                        <figure class="image-slot">
+                            <img src="img/mountain-climber.jpg" alt="Mountain Climber" loading="lazy">
+                            <figcaption>Mountain Climber</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <h3>Stretching Finale (5')</h3>
+                <ul>
+                    <li><strong>Piegamento avanti gambe tese</strong> — 2'</li>
+                    <li><strong>Quadricipiti in piedi</strong> — 1'/lato</li>
+                    <li><strong>Respirazione profonda</strong> — 1'</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SESSIONE 5 -->
+        <section class="session" id="sessione-5">
+            <h2 data-i18n="session5">🧩 Sessione 5 — Recovery & Mobilità</h2>
+            <div class="tagline" data-i18n="session5tag">Venerdì / Domenica • Focus: recupero attivo, flessibilità, mobilità articolare</div>
+            <div class="block">
+                <h3>Mobilità Guidata (15')</h3>
+                <ul>
+                    <li><strong>Cat-Cow Stretch</strong> — 2'</li>
+                    <li><strong>World's Greatest Stretch</strong> — 2'/lato</li>
+                    <li><strong>Hip Circles</strong> — 2'</li>
+                    <li><strong>Ankle Mobility</strong> — 2'</li>
+                    <li><strong>Cerchi spalle e braccia</strong> — 2'</li>
+                    <li><strong>Child's Pose con respirazione</strong> — 3'</li>
+                </ul>
+                <details class="media-gallery">
+                    <summary>🖼️ Mostra / Nascondi immagini mobilità</summary>
+                    <div class="media-grid">
+                        <figure>
+                            <img src="img/cat-cow-stretch.png" alt="Cat-Cow Stretch" loading="lazy" />
+                            <figcaption>Cat-Cow</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/worlds-greatest-stretch.jpg" alt="World's Greatest Stretch" loading="lazy" />
+                            <figcaption>World's Greatest</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/hip-circles.jpg" alt="Hip Circles" loading="lazy" />
+                            <figcaption>Hip Circles</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/childs-pose.png" alt="Child's Pose" loading="lazy" />
+                            <figcaption>Child's Pose</figcaption>
+                        </figure>
+                    </div>
+                </details>
+            </div>
+            <div class="block">
+                <h3>Stretching Profondo (10')</h3>
+                <ul>
+                    <li><strong>Figure-Four Stretch</strong> — 2'/lato</li>
+                    <li><strong>Butterfly Stretch</strong> — 3'</li>
+                    <li><strong>Cobra + Child alternati</strong> — 3'</li>
+                    <li><strong>Respirazione diaframmatica finale</strong> — 2'</li>
+                </ul>
+                <details class="media-gallery">
+                    <summary>🖼️ Mostra / Nascondi immagini stretching</summary>
+                    <div class="media-grid">
+                        <figure>
+                            <img src="img/figure-four-stretch-gluteo.jpg" alt="Figure-Four Stretch" loading="lazy" />
+                            <figcaption>Figure-Four</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/butterfly-stretch.png" alt="Butterfly Stretch" loading="lazy" />
+                            <figcaption>Butterfly</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/cobra-stretch.jpg" alt="Cobra Stretch" loading="lazy" />
+                            <figcaption>Cobra</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/respirazione-profonda.png" alt="Respirazione profonda" loading="lazy" />
+                            <figcaption>Respirazione</figcaption>
+                        </figure>
+                    </div>
+                </details>
+            </div>
+            <div class="block">
+                <h3>Note Recovery</h3>
+                <ul>
+                    <li>Questa sessione è a <strong>bassa intensità</strong> - non serve Tabata timer</li>
+                    <li>Concentrati su <strong>respiro</strong> e <strong>sensazioni corporee</strong></li>
+                    <li>Perfetta nei giorni di recupero tra sessioni intense</li>
+                    <li>Migliora <strong>mobilità</strong> e <strong>prevenzione infortuni</strong></li>
+                </ul>
             </div>
         </section>
 
@@ -819,5 +974,91 @@ function speakCountdown(seconds) {
     });
 })();
 </script>
+
+<script>
+// Multilingual System
+const translations = {
+    it: {
+        title: 'PROGRAMMA TABATA CALISTHENICS',
+        subtitle: '30 minuti x 4 volte a settimana',
+        meta: 'Attrezzi: elastici vari • 2 pesetti da 2 kg • Obiettivo: forza funzionale, postura, tonicità',
+        notice: 'Formato: Tabata 20" lavoro / 10" recupero • 8 round = 4 minuti a blocco • Ripeti il blocco 5 volte = 20\' di lavoro attivo (+ riscaldamento e stretching)',
+        session1: 'Sessione 1 — Upper Body + Core',
+        session1tag: 'Lunedì / Giovedì • Focus: spinta, tirata, core, postura',
+        session2: 'Sessione 2 — Lower Body + Glutei',
+        session2tag: 'Martedì / Venerdì • Focus: gambe, glutei, equilibrio',
+        session3: 'Sessione 3 — Full Body Dinamico',
+        session3tag: 'Mercoledì / Sabato • Focus: cardio, agilità, coordinazione',
+        session4: 'Sessione 4 — Cardio Power',
+        session4tag: 'Facoltativo extra • Focus: resistenza cardiovascolare',
+        session5: 'Sessione 5 — Recovery & Mobilità',
+        session5tag: 'Domenica o riposo attivo • Focus: flessibilità, recupero',
+        warmup: 'Riscaldamento (5\')',
+        tabataTimer: 'Timer Tabata Integrato',
+        stretching: 'Stretching Finale (5\')',
+        testVoice: 'Testa Voce',
+        ready: 'Pronto',
+        prepare: 'Preparati...',
+        work: 'Lavoro',
+        rest: 'Recupero',
+        pause: 'Pausa',
+        done: 'Completato!'
+    },
+    en: {
+        title: 'TABATA CALISTHENICS PROGRAM',
+        subtitle: '30 minutes x 4 times a week',
+        meta: 'Equipment: resistance bands • 2x 2kg dumbbells • Goal: functional strength, posture, tone',
+        notice: 'Format: Tabata 20" work / 10" rest • 8 rounds = 4 min per block • Repeat block 5 times = 20\' active work (+ warm-up and stretching)',
+        session1: 'Session 1 — Upper Body + Core',
+        session1tag: 'Monday / Thursday • Focus: push, pull, core, posture',
+        session2: 'Session 2 — Lower Body + Glutes',
+        session2tag: 'Tuesday / Friday • Focus: legs, glutes, balance',
+        session3: 'Session 3 — Dynamic Full Body',
+        session3tag: 'Wednesday / Saturday • Focus: cardio, agility, coordination',
+        session4: 'Session 4 — Cardio Power',
+        session4tag: 'Optional extra • Focus: cardiovascular endurance',
+        session5: 'Session 5 — Recovery & Mobility',
+        session5tag: 'Sunday or active rest • Focus: flexibility, recovery',
+        warmup: 'Warm-up (5\')',
+        tabataTimer: 'Integrated Tabata Timer',
+        stretching: 'Final Stretching (5\')',
+        testVoice: 'Test Voice',
+        ready: 'Ready',
+        prepare: 'Get Ready...',
+        work: 'Work',
+        rest: 'Rest',
+        pause: 'Pause',
+        done: 'Complete!'
+    }
+};
+
+let currentLang = localStorage.getItem('tabataLang') || 'it';
+
+function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('tabataLang', lang);
+    
+    // Update buttons
+    document.getElementById('langIT').style.background = lang === 'it' ? '#00ff00' : '#333';
+    document.getElementById('langIT').style.borderColor = lang === 'it' ? '#00ff00' : '#555';
+    document.getElementById('langEN').style.background = lang === 'en' ? '#00ff00' : '#333';
+    document.getElementById('langEN').style.borderColor = lang === 'en' ? '#00ff00' : '#555';
+    
+    // Update all elements with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
+document.getElementById('langIT').addEventListener('click', () => setLanguage('it'));
+document.getElementById('langEN').addEventListener('click', () => setLanguage('en'));
+
+// Initialize
+setLanguage(currentLang);
+</script>
+
 </body>
 </html>
