@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<!--
+ Mapping rinomina immagini (normalizzazione kebab-case):
+  Affondi camminati.png -> affondi-camminati.png
+  Allungamento_pettorali_su_stipite.png -> allungamento-pettorali-stipite.png
+  Ankle Mobility.jpg -> ankle-mobility.jpg
+  Cat-Cow_Stretch.png -> cat-cow-stretch.png
+  Child’s_Pose.png -> childs-pose.png
+  Figure-Four Stretch_gluteo.jpg -> figure-four-stretch-gluteo.jpg
+  Glute Bridge con elastico.png -> glute-bridge-elastico.png
+  High Knees.jpg -> high-knees.jpg
+  Hip Circles.jpg -> hip-circles.jpg
+  jumping_jacks.png -> jumping-jacks.png
+  Lateral Lunge con elastico sopra ginocchia.jpg -> lateral-lunge-elastico-sopra-ginocchia.jpg
+  Piegamento in avanti gambe tese.jpg -> piegamento-avanti-gambe-tese.jpg
+  Plank_dinamico.png -> plank-dinamico.png
+  Plank_to_Downward_Dog_Flow.png -> plank-downward-dog-flow.png
+  Push-up.png -> push-up.png
+  Renegade_Row_con_pesetti.png -> renegade-row-pesetti.png
+  Rotazioni_braccia.png -> rotazioni-braccia.png
+  Single Leg Deadlift .jpg -> single-leg-deadlift.jpg
+  Squat Jump.jpg -> squat-jump.jpg
+  Stretch quadricipite in piedi.jpg -> stretch-quadricipite-in-piedi.jpg
+  Stretch_tricipiti_dietro_la_testa.png -> stretch-tricipiti-dietro-testa.png
+  Superman_Hold.png -> superman-hold.png
+    Bear Crawl sul posto.jpg -> bear-crawl-sul-posto.jpg
+    Burpee (senza salto finale.png -> burpee-senza-salto-finale.png
+    Butterfly Stretch.png -> butterfly-stretch.png
+    Cobra Stretch.jpg -> cobra-stretch.jpg
+    Hollow Body Hold.jpg -> hollow-body-hold.jpg
+    Mountain Climber.jpg -> mountain-climber.jpg
+    Respirazione profonda.png -> respirazione-profonda.png
+    Skater Hop.jpg -> skater-hop.jpg
+    Skip basso ginocchia al petto.jpg -> skip-basso-ginocchia-petto.jpg
+    Torso Twist rotazioni busto.jpg -> torso-twist-rotazioni-busto.jpg
+    World’s Greatest Stretch.jpg -> worlds-greatest-stretch.jpg
+ -->
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Programma Tabata Calisthenics</title>
+<style>
+    :root {
+        --bg:#0a0a0a; --panel:#111; --accent:#00ff00; --accent2:#ff6b35; --accent3:#ffd700; --text:#fdfdfd; --muted:#888;
+        --font-heading:'Impact','Bebas Neue','Oswald',sans-serif; --font-body: 'Arial','Helvetica',sans-serif;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:var(--font-body); background:var(--bg); color:var(--text); line-height:1.4; padding:0 0 80px; }
+    header { padding:25px 18px 10px; text-align:center; }
+    header h1 { margin:0 0 8px; font-family:var(--font-heading); font-size:2rem; letter-spacing:2px; color:var(--accent3); }
+    header .subtitle { font-size:0.95rem; color:var(--accent3); font-weight:600; }
+    header .meta { margin-top:10px; font-size:0.8rem; color:var(--muted); }
+    .wrapper { max-width:900px; margin:0 auto; padding:0 18px; }
+    .notice { background:#181818; border:2px solid var(--accent); padding:12px 14px; border-radius:14px; font-size:0.9rem; margin:15px 0 30px; }
+
+    .session { margin:45px 0 55px; position:relative; }
+    .session h2 { margin:0 0 10px; font-family:var(--font-heading); font-size:1.6rem; letter-spacing:1px; color:var(--accent); }
+    .session .tagline { font-size:0.85rem; text-transform:uppercase; color:var(--accent3); font-weight:700; letter-spacing:1px; margin-bottom:14px; }
+
+    .block { background:#141414; border:2px solid #222; padding:18px 18px 12px; border-radius:18px; margin:25px 0; }
+    .block h3 { margin:0 0 12px; font-size:1.05rem; letter-spacing:1px; font-family:var(--font-heading); color:var(--accent2); }
+    .block ul { list-style:none; padding:0; margin:0; }
+    .block ul li { padding:6px 4px 6px 4px; border-bottom:1px solid #222; font-size:0.9rem; line-height:1.35; }
+    .block ul li:last-child { border-bottom:none; }
+    .block ul li strong { color:var(--accent3); }
+
+    .tabata-grid { display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin-top:10px; }
+    .exercise { background:#181818; border:1px solid #262626; padding:12px 12px 10px; border-radius:14px; font-size:0.8rem; display:flex; flex-direction:column; gap:6px; }
+    .exercise h4 { margin:0; font-size:0.9rem; font-family:var(--font-heading); color:var(--accent); letter-spacing:1px; }
+    .exercise .desc { font-size:0.7rem; color:var(--muted); line-height:1.25; }
+    .image-slot { border:1px solid #222; border-radius:10px; aspect-ratio:4/3; position:relative; overflow:hidden; background:#0f0f0f; }
+    .image-slot img { width:100%; height:100%; object-fit:cover; display:block; }
+    .image-slot figcaption { position:absolute; left:0; right:0; bottom:0; background:rgba(0,0,0,0.55); font-size:0.55rem; padding:3px 4px; text-align:center; letter-spacing:1px; color:var(--accent3); }
+
+    /* Gallerie collassabili warm-up / stretching */
+    details.media-gallery { margin-top:12px; background:#101010; border:1px solid #222; border-radius:12px; padding:10px 12px 12px; }
+    details.media-gallery[open] { border-color:var(--accent); }
+    details.media-gallery summary { cursor:pointer; font-family:var(--font-heading); font-size:0.7rem; letter-spacing:1px; color:var(--accent3); list-style:none; outline:none; display:flex; align-items:center; gap:6px; }
+    details.media-gallery summary::-webkit-details-marker { display:none; }
+    .media-grid { margin-top:10px; display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); }
+    .media-grid figure { margin:0; background:#181818; border:1px solid #222; border-radius:10px; overflow:hidden; position:relative; aspect-ratio:4/3; }
+    .media-grid figure img { width:100%; height:100%; object-fit:cover; display:block; }
+    .media-grid figure figcaption { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,.55); font-size:0.5rem; padding:2px 3px; text-align:center; letter-spacing:1px; color:var(--accent3); }
+
+    /* Mini Timers */
+    .mini-timer { margin:16px 0 4px; background:#101010; border:2px solid #222; border-radius:16px; padding:12px 14px 14px; font-size:0.72rem; position:relative; }
+    .mini-timer h4 { margin:0 0 4px; font-family:var(--font-heading); font-size:0.9rem; letter-spacing:1px; color:var(--accent2); display:flex; align-items:center; gap:6px; }
+    .mini-timer .time-display { font-family:var(--font-heading); font-size:1.7rem; letter-spacing:2px; color:var(--accent3); margin:2px 0 2px; }
+    .mini-timer .phase, .mini-timer .label { font-size:0.6rem; letter-spacing:1px; text-transform:uppercase; color:var(--accent); font-weight:700; }
+    .mini-timer .segments { display:flex; gap:4px; margin-top:8px; }
+    .mini-timer .segments div { flex:1; height:10px; background:#181818; border:1px solid #222; border-radius:4px; position:relative; overflow:hidden; }
+    .mini-timer .segments div.active { border-color:var(--accent2); box-shadow:0 0 0 1px var(--accent2) inset; }
+    .mini-timer .segments div span { position:absolute; left:0; top:0; bottom:0; width:0%; background:linear-gradient(90deg,var(--accent2),var(--accent3)); transition:width .35s linear; }
+    .mini-timer .controls { margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+    .mini-timer button { flex:1; background:var(--accent3); color:#000; font-weight:700; font-size:0.6rem; border:2px solid var(--accent); border-radius:20px; cursor:pointer; padding:6px 8px; letter-spacing:1px; text-transform:uppercase; }
+    .mini-timer button:hover { background:var(--accent); }
+    .mini-timer .meta-line, .mini-timer .round-info { font-size:0.53rem; margin-top:5px; color:var(--muted); letter-spacing:1px; }
+    .mini-timer.done { border-color:var(--accent); }
+    @media (max-width:600px){
+        .mini-timer .time-display { font-size:1.4rem; }
+        .mini-timer h4 { font-size:0.8rem; }
+    }
+
+    .tools { position:fixed; bottom:0; left:0; right:0; background:#000; border-top:2px solid var(--accent); padding:10px 14px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+    .tools button, .tools a { background:var(--accent3); color:#000; font-weight:800; font-family:var(--font-heading); border:2px solid var(--accent); padding:10px 18px; border-radius:40px; cursor:pointer; font-size:0.8rem; letter-spacing:1px; text-decoration:none; }
+    .tools button:hover, .tools a:hover { background:var(--accent); }
+
+    .print-note { font-size:0.65rem; color:var(--muted); margin-top:4px; text-align:center; }
+
+    footer { text-align:center; font-size:0.65rem; color:#666; margin:40px 0 120px; }
+
+    @media (max-width:600px){
+        header h1 { font-size:1.55rem; }
+        .tabata-grid { grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); }
+    }
+
+    /* Stampa */
+    @media print {
+        body { background:#fff; color:#000; font-family:Arial, sans-serif; }
+        header, .tools { position:static; background:#fff; border:none; }
+        .tools { display:none !important; }
+        .block, .exercise { background:#fff; border:1px solid #ccc; }
+        .image-slot { color:#999; }
+        a { color:#000; text-decoration:none; }
+        footer { margin:30px 0 0; }
+        .session { page-break-inside:avoid; }
+    }
+</style>
+</head>
+<body>
+    <header>
+        <h1>PROGRAMMA TABATA CALISTHENICS</h1>
+        <div class="subtitle">30 minuti x 4 volte a settimana • Over 45 friendly</div>
+        <div class="meta">Attrezzi: elastici vari • 2 pesetti da 2 kg • Obiettivo: forza funzionale, postura, tonicità</div>
+        <div class="notice">Formato: Tabata 20" lavoro / 10" recupero • 8 round = 4 minuti a blocco • Ripeti il blocco 5 volte = 20' di lavoro attivo (+ riscaldamento e stretching)</div>
+    </header>
+    <div class="wrapper">
+        <!-- SESSIONE 1 -->
+        <section class="session" id="sessione-1">
+            <h2>🧩 Sessione 1 — Upper Body + Core</h2>
+            <div class="tagline">Lunedì / Giovedì • Focus: spinta, tirata, core, postura</div>
+            <div class="block">
+                <h3>Riscaldamento (5')</h3>
+                <ul>
+                    <li><strong>Jumping Jacks</strong> — 1'</li>
+                    <li><strong>Rotazioni braccia</strong> — 1'</li>
+                    <li><strong>Cat-Cow Stretch</strong> — 1'</li>
+                    <li><strong>Plank dinamico</strong> (mani ↔ avambracci) — 2'</li>
+                </ul>
+                <details class="media-gallery">
+                    <summary>🖼️ Mostra / Nascondi immagini riscaldamento</summary>
+                    <div class="media-grid">
+                        <figure>
+                            <img src="img/jumping-jacks.png" alt="Jumping Jacks" loading="lazy" />
+                            <figcaption>Jumping Jacks</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/rotazioni-braccia.png" alt="Rotazioni braccia" loading="lazy" />
+                            <figcaption>Rotazioni braccia</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/cat-cow-stretch.png" alt="Cat-Cow Stretch mobilità colonna" loading="lazy" />
+                            <figcaption>Cat-Cow</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/plank-dinamico.png" alt="Plank dinamico mani avambracci" loading="lazy" />
+                            <figcaption>Plank dinamico</figcaption>
+                        </figure>
+                    </div>
+                </details>
+                <div class="mini-timer warmup" id="warmup-1" data-segments="60,60,60,120" data-labels="Jumping Jacks|Rotazioni braccia|Cat-Cow|Plank dinamico">
+                    <h4>⏱️ Warm-up Timer (5')</h4>
+                    <div class="time-display" data-role="display">05:00</div>
+                    <div class="label" data-role="label">Pronto</div>
+                    <div class="segments" data-role="segments"></div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line" data-role="current-seg">Segmento: —</div>
+                </div>
+            </div>
+            <div class="block">
+                <h3>Tabata (x5 blocchi)</h3>
+                <div class="mini-timer tabata" id="tabata-1" data-work="20" data-rest="10" data-rounds="8" data-blocks="5">
+                    <h4>🔥 Mini Tabata (20"/10" x8 x5)</h4>
+                    <div class="time-display" data-role="display">20:00</div>
+                    <div class="phase" data-role="phase">Pronto</div>
+                    <div class="round-info" data-role="round">Round: - / 8 • Blocco: - / 5</div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line">Totale stimato: 20'</div>
+                </div>
+                <div class="tabata-grid">
+                    <div class="exercise">
+                        <h4>1. Push-up</h4>
+                        <div class="desc">Versione ginocchia o piedi • Mantieni il corpo in linea</div>
+                        <figure class="image-slot">
+                            <img src="img/push-up.png" alt="Push-up: versione ginocchia o piedi • mantieni il corpo in linea" loading="lazy" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='img/push-up.png';}else{const ph=document.createElement('div');ph.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:#ffd700;padding:4px;text-align:center;background:#111;';ph.textContent='Immagine push-up non trovata';this.replaceWith(ph);}">
+                            <figcaption>Push-up</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>2. Plank → Downward Dog</h4>
+                        <div class="desc">Transizione controllata • Spingi i fianchi indietro e ritorna</div>
+                        <figure class="image-slot">
+                            <img src="img/plank-downward-dog-flow.png" alt="Plank verso Downward Dog transizione controllata" loading="lazy">
+                            <figcaption>Plank → Downward Dog</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>3. Renegade Row</h4>
+                        <div class="desc">Stabilizza il bacino • Alterna tirate con pesetti</div>
+                        <figure class="image-slot">
+                            <img src="img/renegade-row-pesetti.png" alt="Renegade Row con pesetti alternati" loading="lazy">
+                            <figcaption>Renegade Row</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>4. Superman Hold</h4>
+                        <div class="desc">Isometria dorsale • Braccia e gambe sollevate</div>
+                        <figure class="image-slot">
+                            <img src="img/superman-hold.png" alt="Superman Hold isometria dorsale" loading="lazy">
+                            <figcaption>Superman Hold</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <h3>Stretching Finale (5')</h3>
+                <ul>
+                    <li><strong>Allungamento pettorali</strong> — 1'/lato</li>
+                    <li><strong>Child’s Pose</strong> — 2'</li>
+                    <li><strong>Stretch tricipiti</strong> — 1'/lato</li>
+                </ul>
+                <details class="media-gallery">
+                    <summary>🖼️ Mostra / Nascondi immagini stretching</summary>
+                    <div class="media-grid">
+                        <figure>
+                            <img src="img/allungamento-pettorali-stipite.png" alt="Allungamento pettorali su stipite" loading="lazy" />
+                            <figcaption>Pettorali</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/childs-pose.png" alt="Child's Pose" loading="lazy" />
+                            <figcaption>Child's Pose</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/stretch-tricipiti-dietro-testa.png" alt="Stretch tricipiti dietro la testa" loading="lazy" />
+                            <figcaption>Tricipiti</figcaption>
+                        </figure>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- SESSIONE 2 -->
+        <section class="session" id="sessione-2">
+            <h2>🧩 Sessione 2 — Lower Body + Mobilità</h2>
+            <div class="tagline">Martedì / Venerdì • Focus: gambe, anche, equilibrio</div>
+            <div class="block">
+                <h3>Riscaldamento (5')</h3>
+                <ul>
+                    <li><strong>High Knees</strong> — 1'</li>
+                    <li><strong>Affondi camminati</strong> — 2'</li>
+                    <li><strong>Hip Circles</strong> — 1'/lato</li>
+                    <li><strong>Mobilità caviglie</strong> — 1'</li>
+                </ul>
+                <details class="media-gallery">
+                    <summary>🖼️ Mostra / Nascondi immagini riscaldamento</summary>
+                    <div class="media-grid">
+                        <figure>
+                            <img src="img/high-knees.jpg" alt="High Knees" loading="lazy" />
+                            <figcaption>High Knees</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/affondi-camminati.png" alt="Affondi camminati" loading="lazy" />
+                            <figcaption>Affondi camminati</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/hip-circles.jpg" alt="Hip Circles" loading="lazy" />
+                            <figcaption>Hip Circles</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/ankle-mobility.jpg" alt="Mobilità caviglie" loading="lazy" />
+                            <figcaption>Mobilità caviglie</figcaption>
+                        </figure>
+                    </div>
+                </details>
+                <div class="mini-timer warmup" id="warmup-2" data-segments="60,120,60,60" data-labels="High Knees|Affondi camminati|Hip Circles|Mobilità caviglie">
+                    <h4>⏱️ Warm-up Timer (5')</h4>
+                    <div class="time-display" data-role="display">05:00</div>
+                    <div class="label" data-role="label">Pronto</div>
+                    <div class="segments" data-role="segments"></div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line" data-role="current-seg">Segmento: —</div>
+                </div>
+            </div>
+            <div class="block">
+                <h3>Tabata (x5 blocchi)</h3>
+                <div class="mini-timer tabata" id="tabata-2" data-work="20" data-rest="10" data-rounds="8" data-blocks="5">
+                    <h4>🔥 Mini Tabata (20"/10" x8 x5)</h4>
+                    <div class="time-display" data-role="display">20:00</div>
+                    <div class="phase" data-role="phase">Pronto</div>
+                    <div class="round-info" data-role="round">Round: - / 8 • Blocco: - / 5</div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line">Totale stimato: 20'</div>
+                </div>
+                <div class="tabata-grid">
+                    <div class="exercise">
+                        <h4>1. Squat Jump</h4>
+                        <div class="desc">O versione lenta controllata • Atterra morbido</div>
+                        <figure class="image-slot">
+                            <img src="img/squat-jump.jpg" alt="Squat Jump atterra morbido" loading="lazy">
+                            <figcaption>Squat Jump</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>2. Glute Bridge (elastico)</h4>
+                        <div class="desc">Spinta talloni • Apri ginocchia contro l'elastico</div>
+                        <figure class="image-slot">
+                            <img src="img/glute-bridge-elastico.png" alt="Glute Bridge con elastico" loading="lazy">
+                            <figcaption>Glute Bridge</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>3. Lateral Lunge (elastico)</h4>
+                        <div class="desc">Affondo laterale ampio • Ginocchia in linea</div>
+                        <figure class="image-slot">
+                            <img src="img/lateral-lunge-elastico-sopra-ginocchia.jpg" alt="Lateral Lunge con elastico sopra le ginocchia" loading="lazy">
+                            <figcaption>Lateral Lunge</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>4. Single Leg Deadlift</h4>
+                        <div class="desc">Stabilità e controllo • Schiena neutra</div>
+                        <figure class="image-slot">
+                            <img src="img/single-leg-deadlift.jpg" alt="Single Leg Deadlift equilibrio" loading="lazy">
+                            <figcaption>Single Leg Deadlift</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <h3>Stretching Finale (5')</h3>
+                <ul>
+                    <li><strong>Piegamento avanti gambe tese</strong> — 2'</li>
+                    <li><strong>Figure-Four Stretch</strong> — 1'/lato</li>
+                    <li><strong>Stretch quadricipite</strong> — 1'/lato</li>
+                </ul>
+                <details class="media-gallery">
+                    <summary>🖼️ Mostra / Nascondi immagini stretching</summary>
+                    <div class="media-grid">
+                        <figure>
+                            <img src="img/piegamento-avanti-gambe-tese.jpg" alt="Piegamento in avanti gambe tese" loading="lazy" />
+                            <figcaption>Piegamento avanti</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/figure-four-stretch-gluteo.jpg" alt="Figure-Four Stretch gluteo" loading="lazy" />
+                            <figcaption>Figure-Four</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/stretch-quadricipite-in-piedi.jpg" alt="Stretch quadricipite in piedi" loading="lazy" />
+                            <figcaption>Quadricipite</figcaption>
+                        </figure>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- SESSIONE 3 -->
+        <section class="session" id="sessione-3">
+            <h2>🧩 Sessione 3 — Full Body Funzionale</h2>
+            <div class="tagline">Giovedì / Sabato • Focus: total body, core, stabilità</div>
+            <div class="block">
+                <h3>Riscaldamento (5')</h3>
+                <ul>
+                    <li><strong>Skip basso</strong> — 1'</li>
+                    <li><strong>Torso Twist</strong> — 1'</li>
+                    <li><strong>Bear Crawl sul posto</strong> — 2'</li>
+                    <li><strong>World's Greatest Stretch</strong> — 1'/lato</li>
+                </ul>
+                <details class="media-gallery">
+                    <summary>🖼️ Mostra / Nascondi immagini riscaldamento</summary>
+                    <div class="media-grid">
+                        <figure>
+                            <img src="img/skip-basso-ginocchia-petto.jpg" alt="Skip basso ginocchia al petto" loading="lazy" />
+                            <figcaption>Skip basso</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/torso-twist-rotazioni-busto.jpg" alt="Torso Twist rotazioni busto" loading="lazy" />
+                            <figcaption>Torso Twist</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/bear-crawl-sul-posto.jpg" alt="Bear Crawl sul posto" loading="lazy" />
+                            <figcaption>Bear Crawl</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/worlds-greatest-stretch.jpg" alt="World's Greatest Stretch mobilità" loading="lazy" />
+                            <figcaption>World's Greatest</figcaption>
+                        </figure>
+                    </div>
+                </details>
+                <div class="mini-timer warmup" id="warmup-3" data-segments="60,60,120,60" data-labels="Skip basso|Torso Twist|Bear Crawl|World's Greatest">
+                    <h4>⏱️ Warm-up Timer (5')</h4>
+                    <div class="time-display" data-role="display">05:00</div>
+                    <div class="label" data-role="label">Pronto</div>
+                    <div class="segments" data-role="segments"></div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line" data-role="current-seg">Segmento: —</div>
+                </div>
+            </div>
+            <div class="block">
+                <h3>Tabata (x5 blocchi)</h3>
+                <div class="mini-timer tabata" id="tabata-3" data-work="20" data-rest="10" data-rounds="8" data-blocks="5">
+                    <h4>🔥 Mini Tabata (20"/10" x8 x5)</h4>
+                    <div class="time-display" data-role="display">20:00</div>
+                    <div class="phase" data-role="phase">Pronto</div>
+                    <div class="round-info" data-role="round">Round: - / 8 • Blocco: - / 5</div>
+                    <div class="controls">
+                        <button data-action="start">Start</button>
+                        <button data-action="pause">Pausa</button>
+                        <button data-action="reset">Reset</button>
+                    </div>
+                    <div class="meta-line">Totale stimato: 20'</div>
+                </div>
+                <div class="tabata-grid">
+                    <div class="exercise">
+                        <h4>1. Burpee (modificato)</h4>
+                        <div class="desc">Senza salto se necessario • Movimento controllato</div>
+                        <figure class="image-slot">
+                            <img src="img/burpee-senza-salto-finale.png" alt="Burpee modificato senza salto finale" loading="lazy">
+                            <figcaption>Burpee (mod)</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>2. Mountain Climber lento</h4>
+                        <div class="desc">Ginocchio al petto alternato • Bacino stabile</div>
+                        <figure class="image-slot">
+                            <img src="img/mountain-climber.jpg" alt="Mountain Climber lento" loading="lazy">
+                            <figcaption>Mountain Climber</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>3. Skater Hop / Step</h4>
+                        <div class="desc">Propulsione laterale o passo ampio low impact</div>
+                        <figure class="image-slot">
+                            <img src="img/skater-hop.jpg" alt="Skater Hop / Step" loading="lazy">
+                            <figcaption>Skater Hop / Step</figcaption>
+                        </figure>
+                    </div>
+                    <div class="exercise">
+                        <h4>4. Hollow Body Hold</h4>
+                        <div class="desc">Addome in tenuta • Forma a banana stabile</div>
+                        <figure class="image-slot">
+                            <img src="img/hollow-body-hold.jpg" alt="Hollow Body Hold tenuta addome" loading="lazy">
+                            <figcaption>Hollow Body Hold</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <h3>Stretching Finale (5')</h3>
+                <ul>
+                    <li><strong>Cobra Stretch</strong> — 2'</li>
+                    <li><strong>Butterfly Stretch</strong> — 2'</li>
+                    <li><strong>Respirazione diaframmatica</strong> — 1'</li>
+                </ul>
+                <details class="media-gallery">
+                    <summary>🖼️ Mostra / Nascondi immagini stretching</summary>
+                    <div class="media-grid">
+                        <figure>
+                            <img src="img/cobra-stretch.jpg" alt="Cobra Stretch" loading="lazy" />
+                            <figcaption>Cobra</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/butterfly-stretch.png" alt="Butterfly Stretch" loading="lazy" />
+                            <figcaption>Butterfly</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="img/respirazione-profonda.png" alt="Respirazione profonda diaframmatica" loading="lazy" />
+                            <figcaption>Respirazione</figcaption>
+                        </figure>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <footer>
+            <p>Disclaimer: consultare un professionista prima di iniziare nuovi programmi di allenamento. Adatta sempre l'intensità al tuo livello.</p>
+        </footer>
+    </div>
+
+    <div class="tools no-print">
+        <button id="printBtn">🖨️ Stampa / PDF</button>
+        <button id="downloadPdfBtn">⬇️ Scarica PDF (beta)</button>
+        <button id="testVoiceBtn">🔊 Test Voce</button>
+        <a href="index.html">⏱️ Torna al Timer</a>
+    </div>
+
+<script>
+// Pulsante stampa nativo
+const printBtn = document.getElementById('printBtn');
+printBtn.addEventListener('click', () => window.print());
+
+// Placeholder download PDF (richiederà libreria futura)
+const downloadBtn = document.getElementById('downloadPdfBtn');
+downloadBtn.addEventListener('click', () => {
+    alert('Funzione PDF avanzato in arrivo. Usa per ora Stampa / Salva come PDF.');
+});
+
+// Test voce - mostra voci disponibili e testa il countdown
+const testVoiceBtn = document.getElementById('testVoiceBtn');
+testVoiceBtn.addEventListener('click', () => {
+    const voices = speechSynth.getVoices();
+    const italianVoices = voices.filter(v => v.lang.startsWith('it'));
+    
+    let message = '🔊 VOCI ITALIANE DISPONIBILI:\n\n';
+    
+    if (italianVoices.length === 0) {
+        message += 'Nessuna voce italiana trovata.\n\n';
+        message += 'Voci disponibili:\n';
+        voices.slice(0, 5).forEach((v, i) => {
+            message += `${i + 1}. ${v.name} (${v.lang})\n`;
+        });
+    } else {
+        italianVoices.forEach((v, i) => {
+            const selected = selectedVoice && v.name === selectedVoice.name ? ' ⭐ SELEZIONATA' : '';
+            message += `${i + 1}. ${v.name} (${v.lang})${selected}\n`;
+        });
+    }
+    
+    alert(message);
+    
+    // Test countdown 3-2-1
+    if (confirm('Vuoi testare il countdown 3-2-1?')) {
+        let count = 3;
+        const testInterval = setInterval(() => {
+            if (count > 0) {
+                speakCountdown(count);
+                count--;
+            } else {
+                clearInterval(testInterval);
+                playBeep(1000, 500);
+            }
+        }, 1000);
+    }
+});
+
+// Audio Functions
+const speechSynth = window.speechSynthesis;
+let selectedVoice = null;
+
+// Funzione per ottenere la voce italiana migliore disponibile
+function getBestItalianVoice() {
+    const voices = speechSynth.getVoices();
+    
+    // Priorità voci (ordine di preferenza)
+    const preferredVoices = [
+        'Alice',           // macOS voce italiana premium
+        'Luca',            // macOS voce italiana maschile
+        'Google italiano', // Google Chrome
+        'Microsoft Elsa',  // Windows
+        'Microsoft Cosimo' // Windows maschile
+    ];
+    
+    // Cerca prima le voci preferite
+    for (const preferred of preferredVoices) {
+        const voice = voices.find(v => v.name.includes(preferred) && v.lang.startsWith('it'));
+        if (voice) {
+            console.log('Voce selezionata:', voice.name);
+            return voice;
+        }
+    }
+    
+    // Altrimenti prendi qualsiasi voce italiana disponibile
+    const italianVoice = voices.find(v => v.lang.startsWith('it'));
+    if (italianVoice) {
+        console.log('Voce italiana trovata:', italianVoice.name);
+        return italianVoice;
+    }
+    
+    console.log('Nessuna voce italiana trovata, uso voce di default');
+    return null;
+}
+
+// Carica le voci quando sono disponibili
+speechSynth.addEventListener('voiceschanged', () => {
+    selectedVoice = getBestItalianVoice();
+});
+
+// Prova a caricare subito
+if (speechSynth.getVoices().length > 0) {
+    selectedVoice = getBestItalianVoice();
+}
+
+function playBeep(frequency, duration = 300) {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.frequency.value = frequency;
+        oscillator.type = "sine";
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        oscillator.start();
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration/1000);
+        oscillator.stop(audioCtx.currentTime + duration/1000);
+    } catch(e) {
+        console.log("Beep non supportato");
+    }
+}
+
+function speakCountdown(seconds) {
+    if (seconds <= 3 && seconds > 0 && speechSynth) {
+        speechSynth.cancel();
+        const utterance = new SpeechSynthesisUtterance(seconds.toString());
+        
+        // Usa la voce migliore se disponibile
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+        
+        utterance.lang = 'it-IT';
+        utterance.rate = 1.0;    // Velocità naturale
+        utterance.pitch = 1.0;   // Pitch naturale
+        utterance.volume = 1.0;  // Volume massimo
+        
+        speechSynth.speak(utterance);
+    }
+}
+
+// Mini Timer Logic
+(function(){
+    function format(sec){ const m=Math.floor(sec/60), s=sec%60; return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`; }
+    const warmups = document.querySelectorAll('.mini-timer.warmup');
+    warmups.forEach(timerEl => {
+        const segStr = timerEl.getAttribute('data-segments');
+        const labelStr = timerEl.getAttribute('data-labels')||'';
+        const segments = segStr.split(',').map(n=>parseInt(n.trim(),10));
+        const labels = labelStr.split('|');
+        const total = segments.reduce((a,b)=>a+b,0);
+        const display = timerEl.querySelector('[data-role="display"]');
+        const labelEl = timerEl.querySelector('[data-role="label"]');
+        const segContainer = timerEl.querySelector('[data-role="segments"]');
+        const currentSegInfo = timerEl.querySelector('[data-role="current-seg"]');
+        let currentSeg = 0, segRemaining = segments[0];
+        let running=false, paused=false, interval; let remainingTotal = total;
+        let preparationCountdown = 0; // Countdown preparazione 3-2-1
+        // Build visual segments
+        segments.forEach(()=>{
+            const d=document.createElement('div');
+            const span=document.createElement('span');
+            d.appendChild(span); segContainer.appendChild(d);
+        });
+        const segDivs = Array.from(segContainer.children);
+        function updateVisual(){
+            display.textContent = format(remainingTotal);
+            segDivs.forEach((d,i)=>{
+                d.classList.toggle('active', i===currentSeg && running);
+                const elapsed = segments[i] - (i===currentSeg?segRemaining:segments[i]);
+                const percent = Math.min(100, (elapsed/segments[i])*100);
+                d.firstChild.style.width = percent+'%';
+            });
+            currentSegInfo.textContent = currentSeg < segments.length ? `Segmento: ${currentSeg+1}/${segments.length}${labels[currentSeg]? ' • '+labels[currentSeg]:''}` : 'Completato';
+        }
+        function tick(){
+            if(!running || paused) return;
+            
+            // Fase preparazione 3-2-1
+            if(preparationCountdown > 0) {
+                preparationCountdown--;
+                display.textContent = preparationCountdown;
+                labelEl.textContent = 'Preparati...';
+                speakCountdown(preparationCountdown);
+                
+                if(preparationCountdown === 0) {
+                    playBeep(1000, 500); // Beep per iniziare
+                    labelEl.textContent = labels[currentSeg] || 'Inizio';
+                }
+                return;
+            }
+            
+            segRemaining--; remainingTotal--;
+            
+            // Countdown vocale 3-2-1 per ogni segmento
+            speakCountdown(segRemaining);
+            
+            if(segRemaining<=0){
+                // Beep alla fine del segmento
+                playBeep(1200, 400);
+                
+                currentSeg++;
+                if(currentSeg>=segments.length){
+                    running=false; labelEl.textContent='Fatto'; timerEl.classList.add('done');
+                    playBeep(2000, 800); // Beep finale più lungo
+                    updateVisual(); clearInterval(interval); return;
+                }
+                segRemaining = segments[currentSeg];
+            }
+            labelEl.textContent = labels[currentSeg] || 'In corso';
+            updateVisual();
+        }
+        updateVisual();
+        timerEl.addEventListener('click', (e)=>{
+            const act = e.target.getAttribute('data-action'); if(!act) return;
+            if(act==='start' && !running){ 
+                running=true; 
+                paused=false; 
+                preparationCountdown = 3; // Inizia con countdown 3-2-1
+                labelEl.textContent = 'Preparati...'; 
+                interval=setInterval(tick,1000); 
+                updateVisual(); 
+            }
+            else if(act==='pause' && running){ paused=!paused; labelEl.textContent = paused? 'Pausa' : (labels[currentSeg]||'Riprendi'); }
+            else if(act==='reset'){ running=false; paused=false; clearInterval(interval); currentSeg=0; segRemaining=segments[0]; remainingTotal=total; preparationCountdown=0; labelEl.textContent='Pronto'; timerEl.classList.remove('done'); segDivs.forEach(d=>d.firstChild.style.width='0%'); updateVisual(); }
+        });
+    });
+
+    // Tabata timers
+    const tabatas = document.querySelectorAll('.mini-timer.tabata');
+    tabatas.forEach(el=>{
+        const work = parseInt(el.getAttribute('data-work'),10)||20;
+        const rest = parseInt(el.getAttribute('data-rest'),10)||10;
+        const rounds = parseInt(el.getAttribute('data-rounds'),10)||8;
+        const blocks = parseInt(el.getAttribute('data-blocks'),10)||5;
+        const display = el.querySelector('[data-role="display"]');
+        const phaseEl = el.querySelector('[data-role="phase"]');
+        const roundInfo = el.querySelector('[data-role="round"]');
+        let currentRound=1, currentBlock=1, isWork=true, remaining = work;
+        let running=false, paused=false, interval;
+        let preparationCountdown = 0; // Countdown preparazione 3-2-1
+        const totalSeconds = (work+rest)*rounds*blocks - rest*blocks; // no rest after last round each block
+        function update(){
+            // compute approximate remaining global time
+            const roundsLeftInBlock = (rounds - currentRound) + (isWork?0:1); // if in rest add rest time remainder effectively
+            let remainingInCurrent = remaining;
+            let future = 0;
+            if(isWork){ future += rest; }
+            // remaining rounds in block
+            future += (rounds - currentRound)* (work+rest);
+            // remaining blocks after this block
+            future += (blocks - currentBlock) * (rounds*(work+rest) - rest);
+            const totalRem = remainingInCurrent + future;
+            display.textContent = format(totalRem);
+            phaseEl.textContent = isWork ? 'Lavoro' : 'Recupero';
+            roundInfo.textContent = `Round: ${currentRound} / ${rounds} • Blocco: ${currentBlock} / ${blocks}`;
+        }
+        function advancePhase(){
+            if(isWork){ // go to rest
+                playBeep(1500, 400); // Beep per passaggio da lavoro a riposo
+                isWork=false; remaining=rest;
+            } else {
+                // finished rest -> next round
+                playBeep(800, 400); // Beep per passaggio da riposo a lavoro
+                isWork=true; remaining=work; currentRound++;
+                if(currentRound>rounds){
+                    currentBlock++; currentRound=1; isWork=true; remaining=work;
+                    if(currentBlock>blocks){
+                        running=false; phaseEl.textContent='Completato'; el.classList.add('done'); 
+                        playBeep(2000, 1000); // Beep finale più lungo
+                        clearInterval(interval); return;
+                    }
+                }
+            }
+        }
+        function tick(){
+            if(!running || paused) return; 
+            
+            // Fase preparazione 3-2-1
+            if(preparationCountdown > 0) {
+                preparationCountdown--;
+                display.textContent = preparationCountdown;
+                phaseEl.textContent = 'Preparati...';
+                speakCountdown(preparationCountdown);
+                
+                if(preparationCountdown === 0) {
+                    playBeep(1000, 500); // Beep per iniziare
+                    phaseEl.textContent = 'Lavoro';
+                    update();
+                }
+                return;
+            }
+            
+            remaining--;
+            
+            // Countdown vocale 3-2-1
+            speakCountdown(remaining);
+            
+            if(remaining<=0){ advancePhase(); } 
+            update(); 
+        }
+        function start(){ if(!running){ running=true; paused=false; preparationCountdown=3; phaseEl.textContent='Preparati...'; update(); interval=setInterval(tick,1000);} }
+        function pause(){ if(running){ paused=!paused; phaseEl.textContent = paused? 'Pausa' : (isWork? 'Lavoro':'Recupero'); } }
+        function reset(){ running=false; paused=false; clearInterval(interval); currentRound=1; currentBlock=1; isWork=true; remaining=work; preparationCountdown=0; el.classList.remove('done'); phaseEl.textContent='Pronto'; roundInfo.textContent='Round: - / '+rounds+' • Blocco: - / '+blocks; display.textContent=format(totalSeconds); }
+        // init
+        display.textContent = format(totalSeconds);
+        el.addEventListener('click', e=>{
+            const act = e.target.getAttribute('data-action'); if(!act) return;
+            if(act==='start') start(); else if(act==='pause') pause(); else if(act==='reset') reset();
+        });
+    });
+})();
+</script>
+</body>
+</html>

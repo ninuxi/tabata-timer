@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⏱️ Tabata Timer</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Impact', 'Arial Black', 'Bebas Neue', 'Oswald', sans-serif;
+            text-align: center;
+            background: #ff6b35;
+            color: white;
+            padding: 10px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #000000;
+            padding: 25px 20px;
+            border-radius: 25px;
+            border: 3px solid #ffd700;
+        }
+        h1 {
+            color: #ffff00;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .controls {
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+        .control-group {
+            background: #000000;
+            padding: 15px 12px;
+            border-radius: 15px;
+            border: 2px solid #00ff00;
+        }
+        .control-group label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #ffff00;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #ff6b35;
+            background: #000000;
+            color: #ffff00;
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-align: center;
+        }
+        input:focus {
+            outline: none;
+            border-color: #ffff00;
+        }
+        .preset-container, .group-body {
+            margin: 10px 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .preset-btn, button, .link-chip {
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 900;
+            background: #ffd700;
+            color: #000000;
+            border: 2px solid #00ff00;
+            text-transform: uppercase;
+        }
+        .preset-btn:hover, button:hover, .link-chip:hover {
+            background: #00ff00;
+            transform: translateY(-3px) scale(1.05);
+            border-color: #ff6b35;
+        }
+        #startBtn {
+            background: #00ff00;
+            color: #000000;
+            font-size: 1.1rem;
+            padding: 18px 40px;
+            margin: 15px 8px;
+            width: auto;
+            min-width: 140px;
+            border: 3px solid #ffff00;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        #stopBtn {
+            background: #ff6b35;
+            color: #000000;
+            font-size: 1.1rem;
+            padding: 18px 40px;
+            margin: 15px 8px;
+            width: auto;
+            min-width: 140px;
+            border: 3px solid #ffff00;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        #timer {
+            font-size: 4.5rem;
+            margin: 25px 0;
+            font-weight: 900;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        #round, #status {
+            font-size: 1.3rem;
+            margin: 15px 0;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .work { 
+            color: #ff6b35; 
+            animation: pulse 1s infinite;
+        }
+        .rest { 
+            color: #00ff00; 
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        /* Accordion panels */
+        details.panel {
+            background:#000000;
+            border:2px solid #00ff00;
+            border-radius:22px;
+            padding:14px 16px 12px;
+            margin:14px 0;
+        }
+        details.panel[open] { border-color:#ffd700; }
+        details.panel summary {
+            list-style:none;
+            cursor:pointer;
+            font-weight:900;
+            letter-spacing:2px;
+            font-size:0.8rem;
+            color:#ffff00;
+            display:flex;
+            align-items:center;
+            gap:8px;
+            text-transform:uppercase;
+        }
+        details.panel summary::-webkit-details-marker { display:none; }
+        details.panel summary:before {
+            content:'▸';
+            display:inline-block;
+            transform:rotate(0deg);
+            transition:transform .25s ease;
+            font-size:0.9rem;
+            color:#00ff00;
+        }
+        details.panel[open] summary:before { transform:rotate(90deg); }
+        .chip-links { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:10px; }
+        .link-chip { text-decoration:none; display:inline-block; }
+        .music-links a { text-decoration:none; }
+        .music-links { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:10px; }
+        .music-links a { background:#111; color:#ffd700; padding:8px 14px; border-radius:18px; font-size:0.7rem; font-weight:700; border:2px solid #00ff00; letter-spacing:1px; text-transform:uppercase; }
+        .music-links a:hover { background:#00ff00; color:#000; border-color:#ff6b35; transform:translateY(-2px); }
+        @media (max-width:480px){
+            details.panel { padding:12px 14px 10px; }
+            details.panel summary { font-size:0.7rem; }
+            .preset-btn, button, .link-chip { font-size:0.75rem; padding:10px 14px; }
+            .music-links a { font-size:0.6rem; padding:6px 10px; }
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            .container {
+                padding: 20px 15px;
+                border-radius: 20px;
+                margin: 10px;
+            }
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+            .controls {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin: 15px 0;
+            }
+            .control-group {
+                padding: 12px 10px;
+            }
+            .control-group label {
+                font-size: 0.85rem;
+            }
+            input {
+                padding: 10px;
+                font-size: 1rem;
+            }
+            .preset-container {
+                gap: 6px;
+                margin: 15px 0;
+            }
+            .preset-btn, button {
+                font-size: 0.8rem;
+                padding: 10px 16px;
+            }
+            #timer {
+                font-size: 3rem;
+                margin: 20px 0;
+            }
+            #round, #status {
+                font-size: 1.1rem;
+                margin: 12px 0;
+            }
+            #startBtn, #stopBtn {
+                font-size: 1rem;
+                padding: 15px 30px;
+                margin: 10px 5px;
+                width: calc(50% - 10px);
+                min-width: unset;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 data-translate-key="title">⏱️ CRONOMETRO TABATA</h1>
+        <!-- Pannelli collassabili -->
+
+        <div class="controls">
+            <div class="control-group">
+                <label data-translate-key="workLabel">⏳ Lavoro (sec):</label>
+                <input type="number" id="workTime" value="20" min="1">
+            </div>
+            <div class="control-group">
+                <label data-translate-key="restLabel">🛌 Recupero (sec):</label>
+                <input type="number" id="restTime" value="10" min="1">
+            </div>
+            <div class="control-group">
+                <label data-translate-key="roundsLabel">🔁 Round totali:</label>
+                <input type="number" id="totalRounds" value="8" min="1">
+            </div>
+        </div>
+        <details class="panel" open>
+            <summary data-translate-key="presetTitle">Preset Rapidi</summary>
+            <div class="group-body">
+                <button type="button" class="preset-btn" data-preset="1">Tabata 20-10</button>
+                <button type="button" class="preset-btn" data-preset="2">Tabata 30-15</button>
+                <button type="button" class="preset-btn" data-preset="3">Tabata 40-20</button>
+            </div>
+        </details>
+        <details class="panel">
+            <summary data-translate-key="customPresetTitle">Preset Personalizzato</summary>
+            <div class="group-body">
+                <button type="button" id="savePresetBtn" data-translate-key="savePreset">💾 Salva</button>
+                <button type="button" id="loadPresetBtn" data-translate-key="loadPreset">📂 Carica</button>
+            </div>
+        </details>
+        <details class="panel">
+            <summary data-translate-key="transferTitle">Importa / Esporta</summary>
+            <div class="group-body">
+                <button type="button" id="exportPresetBtn" data-translate-key="exportPreset">⬇️ Esporta</button>
+                <label for="importPresetInput" style="display:none"></label>
+                <input type="file" id="importPresetInput" accept="application/json" style="display:none">
+                <button type="button" id="importPresetBtn" data-translate-key="importPreset">⬆️ Importa</button>
+            </div>
+        </details>
+        <details class="panel">
+            <summary data-translate-key="resourcesGroupTitle">Programma & Diario</summary>
+            <div class="chip-links">
+                <a class="link-chip" data-translate-key="linkProgram" href="programma.html" target="_blank" rel="noopener noreferrer">📄 Programma</a>
+                <a class="link-chip" data-translate-key="linkProgramText" href="programma_testo.html" target="_blank" rel="noopener noreferrer">🧾 Testo</a>
+                <a class="link-chip" data-translate-key="linkDiary" href="diario.html" target="_blank" rel="noopener noreferrer">📝 Diario</a>
+                <a class="link-chip" data-translate-key="linkAbout" href="about.html" target="_blank" rel="noopener noreferrer">ℹ️ About</a>
+            </div>
+        </details>
+        <details class="panel">
+            <summary data-translate-key="musicTitle">Playlist Musica</summary>
+            <div class="music-links">
+                <a href="https://open.spotify.com/search/workout%20playlist" target="_blank" rel="noopener noreferrer">Spotify</a>
+                <a href="https://music.apple.com/search?term=workout" target="_blank" rel="noopener noreferrer">Apple Music</a>
+                <a href="https://www.youtube.com/results?search_query=workout+music+playlist" target="_blank" rel="noopener noreferrer">YouTube</a>
+                <a href="https://tidal.com/browse/search?q=workout" target="_blank" rel="noopener noreferrer">Tidal</a>
+                <a href="https://soundcloud.com/search?q=workout%20mix" target="_blank" rel="noopener noreferrer">SoundCloud</a>
+            </div>
+        </details>
+
+        <div id="round" data-translate-key="roundInitial">Round: 1/8</div>
+        <div id="status" data-translate-key="statusInitial">PREMERE AVVIA</div>
+        <div id="timer">--</div>
+
+        <button id="startBtn" data-translate-key="startBtn">▶️ AVVIA TIMER</button>
+        <button id="stopBtn" data-translate-key="stopBtn">⏹️ STOP</button>
+
+        <!-- Fine pannelli -->
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "⏱️ TABATA TIMER",
+                workLabel: "⏳ Work (sec):",
+                restLabel: "🛌 Rest (sec):",
+                roundsLabel: "🔁 Total Rounds:",
+                savePreset: "💾 Save",
+                loadPreset: "📂 Load",
+                exportPreset: "⬇️ Export",
+                importPreset: "⬆️ Import",
+                startBtn: "▶️ START TIMER",
+                stopBtn: "⏹️ STOP",
+                statusInitial: "PRESS START",
+                roundInitial: "Round: 1/8",
+                statusWork: "🔥 WORK",
+                statusRest: "💤 REST",
+                statusStopped: "⏹️ STOPPED",
+                sessionComplete: "🎉 SESSION COMPLETE!",
+                greatWork: "Great job!",
+                presetSaved: "Preset saved!",
+                presetLoaded: "Preset loaded!",
+                noPresetSaved: "No saved preset found.",
+                presetExported: "No custom preset to export.",
+                presetImported: "Preset imported and loaded!",
+                invalidPresetFile: "Invalid preset file.",
+                importError: "Error importing preset."
+            },
+            it: {
+                title: "⏱️ CRONOMETRO TABATA",
+                workLabel: "⏳ Lavoro (sec):",
+                restLabel: "🛌 Recupero (sec):",
+                roundsLabel: "🔁 Round totali:",
+                savePreset: "💾 Salva",
+                loadPreset: "📂 Carica",
+                exportPreset: "⬇️ Esporta",
+                importPreset: "⬆️ Importa",
+                startBtn: "▶️ AVVIA TIMER",
+                stopBtn: "⏹️ STOP",
+                statusInitial: "PREMERE AVVIA",
+                roundInitial: "Round: 1/8",
+                statusWork: "🔥 LAVORO",
+                statusRest: "💤 RECUPERO",
+                statusStopped: "⏹️ FERMATO",
+                sessionComplete: "🎉 SESSIONE COMPLETATA!",
+                greatWork: "Ottimo lavoro!",
+                presetSaved: "Preset salvato!",
+                presetLoaded: "Preset caricato!",
+                noPresetSaved: "Nessun preset salvato.",
+                presetExported: "Nessun preset personalizzato da esportare.",
+                presetImported: "Preset importato e caricato!",
+                invalidPresetFile: "File preset non valido.",
+                importError: "Errore durante l'importazione del preset."
+            }
+        };
+
+        // Nuove chiavi pannelli / accordion
+        translations.en.presetTitle = "Quick Presets";
+        translations.it.presetTitle = "Preset Rapidi";
+        translations.en.customPresetTitle = "Custom Preset";
+        translations.it.customPresetTitle = "Preset Personalizzato";
+        translations.en.transferTitle = "Import / Export";
+        translations.it.transferTitle = "Importa / Esporta";
+        translations.en.resourcesGroupTitle = "Program & Diary";
+        translations.it.resourcesGroupTitle = "Programma & Diario";
+        translations.en.musicTitle = "Music Playlists";
+        translations.it.musicTitle = "Playlist Musica";
+
+        // Aggiunta traduzioni link extra
+        translations.en.linkProgram = "📄 Program";
+        translations.en.linkProgramText = "🧾 Plain Text";
+        translations.en.linkDiary = "📝 Diary";
+        translations.en.linkAbout = "ℹ️ About";
+        translations.it.linkProgram = "📄 Programma";
+        translations.it.linkProgramText = "🧾 Testo";
+        translations.it.linkDiary = "📝 Diario";
+    translations.it.linkAbout = "ℹ️ About";
+    translations.it.resourcesTitle = "Risorse";
+    translations.en.resourcesTitle = "Resources";
+
+        const userLang = navigator.language.startsWith('en') ? 'en' : 'it';
+        let currentStrings = translations[userLang];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                const key = el.getAttribute('data-translate-key');
+                if (currentStrings[key]) {
+                    el.innerHTML = currentStrings[key];
+                }
+            });
+            document.documentElement.lang = userLang;
+        });
+
+        let workTime = 20;
+        let restTime = 10;
+// ... existing code ...
+        let totalRounds = 8;
+        let currentRound = 1;
+        let isWorkPhase = true;
+        let timer;
+        let countdown;
+        let speechSynth = window.speechSynthesis;
+
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const timerDisplay = document.getElementById('timer');
+        const roundDisplay = document.getElementById('round');
+        const statusDisplay = document.getElementById('status');
+    const presetBtns = document.querySelectorAll('.preset-btn');
+    const savePresetBtn = document.getElementById('savePresetBtn');
+    const loadPresetBtn = document.getElementById('loadPresetBtn');
+    const exportPresetBtn = document.getElementById('exportPresetBtn');
+    const importPresetBtn = document.getElementById('importPresetBtn');
+    const importPresetInput = document.getElementById('importPresetInput');
+        // Esporta preset personalizzato in file JSON
+        exportPresetBtn.addEventListener('click', () => {
+            const preset = localStorage.getItem('tabataCustomPreset');
+            if (!preset) {
+                alert(currentStrings.presetExported);
+                return;
+            }
+            const blob = new Blob([preset], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'tabata-preset.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Importa preset personalizzato da file JSON
+        importPresetBtn.addEventListener('click', () => {
+            importPresetInput.click();
+        });
+
+        importPresetInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const preset = JSON.parse(e.target.result);
+                    if (
+                        typeof preset.work === 'number' &&
+                        typeof preset.rest === 'number' &&
+                        typeof preset.rounds === 'number'
+                    ) {
+                        localStorage.setItem('tabataCustomPreset', JSON.stringify(preset));
+                        document.getElementById('workTime').value = preset.work;
+                        document.getElementById('restTime').value = preset.rest;
+                        document.getElementById('totalRounds').value = preset.rounds;
+                        alert(currentStrings.presetImported);
+                    } else {
+                        alert(currentStrings.invalidPresetFile);
+                    }
+                } catch (err) {
+                    alert(currentStrings.importError);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Preset predefiniti
+        const tabataPresets = {
+            1: { work: 20, rest: 10, rounds: 8 },
+            2: { work: 30, rest: 15, rounds: 6 },
+            3: { work: 40, rest: 20, rounds: 4 }
+        };
+
+        // Carica preset rapido
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const p = tabataPresets[btn.dataset.preset];
+                if (p) {
+                    document.getElementById('workTime').value = p.work;
+                    document.getElementById('restTime').value = p.rest;
+                    document.getElementById('totalRounds').value = p.rounds;
+                }
+            });
+        });
+
+        // Salva preset personalizzato su localStorage
+        savePresetBtn.addEventListener('click', () => {
+            const preset = {
+                work: parseInt(document.getElementById('workTime').value) || 20,
+                rest: parseInt(document.getElementById('restTime').value) || 10,
+                rounds: parseInt(document.getElementById('totalRounds').value) || 8
+            };
+            localStorage.setItem('tabataCustomPreset', JSON.stringify(preset));
+            alert(currentStrings.presetSaved);
+        });
+
+        // Carica preset personalizzato da localStorage
+        loadPresetBtn.addEventListener('click', () => {
+            const preset = JSON.parse(localStorage.getItem('tabataCustomPreset'));
+            if (preset) {
+                document.getElementById('workTime').value = preset.work;
+                document.getElementById('restTime').value = preset.rest;
+                document.getElementById('totalRounds').value = preset.rounds;
+                alert(currentStrings.presetLoaded);
+            } else {
+                alert(currentStrings.noPresetSaved);
+            }
+        });
+
+        startBtn.addEventListener('click', startTimer);
+        stopBtn.addEventListener('click', stopTimer);
+
+        // Aggiorna i valori quando si clicca su AVVIA
+        function startTimer() {
+            workTime = parseInt(document.getElementById('workTime').value) || 20;
+            restTime = parseInt(document.getElementById('restTime').value) || 10;
+            totalRounds = parseInt(document.getElementById('totalRounds').value) || 8;
+
+            stopTimer();
+            currentRound = 1;
+            isWorkPhase = true;
+            countdown = workTime;
+            updateDisplay();
+            timer = setInterval(tick, 1000);
+        }
+
+        function tick() {
+            countdown--;
+            speakLastThreeSeconds(countdown);
+            updateDisplay();
+
+            if (countdown <= 0) {
+                playBeep(isWorkPhase ? 1500 : 800);
+
+                if (isWorkPhase) {
+                    // Passa a recupero
+                    isWorkPhase = false;
+                    countdown = restTime;
+                } else {
+                    // Passa a lavoro
+                    currentRound++;
+                    if (currentRound > totalRounds) {
+                        endSession();
+                        return;
+                    }
+                    isWorkPhase = true;
+                    countdown = workTime;
+                }
+                updateDisplay();
+            }
+        }
+
+        function updateDisplay() {
+            timerDisplay.textContent = countdown;
+            timerDisplay.className = isWorkPhase ? 'work' : 'rest';
+            statusDisplay.textContent = isWorkPhase ? currentStrings.statusWork : currentStrings.statusRest;
+            roundDisplay.textContent = `Round: ${currentRound}/${totalRounds}`;
+        }
+
+        function speakLastThreeSeconds(seconds) {
+            if (seconds <= 3 && seconds > 0 && speechSynth) {
+                // Annulla eventuali pronunce precedenti
+                speechSynth.cancel();
+                // Crea e pronuncia
+                const utterance = new SpeechSynthesisUtterance(seconds.toString());
+                utterance.rate = 1.2;
+                utterance.pitch = 1.5;
+                speechSynth.speak(utterance);
+            }
+        }
+
+        function playBeep(frequency, duration = 300) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.frequency.value = frequency;
+                oscillator.type = "sine";
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                oscillator.start();
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration/1000);
+                oscillator.stop(audioCtx.currentTime + duration/1000);
+            } catch(e) {
+                console.log("Beep non supportato");
+            }
+        }
+
+        function endSession() {
+            clearInterval(timer);
+            timerDisplay.textContent = "✅";
+            timerDisplay.className = "";
+            statusDisplay.textContent = currentStrings.sessionComplete;
+            playBeep(2000, 1000);
+
+            if (speechSynth) {
+                speechSynth.cancel();
+                const utterance = new SpeechSynthesisUtterance(`${currentStrings.sessionComplete} ${currentStrings.greatWork}`);
+                utterance.lang = userLang;
+                utterance.rate = 1.1;
+                utterance.pitch = 1.2;
+                speechSynth.speak(utterance);
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+            timerDisplay.textContent = "--";
+            statusDisplay.textContent = currentStrings.statusStopped;
+            if (speechSynth) speechSynth.cancel();
+        }
+    </script>
+</body>
+</html>
