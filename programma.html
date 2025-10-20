@@ -54,6 +54,59 @@
     .wrapper { max-width:900px; margin:0 auto; padding:0 18px; }
     .notice { background:#181818; border:2px solid var(--accent); padding:12px 14px; border-radius:14px; font-size:0.9rem; margin:15px 0 30px; }
 
+    /* Weekly Calendar */
+    .weekly-calendar { 
+        max-width:900px; margin:30px auto 40px; padding:0 18px;
+    }
+    .calendar-title {
+        font-family:var(--font-heading); font-size:1.1rem; color:var(--accent3);
+        text-align:center; margin-bottom:16px; letter-spacing:1px;
+    }
+    .calendar-grid {
+        display:grid; grid-template-columns:repeat(7, 1fr); gap:8px;
+        background:#141414; padding:16px; border-radius:18px; border:2px solid #222;
+    }
+    .calendar-day {
+        background:#1a1a1a; border:2px solid #333; border-radius:12px;
+        padding:12px 8px; text-align:center; cursor:pointer;
+        transition:all 0.3s ease;
+    }
+    .calendar-day:hover {
+        border-color:var(--accent); transform:translateY(-2px);
+    }
+    .calendar-day.completed {
+        background:linear-gradient(135deg, var(--accent) 0%, #00cc00 100%);
+        border-color:var(--accent3);
+    }
+    .calendar-day .day-name {
+        font-size:0.7rem; color:var(--accent3); font-weight:700;
+        text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;
+    }
+    .calendar-day .session-info {
+        font-size:0.65rem; color:var(--muted); margin:4px 0;
+        min-height:32px;
+    }
+    .calendar-day.completed .session-info {
+        color:#000; font-weight:700;
+    }
+    .calendar-day .check {
+        font-size:1.5rem; margin-top:6px;
+    }
+    .calendar-day .check::before {
+        content:'○';
+        color:#555;
+    }
+    .calendar-day.completed .check::before {
+        content:'✓';
+        color:#000;
+    }
+    @media (max-width:768px){
+        .calendar-grid { gap:6px; padding:12px; }
+        .calendar-day { padding:8px 4px; }
+        .calendar-day .day-name { font-size:0.6rem; }
+        .calendar-day .session-info { font-size:0.55rem; min-height:28px; }
+    }
+
     .session { margin:45px 0 55px; position:relative; }
     .session h2 { margin:0 0 10px; font-family:var(--font-heading); font-size:1.6rem; letter-spacing:1px; color:var(--accent); }
     .session .tagline { font-size:0.85rem; text-transform:uppercase; color:var(--accent3); font-weight:700; letter-spacing:1px; margin-bottom:14px; }
@@ -141,6 +194,49 @@
         <div class="meta" data-i18n="meta">Attrezzi: elastici vari • 2 pesetti da 2 kg • Obiettivo: forza funzionale, postura, tonicità</div>
         <div class="notice" data-i18n="notice">Formato: Tabata 20" lavoro / 10" recupero • 8 round = 4 minuti a blocco • Ripeti il blocco 5 volte = 20' di lavoro attivo (+ riscaldamento e stretching)</div>
     </header>
+    
+    <!-- Weekly Calendar -->
+    <div class="weekly-calendar no-print">
+        <div class="calendar-title" data-i18n="calendarTitle">📅 Traccia i tuoi allenamenti settimanali</div>
+        <div class="calendar-grid">
+            <div class="calendar-day" data-day="1" data-session="1">
+                <div class="day-name" data-i18n="monday">LUN</div>
+                <div class="session-info" data-i18n="session1Short">Sessione 1<br>Upper Body</div>
+                <div class="check"></div>
+            </div>
+            <div class="calendar-day" data-day="2" data-session="2">
+                <div class="day-name" data-i18n="tuesday">MAR</div>
+                <div class="session-info" data-i18n="session2Short">Sessione 2<br>Lower Body</div>
+                <div class="check"></div>
+            </div>
+            <div class="calendar-day" data-day="3" data-session="3">
+                <div class="day-name" data-i18n="wednesday">MER</div>
+                <div class="session-info" data-i18n="session3Short">Sessione 3<br>Full Body</div>
+                <div class="check"></div>
+            </div>
+            <div class="calendar-day" data-day="4" data-session="1">
+                <div class="day-name" data-i18n="thursday">GIO</div>
+                <div class="session-info" data-i18n="session1Short">Sessione 1<br>Upper Body</div>
+                <div class="check"></div>
+            </div>
+            <div class="calendar-day" data-day="5" data-session="2">
+                <div class="day-name" data-i18n="friday">VEN</div>
+                <div class="session-info" data-i18n="session2Short">Sessione 2<br>Lower Body</div>
+                <div class="check"></div>
+            </div>
+            <div class="calendar-day" data-day="6" data-session="3">
+                <div class="day-name" data-i18n="saturday">SAB</div>
+                <div class="session-info" data-i18n="session3Short">Sessione 3<br>Full Body</div>
+                <div class="check"></div>
+            </div>
+            <div class="calendar-day" data-day="0">
+                <div class="day-name" data-i18n="sunday">DOM</div>
+                <div class="session-info" data-i18n="restDay">Riposo</div>
+                <div class="check"></div>
+            </div>
+        </div>
+    </div>
+    
     <div class="wrapper">
         <!-- SESSIONE 1 -->
         <section class="session" id="sessione-1">
@@ -665,7 +761,6 @@
     <div class="tools no-print">
         <button id="printBtn">🖨️ Stampa / PDF</button>
         <button id="downloadPdfBtn">⬇️ Scarica PDF (beta)</button>
-        <button id="testVoiceBtn">🔊 Test Voce</button>
         <a href="index.html">⏱️ Torna al Timer</a>
     </div>
 
@@ -678,44 +773,6 @@ printBtn.addEventListener('click', () => window.print());
 const downloadBtn = document.getElementById('downloadPdfBtn');
 downloadBtn.addEventListener('click', () => {
     alert('Funzione PDF avanzato in arrivo. Usa per ora Stampa / Salva come PDF.');
-});
-
-// Test voce - mostra voci disponibili e testa il countdown
-const testVoiceBtn = document.getElementById('testVoiceBtn');
-testVoiceBtn.addEventListener('click', () => {
-    const voices = speechSynth.getVoices();
-    const italianVoices = voices.filter(v => v.lang.startsWith('it'));
-    
-    let message = '🔊 VOCI ITALIANE DISPONIBILI:\n\n';
-    
-    if (italianVoices.length === 0) {
-        message += 'Nessuna voce italiana trovata.\n\n';
-        message += 'Voci disponibili:\n';
-        voices.slice(0, 5).forEach((v, i) => {
-            message += `${i + 1}. ${v.name} (${v.lang})\n`;
-        });
-    } else {
-        italianVoices.forEach((v, i) => {
-            const selected = selectedVoice && v.name === selectedVoice.name ? ' ⭐ SELEZIONATA' : '';
-            message += `${i + 1}. ${v.name} (${v.lang})${selected}\n`;
-        });
-    }
-    
-    alert(message);
-    
-    // Test countdown 3-2-1
-    if (confirm('Vuoi testare il countdown 3-2-1?')) {
-        let count = 3;
-        const testInterval = setInterval(() => {
-            if (count > 0) {
-                speakCountdown(count);
-                count--;
-            } else {
-                clearInterval(testInterval);
-                playBeep(1000, 500);
-            }
-        }, 1000);
-    }
 });
 
 // Audio Functions
@@ -1002,7 +1059,19 @@ const translations = {
         work: 'Lavoro',
         rest: 'Recupero',
         pause: 'Pausa',
-        done: 'Completato!'
+        done: 'Completato!',
+        calendarTitle: '📅 Traccia i tuoi allenamenti settimanali',
+        monday: 'LUN',
+        tuesday: 'MAR',
+        wednesday: 'MER',
+        thursday: 'GIO',
+        friday: 'VEN',
+        saturday: 'SAB',
+        sunday: 'DOM',
+        session1Short: 'Sessione 1<br>Upper Body',
+        session2Short: 'Sessione 2<br>Lower Body',
+        session3Short: 'Sessione 3<br>Full Body',
+        restDay: 'Riposo'
     },
     en: {
         title: 'TABATA CALISTHENICS PROGRAM',
@@ -1028,7 +1097,19 @@ const translations = {
         work: 'Work',
         rest: 'Rest',
         pause: 'Pause',
-        done: 'Complete!'
+        done: 'Complete!',
+        calendarTitle: '📅 Track your weekly workouts',
+        monday: 'MON',
+        tuesday: 'TUE',
+        wednesday: 'WED',
+        thursday: 'THU',
+        friday: 'FRI',
+        saturday: 'SAT',
+        sunday: 'SUN',
+        session1Short: 'Session 1<br>Upper Body',
+        session2Short: 'Session 2<br>Lower Body',
+        session3Short: 'Session 3<br>Full Body',
+        restDay: 'Rest'
     }
 };
 
@@ -1058,6 +1139,54 @@ document.getElementById('langEN').addEventListener('click', () => setLanguage('e
 
 // Initialize
 setLanguage(currentLang);
+
+// Weekly Calendar Management
+const CALENDAR_KEY = 'tabataWeeklyCalendar';
+
+function loadCalendarState() {
+    const saved = localStorage.getItem(CALENDAR_KEY);
+    return saved ? JSON.parse(saved) : {};
+}
+
+function saveCalendarState(state) {
+    localStorage.setItem(CALENDAR_KEY, JSON.stringify(state));
+}
+
+function updateCalendarUI() {
+    const state = loadCalendarState();
+    document.querySelectorAll('.calendar-day').forEach(day => {
+        const dayNum = day.getAttribute('data-day');
+        if (state[dayNum]) {
+            day.classList.add('completed');
+        } else {
+            day.classList.remove('completed');
+        }
+    });
+}
+
+// Click handler for calendar days
+document.querySelectorAll('.calendar-day').forEach(day => {
+    day.addEventListener('click', () => {
+        const dayNum = day.getAttribute('data-day');
+        const state = loadCalendarState();
+        
+        // Toggle completion
+        if (state[dayNum]) {
+            delete state[dayNum];
+        } else {
+            state[dayNum] = {
+                completedAt: new Date().toISOString(),
+                session: day.getAttribute('data-session')
+            };
+        }
+        
+        saveCalendarState(state);
+        updateCalendarUI();
+    });
+});
+
+// Initialize calendar
+updateCalendarUI();
 </script>
 
 </body>
