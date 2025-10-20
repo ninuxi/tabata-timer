@@ -422,9 +422,253 @@
                 min-width: unset;
             }
         }
+
+        /* Update Notification Modal */
+        .update-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .update-modal.show {
+            display: flex;
+        }
+        .update-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 3px solid #00ff00;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 255, 0, 0.3);
+        }
+        .update-content h2 {
+            color: #00ff00;
+            margin: 0 0 15px;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+        }
+        .update-content p {
+            color: #fff;
+            margin: 15px 0;
+            line-height: 1.6;
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+        }
+        .update-content .shortcut {
+            background: #000;
+            border: 2px solid #ffd700;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #ffd700;
+            font-weight: bold;
+        }
+        .update-content .browser-info {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .update-content button {
+            background: #00ff00;
+            color: #000;
+            border: 2px solid #ffd700;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .update-content button:hover {
+            background: #ffd700;
+            transform: scale(1.05);
+        }
+        .update-content button.secondary {
+            background: #333;
+            color: #fff;
+            border-color: #666;
+        }
+        .update-content button.secondary:hover {
+            background: #555;
+        }
+
+        /* Install Instructions Modal */
+        .install-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .install-modal.show {
+            display: flex;
+        }
+        .install-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 3px solid #ffd700;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            text-align: left;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .install-content h2 {
+            color: #ffd700;
+            margin: 0 0 20px;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        .install-content h3 {
+            color: #00ff00;
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+        }
+        .install-content p, .install-content li {
+            color: #fff;
+            line-height: 1.6;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            margin: 10px 0;
+        }
+        .install-content ol {
+            padding-left: 25px;
+        }
+        .install-content code {
+            background: #000;
+            color: #00ff00;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        .install-content .browser-section {
+            background: #0a0a0a;
+            border: 2px solid #333;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+        .install-content .close-btn {
+            display: block;
+            margin: 20px auto 0;
+            background: #00ff00;
+            color: #000;
+            border: 2px solid #ffd700;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .install-content .close-btn:hover {
+            background: #ffd700;
+        }
     </style>
 </head>
 <body>
+    <!-- Update Notification Modal -->
+    <div id="updateModal" class="update-modal">
+        <div class="update-content">
+            <h2>🔄 <span data-translate-key="updateAvailable">Aggiornamento Disponibile!</span></h2>
+            <p data-translate-key="updateMessage">È disponibile una nuova versione dell'app con miglioramenti e nuove funzionalità.</p>
+            <p data-translate-key="updateInstructions">Per vedere gli aggiornamenti, ricarica la pagina premendo:</p>
+            <div class="shortcut" id="updateShortcut">
+                Ctrl + Shift + R
+            </div>
+            <div class="browser-info" data-translate-key="updateNote">
+                Questo aggiorna la cache dell'app e scarica l'ultima versione
+            </div>
+            <button onclick="forceReload()" data-translate-key="updateNow">Aggiorna Ora</button>
+            <button class="secondary" onclick="closeUpdateModal()" data-translate-key="updateLater">Più Tardi</button>
+        </div>
+    </div>
+
+    <!-- Install Instructions Modal -->
+    <div id="installModal" class="install-modal">
+        <div class="install-content">
+            <h2>📱 <span data-translate-key="installTitle">Installa l'App</span></h2>
+            
+            <div class="browser-section">
+                <h3>🌐 Chrome / Edge (Desktop)</h3>
+                <ol>
+                    <li data-translate-key="installChrome1">Clicca sull'icona <strong>Install</strong> nella barra degli indirizzi (⊕)</li>
+                    <li data-translate-key="installChrome2">Oppure: Menu (⋮) → <code>Installa Tabata Timer</code></li>
+                    <li data-translate-key="installChrome3">L'app apparirà come programma standalone</li>
+                </ol>
+            </div>
+
+            <div class="browser-section">
+                <h3>🦊 Firefox (Desktop)</h3>
+                <ol>
+                    <li data-translate-key="installFirefox1">Clicca sui tre puntini <strong>(...)</strong> nella barra degli indirizzi</li>
+                    <li data-translate-key="installFirefox2">Seleziona <code>Installa</code></li>
+                    <li data-translate-key="installFirefox3">Oppure: Menu → <code>Installa il sito come app</code></li>
+                </ol>
+            </div>
+
+            <div class="browser-section">
+                <h3>📱 Chrome / Samsung Internet (Android)</h3>
+                <ol>
+                    <li data-translate-key="installAndroid1">Menu (⋮) → <code>Installa app</code></li>
+                    <li data-translate-key="installAndroid2">Oppure: <code>Aggiungi a schermata Home</code></li>
+                    <li data-translate-key="installAndroid3">L'icona apparirà tra le tue app</li>
+                </ol>
+            </div>
+
+            <div class="browser-section">
+                <h3>🍎 Safari (iPhone / iPad)</h3>
+                <ol>
+                    <li data-translate-key="installIOS1">Tocca il pulsante <strong>Condividi</strong> (quadrato con freccia)</li>
+                    <li data-translate-key="installIOS2">Scorri e tocca <code>Aggiungi a schermata Home</code></li>
+                    <li data-translate-key="installIOS3">Tocca <strong>Aggiungi</strong> in alto a destra</li>
+                    <li data-translate-key="installIOS4">L'app apparirà nella home screen</li>
+                </ol>
+            </div>
+
+            <div class="browser-section">
+                <h3>🖥️ Safari (macOS)</h3>
+                <ol>
+                    <li data-translate-key="installMacOS1">File → <code>Aggiungi al Dock</code></li>
+                    <li data-translate-key="installMacOS2">L'app apparirà nel Dock di macOS</li>
+                </ol>
+            </div>
+
+            <button class="close-btn" onclick="closeInstallModal()" data-translate-key="installClose">Ho Capito</button>
+        </div>
+    </div>
+
     <button class="fullscreen-btn" id="fullscreenBtn">⛶ Fullscreen</button>
     <div class="shortcuts-hint" id="shortcutsHint">
         ⌨️ Space=Start/Pause • R=Reset • M=Mute • F=Fullscreen • ?=Help
@@ -474,6 +718,7 @@
         
         <!-- Install PWA Button -->
         <button type="button" id="installBtn" class="install-btn" data-translate-key="installApp">📲 Installa App</button>
+        <button type="button" id="installHelpBtn" class="install-btn" style="background:#333; display:block; margin-top:10px;" data-translate-key="installHelp">❓ Come Installare</button>
         
         <details class="panel">
             <summary data-translate-key="resourcesGroupTitle">Programma & Diario</summary>
@@ -623,6 +868,58 @@
     translations.it.installApp = "📲 Installa App";
     translations.it.resourcesTitle = "Risorse";
     translations.en.resourcesTitle = "Resources";
+
+    // Update Notification Translations
+    translations.en.updateAvailable = "Update Available!";
+    translations.it.updateAvailable = "Aggiornamento Disponibile!";
+    translations.en.updateMessage = "A new version of the app is available with improvements and new features.";
+    translations.it.updateMessage = "È disponibile una nuova versione dell'app con miglioramenti e nuove funzionalità.";
+    translations.en.updateInstructions = "To see the updates, reload the page by pressing:";
+    translations.it.updateInstructions = "Per vedere gli aggiornamenti, ricarica la pagina premendo:";
+    translations.en.updateNote = "This updates the app cache and downloads the latest version";
+    translations.it.updateNote = "Questo aggiorna la cache dell'app e scarica l'ultima versione";
+    translations.en.updateNow = "Update Now";
+    translations.it.updateNow = "Aggiorna Ora";
+    translations.en.updateLater = "Later";
+    translations.it.updateLater = "Più Tardi";
+
+    // Install Instructions Translations
+    translations.en.installHelp = "❓ How to Install";
+    translations.it.installHelp = "❓ Come Installare";
+    translations.en.installTitle = "Install the App";
+    translations.it.installTitle = "Installa l'App";
+    translations.en.installChrome1 = "Click the <strong>Install</strong> icon in the address bar (⊕)";
+    translations.it.installChrome1 = "Clicca sull'icona <strong>Install</strong> nella barra degli indirizzi (⊕)";
+    translations.en.installChrome2 = "Or: Menu (⋮) → <code>Install Tabata Timer</code>";
+    translations.it.installChrome2 = "Oppure: Menu (⋮) → <code>Installa Tabata Timer</code>";
+    translations.en.installChrome3 = "The app will appear as a standalone program";
+    translations.it.installChrome3 = "L'app apparirà come programma standalone";
+    translations.en.installFirefox1 = "Click the three dots <strong>(...)</strong> in the address bar";
+    translations.it.installFirefox1 = "Clicca sui tre puntini <strong>(...)</strong> nella barra degli indirizzi";
+    translations.en.installFirefox2 = "Select <code>Install</code>";
+    translations.it.installFirefox2 = "Seleziona <code>Installa</code>";
+    translations.en.installFirefox3 = "Or: Menu → <code>Install site as app</code>";
+    translations.it.installFirefox3 = "Oppure: Menu → <code>Installa il sito come app</code>";
+    translations.en.installAndroid1 = "Menu (⋮) → <code>Install app</code>";
+    translations.it.installAndroid1 = "Menu (⋮) → <code>Installa app</code>";
+    translations.en.installAndroid2 = "Or: <code>Add to Home screen</code>";
+    translations.it.installAndroid2 = "Oppure: <code>Aggiungi a schermata Home</code>";
+    translations.en.installAndroid3 = "The icon will appear among your apps";
+    translations.it.installAndroid3 = "L'icona apparirà tra le tue app";
+    translations.en.installIOS1 = "Tap the <strong>Share</strong> button (square with arrow)";
+    translations.it.installIOS1 = "Tocca il pulsante <strong>Condividi</strong> (quadrato con freccia)";
+    translations.en.installIOS2 = "Scroll and tap <code>Add to Home Screen</code>";
+    translations.it.installIOS2 = "Scorri e tocca <code>Aggiungi a schermata Home</code>";
+    translations.en.installIOS3 = "Tap <strong>Add</strong> in the top right";
+    translations.it.installIOS3 = "Tocca <strong>Aggiungi</strong> in alto a destra";
+    translations.en.installIOS4 = "The app will appear on your home screen";
+    translations.it.installIOS4 = "L'app apparirà nella home screen";
+    translations.en.installMacOS1 = "File → <code>Add to Dock</code>";
+    translations.it.installMacOS1 = "File → <code>Aggiungi al Dock</code>";
+    translations.en.installMacOS2 = "The app will appear in the macOS Dock";
+    translations.it.installMacOS2 = "L'app apparirà nel Dock di macOS";
+    translations.en.installClose = "Got It";
+    translations.it.installClose = "Ho Capito";
 
         const userLang = navigator.language.startsWith('en') ? 'en' : 'it';
         let currentStrings = translations[userLang];
@@ -1095,18 +1392,79 @@
             localStorage.setItem('tabataStats', JSON.stringify(stats));
         }
         
-        // Register Service Worker for PWA
+        // Register Service Worker for PWA with Update Detection
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
                     .then((registration) => {
                         console.log('SW registrato:', registration.scope);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            console.log('Nuovo SW trovato!');
+                            
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New service worker available, show update notification
+                                    console.log('Aggiornamento disponibile!');
+                                    showUpdateNotification();
+                                }
+                            });
+                        });
+                        
+                        // Check for updates every 60 seconds
+                        setInterval(() => {
+                            registration.update();
+                        }, 60000);
                     })
                     .catch((err) => {
                         console.log('SW registrazione fallita:', err);
                     });
             });
         }
+        
+        // Update Notification Functions
+        function showUpdateNotification() {
+            const updateModal = document.getElementById('updateModal');
+            const shortcutEl = document.getElementById('updateShortcut');
+            
+            // Detect OS for correct shortcut
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+            shortcutEl.textContent = isMac ? 'Cmd + Shift + R' : 'Ctrl + Shift + R';
+            
+            updateModal.classList.add('show');
+        }
+        
+        function closeUpdateModal() {
+            const updateModal = document.getElementById('updateModal');
+            updateModal.classList.remove('show');
+        }
+        
+        function forceReload() {
+            // Clear cache and reload
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => caches.delete(name));
+                });
+            }
+            window.location.reload(true);
+        }
+        
+        // Install Instructions Modal Functions
+        function showInstallModal() {
+            const installModal = document.getElementById('installModal');
+            installModal.classList.add('show');
+        }
+        
+        function closeInstallModal() {
+            const installModal = document.getElementById('installModal');
+            installModal.classList.remove('show');
+        }
+        
+        // Install Help Button
+        const installHelpBtn = document.getElementById('installHelpBtn');
+        installHelpBtn.addEventListener('click', showInstallModal);
         
         // Install PWA prompt
         let deferredPrompt;
@@ -1122,7 +1480,8 @@
         
         installBtn.addEventListener('click', async () => {
             if (!deferredPrompt) {
-                alert('App già installata o non installabile su questo dispositivo');
+                // Se non c'è prompt nativo, mostra istruzioni
+                showInstallModal();
                 return;
             }
             
@@ -1142,6 +1501,17 @@
             installBtn.style.display = 'none';
             console.log('App installata con successo!');
         });
+        
+        // Detect if running as PWA
+        function isPWA() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone === true;
+        }
+        
+        // Show install button always (for browsers that don't support beforeinstallprompt)
+        if (!isPWA()) {
+            installBtn.style.display = 'block';
+        }
     </script>
 </body>
 </html>
