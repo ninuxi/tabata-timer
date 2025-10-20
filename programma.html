@@ -107,9 +107,129 @@
         .calendar-day .session-info { font-size:0.55rem; min-height:28px; }
     }
 
+    /* Session Cards */
+    .sessions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+        margin: 30px 0 50px;
+    }
+    .session-card {
+        background: linear-gradient(135deg, #141414 0%, #1a1a1a 100%);
+        border: 2px solid #222;
+        border-radius: 18px;
+        padding: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .session-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent) 0%, var(--accent3) 100%);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    .session-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0,255,0,0.2);
+    }
+    .session-card:hover::before {
+        transform: scaleX(1);
+    }
+    .session-card .icon {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+    }
+    .session-card .title {
+        font-family: var(--font-heading);
+        font-size: 1.3rem;
+        color: var(--accent3);
+        margin: 0 0 8px;
+        letter-spacing: 1px;
+    }
+    .session-card .days {
+        font-size: 0.75rem;
+        color: var(--accent);
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+    }
+    .session-card .description {
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.4;
+        margin-bottom: 12px;
+    }
+    .session-card .duration {
+        font-size: 0.7rem;
+        color: var(--accent3);
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* Session Detail View */
+    .session-detail {
+        display: none;
+    }
+    .session-detail.active {
+        display: block;
+    }
     .session { margin:45px 0 55px; position:relative; }
     .session h2 { margin:0 0 10px; font-family:var(--font-heading); font-size:1.6rem; letter-spacing:1px; color:var(--accent); }
     .session .tagline { font-size:0.85rem; text-transform:uppercase; color:var(--accent3); font-weight:700; letter-spacing:1px; margin-bottom:14px; }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 20px 0 30px;
+        justify-content: center;
+    }
+    .nav-buttons button, .nav-buttons a {
+        background: var(--accent3);
+        color: #000;
+        font-weight: 700;
+        font-family: var(--font-heading);
+        border: 2px solid var(--accent);
+        padding: 12px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+    .nav-buttons button:hover, .nav-buttons a:hover {
+        background: var(--accent);
+        transform: translateY(-2px);
+    }
+
+    @media (max-width:768px) {
+        .sessions-grid {
+            grid-template-columns: 1fr;
+        }
+        .nav-buttons {
+            flex-direction: column;
+        }
+        .nav-buttons button, .nav-buttons a {
+            width: 100%;
+            justify-content: center;
+        }
+    }
 
     .block { background:#141414; border:2px solid #222; padding:18px 18px 12px; border-radius:18px; margin:25px 0; }
     .block h3 { margin:0 0 12px; font-size:1.05rem; letter-spacing:1px; font-family:var(--font-heading); color:var(--accent2); }
@@ -244,8 +364,74 @@
     </div>
     
     <div class="wrapper">
-        <!-- SESSIONE 1 -->
-        <section class="session" id="sessione-1">
+        <!-- Sessions Overview (Grid View) -->
+        <div id="sessionsOverview">
+            <h2 style="font-family:var(--font-heading); font-size:1.8rem; text-align:center; color:var(--accent3); margin:30px 0 20px; letter-spacing:2px;" data-i18n="programTitle">📋 LE TUE 5 SESSIONI</h2>
+            <div class="sessions-grid">
+                <!-- Session 1 Card -->
+                <div class="session-card" data-session="1">
+                    <div class="icon">💪</div>
+                    <h3 class="title" data-i18n="session1CardTitle">Upper Body + Core</h3>
+                    <div class="days" data-i18n="session1Days">Lunedì / Giovedì</div>
+                    <p class="description" data-i18n="session1CardDesc">Focus su spinta, tirata, core e postura. Push-up, plank, superman e renegade row per forza funzionale della parte superiore.</p>
+                    <div class="duration">⏱️ <span data-i18n="duration30">~30 minuti</span></div>
+                </div>
+
+                <!-- Session 2 Card -->
+                <div class="session-card" data-session="2">
+                    <div class="icon">🦵</div>
+                    <h3 class="title" data-i18n="session2CardTitle">Lower Body + Mobilità</h3>
+                    <div class="days" data-i18n="session2Days">Martedì / Venerdì</div>
+                    <p class="description" data-i18n="session2CardDesc">Gambe forti e mobili. Squat jump, affondi, glute bridge con elastico e single leg deadlift per stabilità e potenza.</p>
+                    <div class="duration">⏱️ <span data-i18n="duration30">~30 minuti</span></div>
+                </div>
+
+                <!-- Session 3 Card -->
+                <div class="session-card" data-session="3">
+                    <div class="icon">🔥</div>
+                    <h3 class="title" data-i18n="session3CardTitle">Full Body Dinamico</h3>
+                    <div class="days" data-i18n="session3Days">Mercoledì / Sabato</div>
+                    <p class="description" data-i18n="session3CardDesc">Allenamento totale. Mountain climber, burpee, bear crawl e hollow body per coinvolgere tutto il corpo in modo esplosivo.</p>
+                    <div class="duration">⏱️ <span data-i18n="duration30">~30 minuti</span></div>
+                </div>
+
+                <!-- Session 4 Card -->
+                <div class="session-card" data-session="4">
+                    <div class="icon">⚡</div>
+                    <h3 class="title" data-i18n="session4CardTitle">Cardio Power</h3>
+                    <div class="days" data-i18n="session4Days">Opzionale</div>
+                    <p class="description" data-i18n="session4CardDesc">Boost cardiovascolare. High knees, skater hop, skip basso e lateral lunge per resistenza e agilità esplosiva.</p>
+                    <div class="duration">⏱️ <span data-i18n="duration30">~30 minuti</span></div>
+                </div>
+
+                <!-- Session 5 Card -->
+                <div class="session-card" data-session="5">
+                    <div class="icon">🧘</div>
+                    <h3 class="title" data-i18n="session5CardTitle">Recovery & Mobilità</h3>
+                    <div class="days" data-i18n="session5Days">Opzionale</div>
+                    <p class="description" data-i18n="session5CardDesc">Rigenerazione attiva. Stretching profondo, respirazione e posture di allungamento per recupero muscolare e flessibilità.</p>
+                    <div class="duration">⏱️ <span data-i18n="duration30">~30 minuti</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session Detail Views (Hidden by default) -->
+        <div id="sessionDetail" class="session-detail">
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons">
+                <button id="backToProgramBtn" data-i18n="backToProgram">
+                    ← Torna a Programma
+                </button>
+                <a href="index.html" data-i18n="goToHome">
+                    🏠 Vai a Home
+                </a>
+                <a href="index.html#settings" data-i18n="chooseMusic">
+                    🎵 Scegli Musica
+                </a>
+            </div>
+
+            <!-- SESSIONE 1 -->
+            <section class="session" id="sessione-1" style="display:none;">
             <h2 data-i18n="session1">🧩 Sessione 1 — Upper Body + Core</h2>
             <div class="tagline" data-i18n="session1tag">Lunedì / Giovedì • Focus: spinta, tirata, core, postura</div>
             <div class="block">
@@ -366,8 +552,10 @@
             </div>
         </section>
 
+        </section>
+
         <!-- SESSIONE 2 -->
-        <section class="session" id="sessione-2">
+        <section class="session" id="sessione-2" style="display:none;">
             <h2 data-i18n="session2">🧩 Sessione 2 — Lower Body + Mobilità</h2>
             <div class="tagline" data-i18n="session2tag">Martedì / Venerdì • Focus: gambe, anche, equilibrio</div>
             <div class="block">
@@ -488,8 +676,10 @@
             </div>
         </section>
 
+        </section>
+
         <!-- SESSIONE 3 -->
-        <section class="session" id="sessione-3">
+        <section class="session" id="sessione-3" style="display:none;">
             <h2 data-i18n="session3">🧩 Sessione 3 — Full Body Funzionale</h2>
             <div class="tagline" data-i18n="session3tag">Giovedì / Sabato • Focus: total body, core, stabilità</div>
             <div class="block">
@@ -610,8 +800,10 @@
             </div>
         </section>
 
+        </section>
+
         <!-- SESSIONE 4 -->
-        <section class="session" id="sessione-4">
+        <section class="session" id="sessione-4" style="display:none;">
             <h2 data-i18n="session4">🧩 Sessione 4 — Cardio Power</h2>
             <div class="tagline" data-i18n="session4tag">Mercoledì / Sabato • Focus: resistenza, coordinazione, agilità</div>
             <div class="block">
@@ -682,8 +874,10 @@
             </div>
         </section>
 
+        </section>
+
         <!-- SESSIONE 5 -->
-        <section class="session" id="sessione-5">
+        <section class="session" id="sessione-5" style="display:none;">
             <h2 data-i18n="session5">🧩 Sessione 5 — Recovery & Mobilità (OPZIONALE)</h2>
             <div class="tagline" data-i18n="session5tag">Venerdì / Domenica • Focus: recupero attivo, flessibilità, mobilità articolare</div>
             <div class="block">
@@ -758,6 +952,7 @@
                 </ul>
             </div>
         </section>
+        </div> <!-- Fine sessionDetail -->
 
         <footer>
             <p>Disclaimer: consultare un professionista prima di iniziare nuovi programmi di allenamento. Adatta sempre l'intensità al tuo livello.</p>
@@ -771,6 +966,42 @@
     </div>
 
 <script>
+// Session Navigation
+const sessionsOverview = document.getElementById('sessionsOverview');
+const sessionDetail = document.getElementById('sessionDetail');
+const sessionCards = document.querySelectorAll('.session-card');
+const backToProgramBtn = document.getElementById('backToProgramBtn');
+const allSessions = document.querySelectorAll('.session');
+
+// Show session detail when card is clicked
+sessionCards.forEach(card => {
+    card.addEventListener('click', () => {
+        const sessionNum = card.dataset.session;
+        const selectedSession = document.getElementById(`sessione-${sessionNum}`);
+        
+        // Hide overview, show detail container
+        sessionsOverview.style.display = 'none';
+        sessionDetail.style.display = 'block';
+        
+        // Hide all sessions, show selected
+        allSessions.forEach(s => s.style.display = 'none');
+        if (selectedSession) {
+            selectedSession.style.display = 'block';
+        }
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});
+
+// Back to program button
+backToProgramBtn.addEventListener('click', () => {
+    sessionDetail.style.display = 'none';
+    sessionsOverview.style.display = 'block';
+    allSessions.forEach(s => s.style.display = 'none');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
 // Pulsante stampa nativo
 const printBtn = document.getElementById('printBtn');
 printBtn.addEventListener('click', () => window.print());
@@ -1080,7 +1311,27 @@ const translations = {
         restDay: 'Riposo',
         exportBtn: '💾 Export JSON',
         importBtn: '📥 Import JSON',
-        syncBtn: '☁️ Google Sync'
+        syncBtn: '☁️ Google Sync',
+        programTitle: '📋 LE TUE 5 SESSIONI',
+        session1CardTitle: 'Upper Body + Core',
+        session1Days: 'Lunedì / Giovedì',
+        session1CardDesc: 'Focus su spinta, tirata, core e postura. Push-up, plank, superman e renegade row per forza funzionale della parte superiore.',
+        session2CardTitle: 'Lower Body + Mobilità',
+        session2Days: 'Martedì / Venerdì',
+        session2CardDesc: 'Gambe forti e mobili. Squat jump, affondi, glute bridge con elastico e single leg deadlift per stabilità e potenza.',
+        session3CardTitle: 'Full Body Dinamico',
+        session3Days: 'Mercoledì / Sabato',
+        session3CardDesc: 'Allenamento totale. Mountain climber, burpee, bear crawl e hollow body per coinvolgere tutto il corpo in modo esplosivo.',
+        session4CardTitle: 'Cardio Power',
+        session4Days: 'Opzionale',
+        session4CardDesc: 'Boost cardiovascolare. High knees, skater hop, skip basso e lateral lunge per resistenza e agilità esplosiva.',
+        session5CardTitle: 'Recovery & Mobilità',
+        session5Days: 'Opzionale',
+        session5CardDesc: 'Rigenerazione attiva. Stretching profondo, respirazione e posture di allungamento per recupero muscolare e flessibilità.',
+        duration30: '~30 minuti',
+        backToProgram: '← Torna a Programma',
+        goToHome: '🏠 Vai a Home',
+        chooseMusic: '🎵 Scegli Musica'
     },
     en: {
         title: 'TABATA CALISTHENICS PROGRAM',
@@ -1121,7 +1372,27 @@ const translations = {
         restDay: 'Rest',
         exportBtn: '💾 Export JSON',
         importBtn: '📥 Import JSON',
-        syncBtn: '☁️ Google Sync'
+        syncBtn: '☁️ Google Sync',
+        programTitle: '📋 YOUR 5 SESSIONS',
+        session1CardTitle: 'Upper Body + Core',
+        session1Days: 'Monday / Thursday',
+        session1CardDesc: 'Focus on push, pull, core and posture. Push-ups, plank, superman and renegade row for functional upper body strength.',
+        session2CardTitle: 'Lower Body + Mobility',
+        session2Days: 'Tuesday / Friday',
+        session2CardDesc: 'Strong and mobile legs. Squat jump, lunges, glute bridge with band and single leg deadlift for stability and power.',
+        session3CardTitle: 'Dynamic Full Body',
+        session3Days: 'Wednesday / Saturday',
+        session3CardDesc: 'Total body workout. Mountain climber, burpee, bear crawl and hollow body to engage the entire body explosively.',
+        session4CardTitle: 'Cardio Power',
+        session4Days: 'Optional',
+        session4CardDesc: 'Cardiovascular boost. High knees, skater hop, low skip and lateral lunge for endurance and explosive agility.',
+        session5CardTitle: 'Recovery & Mobility',
+        session5Days: 'Optional',
+        session5CardDesc: 'Active regeneration. Deep stretching, breathing and lengthening postures for muscle recovery and flexibility.',
+        duration30: '~30 minutes',
+        backToProgram: '← Back to Program',
+        goToHome: '🏠 Go to Home',
+        chooseMusic: '🎵 Choose Music'
     }
 };
 
