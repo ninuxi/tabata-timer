@@ -329,6 +329,37 @@
         details.panel[open] summary:before { transform:rotate(90deg); }
         .chip-links { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:10px; }
         .link-chip { text-decoration:none; display:inline-block; }
+        .link-chip.highlight { 
+            background: linear-gradient(135deg, #ffd700 0%, #ffA500 100%); 
+            color: #000; 
+            font-weight: 900; 
+            font-size: 0.95rem;
+            border: 3px solid #00ff00;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .install-btn {
+            background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+            color: #000;
+            border: 2px solid #ffd700;
+            font-weight: 900;
+            margin: 15px 0;
+            padding: 14px 24px;
+            font-size: 0.85rem;
+            border-radius: 25px;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
+        }
+        .install-btn:hover {
+            background: linear-gradient(135deg, #ffd700 0%, #ffA500 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+        }
         .music-links a { text-decoration:none; }
         .music-links { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:10px; }
         .music-links a { background:#111; color:#ffd700; padding:8px 14px; border-radius:18px; font-size:0.7rem; font-weight:700; border:2px solid #00ff00; letter-spacing:1px; text-transform:uppercase; }
@@ -440,10 +471,14 @@
                 <button type="button" id="importPresetBtn" data-translate-key="importPreset">⬆️ Importa</button>
             </div>
         </details>
+        
+        <!-- Install PWA Button -->
+        <button type="button" id="installBtn" class="install-btn" data-translate-key="installApp">📲 Installa App</button>
+        
         <details class="panel">
             <summary data-translate-key="resourcesGroupTitle">Programma & Diario</summary>
             <div class="chip-links">
-                <a class="link-chip" data-translate-key="linkProgram" href="programma.html" target="_blank" rel="noopener noreferrer">📄 Programma</a>
+                <a class="link-chip highlight" data-translate-key="linkProgram" href="programma.html" target="_blank" rel="noopener noreferrer">⭐ PROGRAMMA COMPLETO</a>
                 <a class="link-chip" data-translate-key="linkProgramText" href="programma_testo.html" target="_blank" rel="noopener noreferrer">🧾 Testo</a>
                 <a class="link-chip" data-translate-key="linkDiary" href="diario.html" target="_blank" rel="noopener noreferrer">📝 Diario</a>
                 <a class="link-chip" data-translate-key="linkAbout" href="about.html" target="_blank" rel="noopener noreferrer">ℹ️ About</a>
@@ -576,14 +611,16 @@
         translations.it.musicTitle = "Playlist Musica";
 
         // Aggiunta traduzioni link extra
-        translations.en.linkProgram = "📄 Program";
+        translations.en.linkProgram = "⭐ COMPLETE PROGRAM";
         translations.en.linkProgramText = "🧾 Plain Text";
         translations.en.linkDiary = "📝 Diary";
         translations.en.linkAbout = "ℹ️ About";
-        translations.it.linkProgram = "📄 Programma";
+        translations.en.installApp = "📲 Install App";
+        translations.it.linkProgram = "⭐ PROGRAMMA COMPLETO";
         translations.it.linkProgramText = "🧾 Testo";
         translations.it.linkDiary = "📝 Diario";
     translations.it.linkAbout = "ℹ️ About";
+    translations.it.installApp = "📲 Installa App";
     translations.it.resourcesTitle = "Risorse";
     translations.en.resourcesTitle = "Resources";
 
@@ -1073,11 +1110,37 @@
         
         // Install PWA prompt
         let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
+        
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // Mostra un suggerimento per installare l'app
+            // Mostra il pulsante Install
+            installBtn.style.display = 'block';
             console.log('App installabile!');
+        });
+        
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) {
+                alert('App già installata o non installabile su questo dispositivo');
+                return;
+            }
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`Utente ha scelto: ${outcome}`);
+            
+            if (outcome === 'accepted') {
+                installBtn.style.display = 'none';
+            }
+            
+            deferredPrompt = null;
+        });
+        
+        // Nascondi il pulsante se l'app è già installata
+        window.addEventListener('appinstalled', () => {
+            installBtn.style.display = 'none';
+            console.log('App installata con successo!');
         });
     </script>
 </body>
