@@ -1,0 +1,42 @@
+{
+  "name": "Tabata Timer Pro",
+  "short_name": "Tabata",
+  "description": "Timer professionale per allenamenti Tabata HIIT - 30 minuti x 4 volte settimana",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#00ff00",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "fitness", "sports"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Avvia Timer",
+      "short_name": "Timer",
+      "description": "Avvia il cronometro Tabata",
+      "url": "/index.html",
+      "icons": [{ "src": "icon-192.svg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Programma",
+      "short_name": "Programma",
+      "description": "Visualizza programma allenamento",
+      "url": "/programma.html",
+      "icons": [{ "src": "icon-192.svg", "sizes": "192x192" }]
+    }
+  ]
+}

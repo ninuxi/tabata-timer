@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Timer professionale per allenamenti Tabata HIIT - Programmabile e personalizzabile">
+    <meta name="theme-color" content="#00ff00">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Tabata Timer">
+    <link rel="manifest" href="manifest.json">
     <title>⏱️ Tabata Timer</title>
     <style>
         * {
@@ -142,10 +148,153 @@
             color: #00ff00; 
             animation: pulse 1s infinite;
         }
+        .work.flash-warning {
+            animation: pulse 1s infinite, flashWork 0.5s infinite;
+        }
+        .rest.flash-warning {
+            animation: pulse 1s infinite, flashRest 0.5s infinite;
+        }
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
+        }
+        @keyframes flashWork {
+            0%, 100% { background: rgba(255, 107, 53, 0.1); }
+            50% { background: rgba(255, 107, 53, 0.3); }
+        }
+        @keyframes flashRest {
+            0%, 100% { background: rgba(0, 255, 0, 0.1); }
+            50% { background: rgba(0, 255, 0, 0.3); }
+        }
+        
+        /* Volume Control */
+        .volume-control {
+            margin: 15px 0;
+            padding: 12px;
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+        }
+        .volume-control label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            color: #ffd700;
+            font-weight: 700;
+        }
+        .volume-slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #333;
+            border-radius: 5px;
+            outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ffd700;
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #ffd700;
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        /* Settings Toggle */
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 0.8rem;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333;
+            transition: .3s;
+            border-radius: 24px;
+            border: 2px solid #666;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider {
+            background-color: #00ff00;
+            border-color: #00ff00;
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* Fullscreen button */
+        .fullscreen-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            z-index: 1000;
+            font-weight: 700;
+        }
+        .fullscreen-btn:hover {
+            background: #ffd700;
+            color: #000;
+        }
+        
+        /* Keyboard shortcuts hint */
+        .shortcuts-hint {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #888;
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            z-index: 1000;
+            display: none;
+        }
+        .shortcuts-hint.visible {
+            display: block;
         }
         /* Accordion panels */
         details.panel {
@@ -245,6 +394,10 @@
     </style>
 </head>
 <body>
+    <button class="fullscreen-btn" id="fullscreenBtn">⛶ Fullscreen</button>
+    <div class="shortcuts-hint" id="shortcutsHint">
+        ⌨️ Space=Start/Pause • R=Reset • M=Mute • F=Fullscreen • ?=Help
+    </div>
     <div class="container">
         <h1 data-translate-key="title">⏱️ CRONOMETRO TABATA</h1>
         <!-- Pannelli collassabili -->
@@ -294,6 +447,43 @@
                 <a class="link-chip" data-translate-key="linkProgramText" href="programma_testo.html" target="_blank" rel="noopener noreferrer">🧾 Testo</a>
                 <a class="link-chip" data-translate-key="linkDiary" href="diario.html" target="_blank" rel="noopener noreferrer">📝 Diario</a>
                 <a class="link-chip" data-translate-key="linkAbout" href="about.html" target="_blank" rel="noopener noreferrer">ℹ️ About</a>
+            </div>
+        </details>
+        <details class="panel">
+            <summary>⚙️ Impostazioni</summary>
+            <div class="group-body" style="display:block;">
+                <div class="volume-control">
+                    <label>🔊 Volume: <span id="volumeValue">80</span>%</label>
+                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="80">
+                </div>
+                <div class="settings-row">
+                    <span>🔔 Suoni Beep</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggleBeep" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <span>🗣️ Voce Countdown</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggleVoice" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <span>📳 Vibrazione</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggleVibration" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <span>💡 Schermo Sempre Acceso</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggleWakeLock" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
             </div>
         </details>
         <details class="panel">
@@ -420,17 +610,185 @@
         let countdown;
         let speechSynth = window.speechSynthesis;
 
+        // Settings
+        let volumeLevel = 0.8;
+        let beepEnabled = true;
+        let voiceEnabled = true;
+        let vibrationEnabled = true;
+        let wakeLockEnabled = true;
+        let wakeLock = null;
+
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
         const timerDisplay = document.getElementById('timer');
         const roundDisplay = document.getElementById('round');
         const statusDisplay = document.getElementById('status');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeValue = document.getElementById('volumeValue');
+        const toggleBeep = document.getElementById('toggleBeep');
+        const toggleVoice = document.getElementById('toggleVoice');
+        const toggleVibration = document.getElementById('toggleVibration');
+        const toggleWakeLock = document.getElementById('toggleWakeLock');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const shortcutsHint = document.getElementById('shortcutsHint');
     const presetBtns = document.querySelectorAll('.preset-btn');
     const savePresetBtn = document.getElementById('savePresetBtn');
     const loadPresetBtn = document.getElementById('loadPresetBtn');
     const exportPresetBtn = document.getElementById('exportPresetBtn');
     const importPresetBtn = document.getElementById('importPresetBtn');
     const importPresetInput = document.getElementById('importPresetInput');
+    
+        // Volume Control
+        volumeSlider.addEventListener('input', (e) => {
+            volumeLevel = e.target.value / 100;
+            volumeValue.textContent = e.target.value;
+            localStorage.setItem('tabataVolume', e.target.value);
+        });
+        
+        // Settings Toggles
+        toggleBeep.addEventListener('change', (e) => {
+            beepEnabled = e.target.checked;
+            localStorage.setItem('tabataBeepEnabled', e.target.checked);
+        });
+        
+        toggleVoice.addEventListener('change', (e) => {
+            voiceEnabled = e.target.checked;
+            localStorage.setItem('tabataVoiceEnabled', e.target.checked);
+        });
+        
+        toggleVibration.addEventListener('change', (e) => {
+            vibrationEnabled = e.target.checked;
+            localStorage.setItem('tabataVibrationEnabled', e.target.checked);
+        });
+        
+        toggleWakeLock.addEventListener('change', (e) => {
+            wakeLockEnabled = e.target.checked;
+            localStorage.setItem('tabataWakeLockEnabled', e.target.checked);
+            if (!e.target.checked && wakeLock) {
+                releaseWakeLock();
+            }
+        });
+        
+        // Load saved settings
+        function loadSettings() {
+            const savedVolume = localStorage.getItem('tabataVolume');
+            if (savedVolume) {
+                volumeLevel = savedVolume / 100;
+                volumeSlider.value = savedVolume;
+                volumeValue.textContent = savedVolume;
+            }
+            
+            const savedBeep = localStorage.getItem('tabataBeepEnabled');
+            if (savedBeep !== null) {
+                beepEnabled = savedBeep === 'true';
+                toggleBeep.checked = beepEnabled;
+            }
+            
+            const savedVoice = localStorage.getItem('tabataVoiceEnabled');
+            if (savedVoice !== null) {
+                voiceEnabled = savedVoice === 'true';
+                toggleVoice.checked = voiceEnabled;
+            }
+            
+            const savedVibration = localStorage.getItem('tabataVibrationEnabled');
+            if (savedVibration !== null) {
+                vibrationEnabled = savedVibration === 'true';
+                toggleVibration.checked = vibrationEnabled;
+            }
+            
+            const savedWakeLock = localStorage.getItem('tabataWakeLockEnabled');
+            if (savedWakeLock !== null) {
+                wakeLockEnabled = savedWakeLock === 'true';
+                toggleWakeLock.checked = wakeLockEnabled;
+            }
+        }
+        
+        loadSettings();
+        
+        // Wake Lock
+        async function requestWakeLock() {
+            if (!wakeLockEnabled) return;
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake Lock attivo');
+                    wakeLock.addEventListener('release', () => {
+                        console.log('Wake Lock rilasciato');
+                    });
+                }
+            } catch (err) {
+                console.log('Wake Lock non supportato:', err);
+            }
+        }
+        
+        function releaseWakeLock() {
+            if (wakeLock) {
+                wakeLock.release();
+                wakeLock = null;
+            }
+        }
+        
+        // Fullscreen
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+        
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log('Fullscreen non supportato:', err);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        // Keyboard Shortcuts
+        let shortcutsVisible = false;
+        document.addEventListener('keydown', (e) => {
+            // Ignora se si sta scrivendo in un input
+            if (e.target.tagName === 'INPUT') return;
+            
+            switch(e.key.toLowerCase()) {
+                case ' ':
+                    e.preventDefault();
+                    if (!timer) {
+                        startTimer();
+                    } else {
+                        stopTimer();
+                    }
+                    break;
+                case 'r':
+                    e.preventDefault();
+                    stopTimer();
+                    break;
+                case 'm':
+                    e.preventDefault();
+                    toggleBeep.checked = !toggleBeep.checked;
+                    beepEnabled = toggleBeep.checked;
+                    toggleVoice.checked = !toggleVoice.checked;
+                    voiceEnabled = toggleVoice.checked;
+                    break;
+                case 'f':
+                    e.preventDefault();
+                    toggleFullscreen();
+                    break;
+                case '?':
+                    e.preventDefault();
+                    shortcutsVisible = !shortcutsVisible;
+                    shortcutsHint.classList.toggle('visible', shortcutsVisible);
+                    setTimeout(() => {
+                        shortcutsHint.classList.remove('visible');
+                        shortcutsVisible = false;
+                    }, 5000);
+                    break;
+            }
+        });
+        
+        // Vibration function
+        function vibrate(pattern = [200]) {
+            if (vibrationEnabled && 'vibrate' in navigator) {
+                navigator.vibrate(pattern);
+            }
+        }
         // Esporta preset personalizzato in file JSON
         exportPresetBtn.addEventListener('click', () => {
             const preset = localStorage.getItem('tabataCustomPreset');
@@ -539,15 +897,30 @@
             countdown = workTime;
             updateDisplay();
             timer = setInterval(tick, 1000);
+            
+            // Attiva Wake Lock
+            requestWakeLock();
+            
+            // Salva workout iniziato
+            saveWorkoutStart();
         }
 
         function tick() {
             countdown--;
             speakLastThreeSeconds(countdown);
+            
+            // Flash visuale ultimi 3 secondi
+            if (countdown <= 3 && countdown > 0) {
+                timerDisplay.classList.add('flash-warning');
+            } else {
+                timerDisplay.classList.remove('flash-warning');
+            }
+            
             updateDisplay();
 
             if (countdown <= 0) {
                 playBeep(isWorkPhase ? 1500 : 800);
+                vibrate(isWorkPhase ? [200, 100, 200] : [400]);
 
                 if (isWorkPhase) {
                     // Passa a recupero
@@ -575,18 +948,20 @@
         }
 
         function speakLastThreeSeconds(seconds) {
-            if (seconds <= 3 && seconds > 0 && speechSynth) {
+            if (seconds <= 3 && seconds > 0 && speechSynth && voiceEnabled) {
                 // Annulla eventuali pronunce precedenti
                 speechSynth.cancel();
                 // Crea e pronuncia
                 const utterance = new SpeechSynthesisUtterance(seconds.toString());
                 utterance.rate = 1.2;
                 utterance.pitch = 1.5;
+                utterance.volume = volumeLevel;
                 speechSynth.speak(utterance);
             }
         }
 
         function playBeep(frequency, duration = 300) {
+            if (!beepEnabled) return;
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioCtx.createOscillator();
@@ -595,7 +970,7 @@
                 gainNode.connect(audioCtx.destination);
                 oscillator.frequency.value = frequency;
                 oscillator.type = "sine";
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.1 * volumeLevel, audioCtx.currentTime);
                 oscillator.start();
                 gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration/1000);
                 oscillator.stop(audioCtx.currentTime + duration/1000);
@@ -606,27 +981,104 @@
 
         function endSession() {
             clearInterval(timer);
+            timer = null;
             timerDisplay.textContent = "✅";
             timerDisplay.className = "";
+            timerDisplay.classList.remove('flash-warning');
             statusDisplay.textContent = currentStrings.sessionComplete;
             playBeep(2000, 1000);
+            vibrate([300, 100, 300, 100, 300]);
 
-            if (speechSynth) {
+            if (speechSynth && voiceEnabled) {
                 speechSynth.cancel();
                 const utterance = new SpeechSynthesisUtterance(`${currentStrings.sessionComplete} ${currentStrings.greatWork}`);
                 utterance.lang = userLang;
                 utterance.rate = 1.1;
                 utterance.pitch = 1.2;
+                utterance.volume = volumeLevel;
                 speechSynth.speak(utterance);
             }
+            
+            // Rilascia Wake Lock
+            releaseWakeLock();
+            
+            // Salva workout completato
+            saveWorkoutComplete();
         }
 
         function stopTimer() {
             clearInterval(timer);
+            timer = null;
             timerDisplay.textContent = "--";
+            timerDisplay.classList.remove('flash-warning');
             statusDisplay.textContent = currentStrings.statusStopped;
             if (speechSynth) speechSynth.cancel();
+            
+            // Rilascia Wake Lock
+            releaseWakeLock();
         }
+        
+        // Workout History Functions
+        function saveWorkoutStart() {
+            const workoutData = {
+                date: new Date().toISOString(),
+                work: workTime,
+                rest: restTime,
+                rounds: totalRounds,
+                started: true,
+                completed: false
+            };
+            localStorage.setItem('tabataCurrentWorkout', JSON.stringify(workoutData));
+        }
+        
+        function saveWorkoutComplete() {
+            const current = JSON.parse(localStorage.getItem('tabataCurrentWorkout') || '{}');
+            if (!current.started) return;
+            
+            current.completed = true;
+            current.completedAt = new Date().toISOString();
+            
+            // Aggiungi allo storico
+            const history = JSON.parse(localStorage.getItem('tabataHistory') || '[]');
+            history.push(current);
+            localStorage.setItem('tabataHistory', JSON.stringify(history));
+            localStorage.removeItem('tabataCurrentWorkout');
+            
+            // Aggiorna statistiche
+            updateStats();
+        }
+        
+        function updateStats() {
+            const history = JSON.parse(localStorage.getItem('tabataHistory') || '[]');
+            const stats = {
+                totalWorkouts: history.length,
+                totalRounds: history.reduce((sum, w) => sum + (w.rounds || 0), 0),
+                lastWorkout: history[history.length - 1]?.completedAt || null
+            };
+            localStorage.setItem('tabataStats', JSON.stringify(stats));
+        }
+        
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registrato:', registration.scope);
+                    })
+                    .catch((err) => {
+                        console.log('SW registrazione fallita:', err);
+                    });
+            });
+        }
+        
+        // Install PWA prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Mostra un suggerimento per installare l'app
+            console.log('App installabile!');
+        });
     </script>
 </body>
 </html>
