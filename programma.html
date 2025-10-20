@@ -235,6 +235,12 @@
                 <div class="check"></div>
             </div>
         </div>
+        <div style="text-align:center; margin-top:16px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+            <button id="exportCalendarBtn" style="background:#ffd700; color:#000; border:2px solid #00ff00; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:700; font-size:0.75rem;">💾 Export JSON</button>
+            <button id="importCalendarBtn" style="background:#00ff00; color:#000; border:2px solid #ffd700; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:700; font-size:0.75rem;">📥 Import JSON</button>
+            <button id="syncGoogleBtn" style="background:#4285f4; color:#fff; border:2px solid #fff; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:700; font-size:0.75rem;">☁️ Google Sync</button>
+        </div>
+        <input type="file" id="importFileInput" accept=".json" style="display:none;">
     </div>
     
     <div class="wrapper">
@@ -1071,7 +1077,10 @@ const translations = {
         session1Short: 'Sessione 1<br>Upper Body',
         session2Short: 'Sessione 2<br>Lower Body',
         session3Short: 'Sessione 3<br>Full Body',
-        restDay: 'Riposo'
+        restDay: 'Riposo',
+        exportBtn: '💾 Export JSON',
+        importBtn: '📥 Import JSON',
+        syncBtn: '☁️ Google Sync'
     },
     en: {
         title: 'TABATA CALISTHENICS PROGRAM',
@@ -1109,7 +1118,10 @@ const translations = {
         session1Short: 'Session 1<br>Upper Body',
         session2Short: 'Session 2<br>Lower Body',
         session3Short: 'Session 3<br>Full Body',
-        restDay: 'Rest'
+        restDay: 'Rest',
+        exportBtn: '💾 Export JSON',
+        importBtn: '📥 Import JSON',
+        syncBtn: '☁️ Google Sync'
     }
 };
 
@@ -1192,6 +1204,106 @@ document.querySelectorAll('.calendar-day').forEach(day => {
 
 // Initialize calendar
 updateCalendarUI();
+
+// Export/Import Functionality
+document.getElementById('exportCalendarBtn').addEventListener('click', () => {
+    const allData = {
+        calendar: loadCalendarState(),
+        history: JSON.parse(localStorage.getItem('tabataHistory') || '[]'),
+        stats: JSON.parse(localStorage.getItem('tabataStats') || '{}'),
+        exportDate: new Date().toISOString(),
+        version: '1.0'
+    };
+    
+    const dataStr = JSON.stringify(allData, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `tabata-backup-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    alert('✅ Dati esportati con successo!\n\nSalva questo file per importarlo su un altro dispositivo.');
+});
+
+document.getElementById('importCalendarBtn').addEventListener('click', () => {
+    document.getElementById('importFileInput').click();
+});
+
+document.getElementById('importFileInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const data = JSON.parse(event.target.result);
+            
+            if (confirm('⚠️ Importare i dati?\n\nQuesto sovrascriverà i dati attuali. Vuoi continuare?')) {
+                if (data.calendar) {
+                    localStorage.setItem(CALENDAR_KEY, JSON.stringify(data.calendar));
+                    updateCalendarUI();
+                }
+                if (data.history) {
+                    localStorage.setItem('tabataHistory', JSON.stringify(data.history));
+                }
+                if (data.stats) {
+                    localStorage.setItem('tabataStats', JSON.stringify(data.stats));
+                }
+                
+                alert('✅ Dati importati con successo!\n\nRicarica la pagina per vedere tutti i cambiamenti.');
+                location.reload();
+            }
+        } catch (err) {
+            alert('❌ Errore nell\'importazione!\n\nFile JSON non valido: ' + err.message);
+        }
+    };
+    reader.readAsText(file);
+    e.target.value = ''; // Reset input
+});
+
+// Google Sync (OAuth 2.0)
+let googleAccessToken = null;
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'; // Da configurare
+const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY'; // Da configurare
+const DRIVE_FOLDER_NAME = 'TabataTimerBackup';
+
+document.getElementById('syncGoogleBtn').addEventListener('click', async () => {
+    // Check if already authenticated
+    if (!googleAccessToken) {
+        alert('🔐 Login Google\n\n' +
+              'NOTA: Questa funzione richiede configurazione:\n\n' +
+              '1. Crea un progetto su Google Cloud Console\n' +
+              '2. Abilita Google Drive API\n' +
+              '3. Configura OAuth 2.0\n' +
+              '4. Inserisci le credenziali nel codice\n\n' +
+              '⚠️ Funzione in fase di sviluppo.\n\n' +
+              'Per ora usa Export/Import JSON! 💾');
+        return;
+    }
+    
+    // TODO: Implement Google Drive sync
+    try {
+        const allData = {
+            calendar: loadCalendarState(),
+            history: JSON.parse(localStorage.getItem('tabataHistory') || '[]'),
+            stats: JSON.parse(localStorage.getItem('tabataStats') || '{}'),
+            syncDate: new Date().toISOString()
+        };
+        
+        // Upload to Google Drive
+        const response = await uploadToGoogleDrive(allData);
+        alert('✅ Sincronizzazione completata!\n\nDati salvati su Google Drive.');
+    } catch (error) {
+        alert('❌ Errore sincronizzazione: ' + error.message);
+    }
+});
+
+async function uploadToGoogleDrive(data) {
+    // Placeholder - requires Google Drive API setup
+    throw new Error('Google Drive API non ancora configurata. Usa Export/Import per ora.');
+}
 </script>
 
 </body>

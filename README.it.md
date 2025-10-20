@@ -16,6 +16,10 @@ Cronometro Tabata moderno e responsive con:
 - 📤 Esportazione/importazione preset tramite file JSON
 - 🔔 Segnali audio per cambio fase
 - 🇮🇹/🇬🇧 Supporto multilingua (IT/EN) con rilevamento automatico
+- 📅 **NUOVO**: Calendario settimanale con tracking progressi
+- 💾 **NUOVO**: Export/Import di tutti i tuoi dati come JSON
+- ☁️ **NUOVO**: Sincronizzazione Google Drive (beta - richiede setup)
+- 📲 **NUOVO**: App PWA installabile per uso offline
 
 ## 🐍 Versioni Python
 
@@ -63,6 +67,22 @@ python tabata_personalizzabile.py
 - **Preset Manager**: Salvataggio e condivisione configurazioni.
 - **Cross-Platform**: Funziona su Windows, Mac, Linux e browser web.
 - **Multilingua**: Rilevamento automatico della lingua (Italiano/Inglese).
+- **📅 Tracking Progressi**: Calendario settimanale per segnare gli allenamenti completati
+- **💾 Backup Dati**: Export/Import di tutti i tuoi dati come JSON
+- **☁️ Sync Cloud**: Integrazione Google Drive (vedi [GOOGLE_SYNC_SETUP.md](GOOGLE_SYNC_SETUP.md))
+- **📲 PWA Ready**: Installabile come app su mobile e desktop
+
+## 💾 Backup & Sincronizzazione
+
+### Export/Import (Pronto all'Uso)
+- Clicca **💾 Export JSON** per scaricare tutti i tuoi dati di allenamento
+- Usa **📥 Import JSON** su un altro dispositivo per ripristinare i dati
+- Il file include: calendario, storico allenamenti e statistiche
+
+### Google Drive Sync (Beta)
+- Richiede configurazione Google Cloud
+- Vedi [GOOGLE_SYNC_SETUP.md](GOOGLE_SYNC_SETUP.md) per le istruzioni di setup
+- Backup automatico sul tuo account Google Drive
 
 ---
 

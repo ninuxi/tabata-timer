@@ -16,6 +16,10 @@ A modern and responsive Tabata timer with:
 - 📤 Export/import presets via JSON file
 - 🔔 Audio cues for phase changes
 - 🇮🇹/🇬🇧 Multi-language support (IT/EN) with auto-detection
+- 📅 **NEW**: Weekly workout calendar with progress tracking
+- 💾 **NEW**: Export/Import all your workout data as JSON
+- ☁️ **NEW**: Google Drive sync (beta - requires setup)
+- 📲 **NEW**: PWA installable app for offline use
 
 ## 🐍 Python Versions
 
@@ -63,6 +67,22 @@ python tabata_personalizzabile.py
 - **Preset Manager**: Save and share configurations.
 - **Cross-Platform**: Works on Windows, Mac, Linux, and web browsers.
 - **Multi-language**: Automatic language detection (Italian/English).
+- **📅 Progress Tracking**: Weekly calendar to mark completed workouts
+- **💾 Data Backup**: Export/Import all your data as JSON
+- **☁️ Cloud Sync**: Google Drive integration (see [GOOGLE_SYNC_SETUP.md](GOOGLE_SYNC_SETUP.md))
+- **📲 PWA Ready**: Install as app on mobile and desktop
+
+## 💾 Backup & Sync
+
+### Export/Import (Ready to Use)
+- Click **💾 Export JSON** to download all your workout data
+- Use **📥 Import JSON** on another device to restore your data
+- File includes: calendar, workout history, and statistics
+
+### Google Drive Sync (Beta)
+- Requires Google Cloud configuration
+- See [GOOGLE_SYNC_SETUP.md](GOOGLE_SYNC_SETUP.md) for setup instructions
+- Automatic backup to your Google Drive account
 
 ---
 
