@@ -283,6 +283,24 @@
 
     footer { text-align:center; font-size:0.65rem; color:#666; margin:40px 0 120px; }
 
+    /* Buttons - unified styles */
+    .btn {
+        display:inline-flex; align-items:center; justify-content:center;
+        gap:8px; padding:8px 16px; border-radius:20px; cursor:pointer;
+        font-weight:800; font-family:var(--font-heading); letter-spacing:1px;
+        border:2px solid var(--accent); text-decoration:none; transition:all .2s ease;
+        font-size:0.8rem;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-gold { background:var(--accent3); color:#000; border-color:var(--accent); }
+    .btn-gold:hover { background:var(--accent); }
+    .btn-green { background:#00ff00; color:#000; border-color:var(--accent3); }
+    .btn-green:hover { background:#b6ff66; }
+    .btn-blue { background:#4285f4; color:#fff; border-color:#fff; }
+    .btn-blue:hover { filter:brightness(1.1); }
+    .btn-outline { background:transparent; color:var(--accent3); border-color:var(--accent3); }
+    .btn-outline:hover { background:#111; }
+
     /* Video Section */
     .video-section {
         background: #141414;
@@ -434,9 +452,9 @@
             </div>
         </div>
         <div style="text-align:center; margin-top:16px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
-            <button id="exportCalendarBtn" style="background:#ffd700; color:#000; border:2px solid #00ff00; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:700; font-size:0.75rem;">💾 Export JSON</button>
-            <button id="importCalendarBtn" style="background:#00ff00; color:#000; border:2px solid #ffd700; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:700; font-size:0.75rem;">📥 Import JSON</button>
-            <button id="syncGoogleBtn" style="background:#4285f4; color:#fff; border:2px solid #fff; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:700; font-size:0.75rem;">☁️ Google Sync</button>
+            <button id="exportCalendarBtn" class="btn btn-gold" data-i18n="exportBtn">💾 Export JSON</button>
+            <button id="importCalendarBtn" class="btn btn-green" data-i18n="importBtn">📥 Import JSON</button>
+            <button id="syncGoogleBtn" class="btn btn-blue" data-i18n="syncBtn">☁️ Google Sync</button>
         </div>
         <input type="file" id="importFileInput" accept=".json" style="display:none;">
     </div>
