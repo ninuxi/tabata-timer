@@ -1818,13 +1818,22 @@ document.getElementById('importCalendarBtn').addEventListener('click', () => {
 
 // Video Selector Functions
 function switchVideo(sessionNum, videoIndex) {
+    console.log('Switching video for session', sessionNum, 'to index', videoIndex);
     const playlist = videoPlaylists[`session${sessionNum}`];
-    if (!playlist || !playlist[videoIndex]) return;
+    if (!playlist || !playlist[videoIndex]) {
+        console.error('Playlist or video not found for session', sessionNum, 'index', videoIndex);
+        return;
+    }
     
     const video = playlist[videoIndex];
+    console.log('Selected video:', video);
     const iframe = document.querySelector(`#sessione-${sessionNum} .video-container iframe`);
     if (iframe) {
-        iframe.src = `https://www.youtube-nocookie.com/embed/${video.id}`;
+        const newSrc = `https://www.youtube-nocookie.com/embed/${video.id}`;
+        console.log('Setting iframe src to:', newSrc);
+        iframe.src = newSrc;
+    } else {
+        console.error('Iframe not found for session', sessionNum);
     }
     
     // Update button states
@@ -1834,18 +1843,32 @@ function switchVideo(sessionNum, videoIndex) {
     
     // Save preference
     localStorage.setItem(`tabataVideoPreference${sessionNum}`, videoIndex);
+    console.log('Preference saved');
 }
 
 function buildVideoSelector(sessionNum) {
+    console.log('Building video selector for session', sessionNum);
     const playlist = videoPlaylists[`session${sessionNum}`];
-    if (!playlist) return;
+    if (!playlist) {
+        console.warn('No playlist for session', sessionNum);
+        return;
+    }
 
     const session = document.getElementById(`sessione-${sessionNum}`);
-    if (!session) return;
-    if (session.dataset.videoSelectorBuilt === '1') return; // avoid duplicate
+    if (!session) {
+        console.warn('Session element not found for', sessionNum);
+        return;
+    }
+    if (session.dataset.videoSelectorBuilt === '1') {
+        console.log('Selector already built for session', sessionNum);
+        return; // avoid duplicate
+    }
 
     const videoSection = session.querySelector('.video-section');
-    if (!videoSection) return;
+    if (!videoSection) {
+        console.warn('Video section not found for session', sessionNum);
+        return;
+    }
 
     // Optional label
     const label = document.createElement('div');
@@ -1867,8 +1890,13 @@ function buildVideoSelector(sessionNum) {
 
     // Insert label and selector before video container
     const videoContainer = videoSection.querySelector('.video-container');
-    videoContainer.parentNode.insertBefore(label, videoContainer);
-    videoContainer.parentNode.insertBefore(selector, videoContainer);
+    if (videoContainer) {
+        videoContainer.parentNode.insertBefore(label, videoContainer);
+        videoContainer.parentNode.insertBefore(selector, videoContainer);
+        console.log('Inserted selector for session', sessionNum);
+    } else {
+        console.warn('Video container not found for session', sessionNum);
+    }
 
     // Set default video
     const savedPreference = Number.isInteger(parseInt(localStorage.getItem(`tabataVideoPreference${sessionNum}`)))
