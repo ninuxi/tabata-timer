@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tabata-timer-v2.0.0';
+const CACHE_NAME = 'tabata-timer-v2.0.1';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -22,29 +22,32 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Fetch event - network first, fallback to cache for better updates
+// Fetch event: always try network for HTML (navigate), cache others network-first
 self.addEventListener('fetch', (event) => {
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  const accept = req.headers.get('accept') || '';
+
+  // For navigations/HTML: network first, no re-cache of HTML, fallback to cache
+  if (accept.includes('text/html')) {
+    event.respondWith(
+      fetch(req).catch(() => caches.match(req))
+    );
+    return;
+  }
+
+  // For other GETs: network first, then cache the fresh response, fallback to cache
   event.respondWith(
-    fetch(event.request)
+    fetch(req)
       .then((response) => {
-        // Check if valid response
         if(!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
-
-        // Clone and cache the response
         const responseToCache = response.clone();
-        caches.open(CACHE_NAME)
-          .then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-
+        caches.open(CACHE_NAME).then((cache) => cache.put(req, responseToCache));
         return response;
       })
-      .catch(() => {
-        // If network fails, try cache
-        return caches.match(event.request);
-      })
+      .catch(() => caches.match(req))
   );
 });
 

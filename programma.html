@@ -47,12 +47,24 @@
     }
     * { box-sizing:border-box; }
     body { margin:0; font-family:var(--font-body); background:var(--bg); color:var(--text); line-height:1.4; padding:0 0 80px; }
+    body.has-topnav { padding-top:64px; }
     header { padding:25px 18px 10px; text-align:center; }
     header h1 { margin:0 0 8px; font-family:var(--font-heading); font-size:2rem; letter-spacing:2px; color:var(--accent3); }
     header .subtitle { font-size:0.95rem; color:var(--accent3); font-weight:600; }
     header .meta { margin-top:10px; font-size:0.8rem; color:var(--muted); }
     .wrapper { max-width:900px; margin:0 auto; padding:0 18px; }
+    /* Top Navigation */
+    .top-nav { position:fixed; top:0; left:0; right:0; height:56px; background:#000; border-bottom:2px solid var(--accent); z-index:10000; display:flex; align-items:center; justify-content:space-between; padding:0 14px; }
+    .top-nav .brand { display:flex; align-items:center; gap:8px; font-family:var(--font-heading); letter-spacing:1px; color:var(--accent3); font-size:1rem; }
+    .top-nav .nav-links { display:flex; gap:8px; align-items:center; }
+    .top-nav .nav-links a { background:#111; color:var(--accent3); border:2px solid #333; border-radius:999px; padding:8px 12px; text-decoration:none; font-family:var(--font-heading); font-size:0.85rem; letter-spacing:1px; }
+    .top-nav .nav-links a.active, .top-nav .nav-links a:hover { background:var(--accent3); color:#000; border-color:var(--accent); }
+    .top-nav .lang { display:flex; gap:6px; }
+    .top-nav .lang button { padding:6px 10px; border-radius:999px; font-weight:700; font-size:0.72rem; cursor:pointer; border:2px solid #555; background:#333; color:#fff; }
+    @media (max-width:600px){ .top-nav { padding:0 8px; } .top-nav .brand { font-size:0.95rem; } .top-nav .nav-links a { padding:6px 10px; font-size:0.8rem; } }
     .notice { background:#181818; border:2px solid var(--accent); padding:12px 14px; border-radius:14px; font-size:0.9rem; margin:15px 0 30px; }
+    .section-title { font-family:var(--font-heading); font-size:1.8rem; text-align:center; color:var(--accent3); margin:30px 0 20px; letter-spacing:2px; }
+    .muted { color: var(--muted); }
 
     /* Weekly Calendar */
     .weekly-calendar { 
@@ -301,6 +313,15 @@
     .btn-outline { background:transparent; color:var(--accent3); border-color:var(--accent3); }
     .btn-outline:hover { background:#111; }
 
+    /* Tabs */
+    .tabs { max-width: 1000px; margin: 0 auto; padding: 0 18px; }
+    .tab-headers { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:20px auto 10px; }
+    .tab-link { background:#0f0f0f; color:var(--accent3); border:2px solid #2a2a2a; border-radius:999px; padding:10px 16px; cursor:pointer; font-family:var(--font-heading); letter-spacing:1px; font-size:0.9rem; transition:all .2s ease; }
+    .tab-link:hover { border-color:var(--accent3); transform: translateY(-1px); }
+    .tab-link.active { background:var(--accent3); color:#000; border-color:var(--accent); box-shadow:0 6px 16px rgba(255,215,0,.15); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
     /* Video Section */
     .video-section {
         background: #141414;
@@ -356,6 +377,14 @@
         margin-bottom: 15px;
         justify-content: center;
     }
+    .video-selector-label {
+        text-align:center;
+        font-family: var(--font-heading);
+        color: var(--accent3);
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
     .video-option {
         background: #222;
         color: #fff;
@@ -398,11 +427,19 @@
 </style>
 </head>
 <body>
-    <!-- Language Selector -->
-    <div style="position:fixed;top:10px;right:10px;z-index:9999;display:flex;gap:6px;">
-        <button id="langIT" style="background:#00ff00;color:#000;border:2px solid #00ff00;padding:6px 12px;border-radius:20px;cursor:pointer;font-weight:700;font-size:0.7rem;">🇮🇹 IT</button>
-        <button id="langEN" style="background:#333;color:#fff;border:2px solid #555;padding:6px 12px;border-radius:20px;cursor:pointer;font-weight:700;font-size:0.7rem;">🇬🇧 EN</button>
-    </div>
+    <nav class="top-nav no-print">
+        <div class="brand">⏱️ Tabata <span style="color:var(--accent)">Calisthenics</span></div>
+        <div class="nav-links">
+            <a id="navHome" href="index.html" data-i18n="navHome">🏠 Home</a>
+            <a id="navProgram" href="#" class="active" data-i18n="navProgram">📋 Programma</a>
+            <a id="navMusic" href="index.html#settings" data-i18n="navMusic">� Musica</a>
+            <a id="navUpdate" href="#" data-i18n="navUpdate">🔄 Aggiorna</a>
+        </div>
+        <div class="lang">
+            <button id="langIT">🇮🇹 IT</button>
+            <button id="langEN">🇬🇧 EN</button>
+        </div>
+    </nav>
 
     <header>
         <h1 data-i18n="title">PROGRAMMA TABATA CALISTHENICS</h1>
@@ -410,6 +447,14 @@
         <div class="meta" data-i18n="meta">Attrezzi: elastici vari • 2 pesetti da 2 kg • Obiettivo: forza funzionale, postura, tonicità</div>
         <div class="notice" data-i18n="notice">Formato: Tabata 20" lavoro / 10" recupero • 8 round = 4 minuti a blocco • Ripeti il blocco 5 volte = 20' di lavoro attivo (+ riscaldamento e stretching)</div>
     </header>
+    
+    <!-- Tabs Header and Overview Panel Start -->
+    <div class="tabs">
+        <div class="tab-headers">
+            <button class="tab-link active" data-tab="overview" data-i18n="tabOverview">📋 Programma</button>
+            <button class="tab-link" data-tab="data" data-i18n="tabData">💾 Dati & Backup</button>
+        </div>
+        <div id="tab-overview" class="tab-panel active">
     
     <!-- Weekly Calendar -->
     <div class="weekly-calendar no-print">
@@ -451,18 +496,13 @@
                 <div class="check"></div>
             </div>
         </div>
-        <div style="text-align:center; margin-top:16px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
-            <button id="exportCalendarBtn" class="btn btn-gold" data-i18n="exportBtn">💾 Export JSON</button>
-            <button id="importCalendarBtn" class="btn btn-green" data-i18n="importBtn">📥 Import JSON</button>
-            <button id="syncGoogleBtn" class="btn btn-blue" data-i18n="syncBtn">☁️ Google Sync</button>
-        </div>
-        <input type="file" id="importFileInput" accept=".json" style="display:none;">
+        <!-- Pulsanti Export/Import/Sync spostati nel tab "Dati & Backup" -->
     </div>
     
     <div class="wrapper">
         <!-- Sessions Overview (Grid View) -->
         <div id="sessionsOverview">
-            <h2 style="font-family:var(--font-heading); font-size:1.8rem; text-align:center; color:var(--accent3); margin:30px 0 20px; letter-spacing:2px;" data-i18n="programTitle">📋 LE TUE 5 SESSIONI</h2>
+            <h2 class="section-title" data-i18n="programTitle">📋 LE TUE 5 SESSIONI</h2>
             <div class="sessions-grid">
                 <!-- Session 1 Card -->
                 <div class="session-card" data-session="1">
@@ -657,11 +697,9 @@
                     Guida completa per la Sessione 1: Upper Body. Segui il ritmo del video per un allenamento ottimale. Adatta l'intensità al tuo livello.
                 </div>
             </div>
-        </section>
+    </section>
 
-        </section>
-
-        <!-- SESSIONE 2 -->
+    <!-- SESSIONE 2 -->
         <section class="session" id="sessione-2" style="display:none;">
             <h2 data-i18n="session2">🧩 Sessione 2 — Lower Body + Mobilità</h2>
             <div class="tagline" data-i18n="session2tag">Martedì / Venerdì • Focus: gambe, anche, equilibrio</div>
@@ -792,8 +830,6 @@
                     Guida completa per la Sessione 2: Lower Body. Perfetto per gambe, anche e mobilità. Segui il ritmo e adatta l'intensità al tuo livello.
                 </div>
             </div>
-        </section>
-
         </section>
 
         <!-- SESSIONE 3 -->
@@ -929,8 +965,6 @@
             </div>
         </section>
 
-        </section>
-
         <!-- SESSIONE 4 -->
         <section class="session" id="sessione-4" style="display:none;">
             <h2 data-i18n="session4">🧩 Sessione 4 — Cardio Power</h2>
@@ -1001,8 +1035,6 @@
                     <li><strong>Respirazione profonda</strong> — 1'</li>
                 </ul>
             </div>
-        </section>
-
         </section>
 
         <!-- SESSIONE 5 -->
@@ -1080,14 +1112,35 @@
                     <li>Migliora <strong>mobilità</strong> e <strong>prevenzione infortuni</strong></li>
                 </ul>
             </div>
-        </section>
-        </div> <!-- Fine sessionDetail -->
+    </section>
+    </div> <!-- Fine sessionDetail -->
+
+    </div> <!-- /wrapper -->
+
+        </div> <!-- /tab-overview -->
+
+        <!-- Tab: Dati & Backup -->
+        <div id="tab-data" class="tab-panel">
+            <div class="wrapper">
+                <section class="block" style="margin-top:20px;">
+                    <h3 class="" data-i18n="dataBackupTitle">💾 Dati & Backup</h3>
+                    <p class="muted" style="margin:0 0 14px;" data-i18n="dataBackupDesc">Esporta o importa i tuoi progressi e sincronizza con Google Drive (beta).</p>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+                        <button id="exportCalendarBtn" class="btn btn-gold" data-i18n="exportBtn">💾 Export JSON</button>
+                        <button id="importCalendarBtn" class="btn btn-green" data-i18n="importBtn">📥 Import JSON</button>
+                        <button id="syncGoogleBtn" class="btn btn-blue" data-i18n="syncBtn">☁️ Google Sync</button>
+                        <input type="file" id="importFileInput" accept=".json" style="display:none;">
+                    </div>
+                    <p class="print-note" data-i18n="backupNote">Suggerimento: conserva un backup anche su email o cloud.</p>
+                </section>
+            </div>
+        </div> <!-- /tab-data -->
+    </div> <!-- /tabs -->
 
         <footer>
             <p>Disclaimer: consultare un professionista prima di iniziare nuovi programmi di allenamento. Adatta sempre l'intensità al tuo livello.</p>
         </footer>
-    </div>
-
+    
     <div class="tools no-print">
         <button id="printBtn">🖨️ Stampa / PDF</button>
         <button id="downloadPdfBtn">⬇️ Scarica PDF (beta)</button>
@@ -1095,6 +1148,88 @@
     </div>
 
 <script>
+// Tabs Navigation
+document.addEventListener('DOMContentLoaded', () => {
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const panels = {
+        overview: document.getElementById('tab-overview'),
+        data: document.getElementById('tab-data')
+    };
+    function setActiveTab(name){
+        tabLinks.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === name));
+        Object.keys(panels).forEach(k => panels[k]?.classList.toggle('active', k === name));
+        localStorage.setItem('programTab', name);
+    }
+    const savedTab = localStorage.getItem('programTab') || 'overview';
+    setActiveTab(savedTab);
+    tabLinks.forEach(btn => btn.addEventListener('click', () => setActiveTab(btn.dataset.tab)));
+
+    // Top-nav Program link should show the overview tab and hide detail view
+    const navProgram = document.getElementById('navProgram');
+    const navUpdate = document.getElementById('navUpdate');
+    if (navProgram) {
+        navProgram.addEventListener('click', (e) => {
+            e.preventDefault();
+            const overviewBtn = document.querySelector('.tab-link[data-tab="overview"]');
+            overviewBtn?.click();
+            // Ensure overview grid visible
+            const sessionsOverviewEl = document.getElementById('sessionsOverview');
+            const sessionDetailEl = document.getElementById('sessionDetail');
+            if (sessionsOverviewEl && sessionDetailEl) {
+                sessionDetailEl.style.display = 'none';
+                sessionsOverviewEl.style.display = 'block';
+                // hide all session sections
+                document.querySelectorAll('.session').forEach(s => s.style.display = 'none');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Update link: clear caches and reload to fetch latest assets
+    if (navUpdate) {
+        navUpdate.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                // Clear Cache Storage
+                const keys = await caches.keys();
+                await Promise.all(keys.map(k => caches.delete(k)));
+            } catch(err) { /* ignore */ }
+            try {
+                // Unregister Service Workers
+                if ('serviceWorker' in navigator) {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(regs.map(r => r.unregister()));
+                }
+            } catch(err) { /* ignore */ }
+            // Reload with cache-busting param
+            const url = new URL(window.location.href);
+            url.searchParams.set('v', Date.now().toString());
+            window.location.replace(url.toString());
+        });
+    }
+
+    // Mark body to add padding for fixed top-nav
+    document.body.classList.add('has-topnav');
+
+    // Check for nocache param to force update
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('nocache')) {
+        (async () => {
+            try {
+                const keys = await caches.keys();
+                await Promise.all(keys.map(k => caches.delete(k)));
+            } catch(err) { /* ignore */ }
+            try {
+                if ('serviceWorker' in navigator) {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(regs.map(r => r.unregister()));
+                }
+            } catch(err) { /* ignore */ }
+            const cleanUrl = window.location.pathname;
+            window.location.replace(cleanUrl);
+        })();
+    }
+});
 // Session Navigation
 const sessionsOverview = document.getElementById('sessionsOverview');
 const sessionDetail = document.getElementById('sessionDetail');
@@ -1116,6 +1251,11 @@ sessionCards.forEach(card => {
         allSessions.forEach(s => s.style.display = 'none');
         if (selectedSession) {
             selectedSession.style.display = 'block';
+            // Ensure video selector exists for this session
+            const num = parseInt(sessionNum, 10);
+            if ([1,2,3].includes(num)) {
+                buildVideoSelector(num);
+            }
         }
         
         // Scroll to top
@@ -1464,7 +1604,16 @@ const translations = {
         videoDescSession1: 'Guida completa per la Sessione 1: Upper Body. Segui il ritmo del video per un allenamento ottimale. Adatta l\'intensità al tuo livello.',
         videoDescSession2: 'Guida completa per la Sessione 2: Lower Body. Perfetto per gambe, anche e mobilità. Segui il ritmo e adatta l\'intensità al tuo livello.',
         videoDescSession3: 'Guida completa per la Sessione 3: Full Body Dinamico. Allenamento totale esplosivo. Segui il ritmo e adatta l\'intensità al tuo livello.',
-        selectVideo: 'Scegli un video:'
+        selectVideo: 'Scegli un video:',
+        tabOverview: '📋 Programma',
+        tabData: '💾 Dati & Backup',
+        dataBackupTitle: '💾 Dati & Backup',
+        dataBackupDesc: 'Esporta o importa i tuoi progressi e sincronizza con Google Drive (beta).',
+        backupNote: 'Suggerimento: conserva un backup anche su email o cloud.',
+        navHome: '🏠 Home',
+        navProgram: '📋 Programma',
+        navMusic: '🎵 Musica',
+        navUpdate: '🔄 Aggiorna'
     },
     en: {
         title: 'TABATA CALISTHENICS PROGRAM',
@@ -1505,7 +1654,7 @@ const translations = {
         restDay: 'Rest',
         exportBtn: '💾 Export JSON',
         importBtn: '📥 Import JSON',
-        syncBtn: '☁️ Google Sync',
+    syncBtn: '☁️ Google Sync',
         programTitle: '📋 YOUR 5 SESSIONS',
         session1CardTitle: 'Upper Body + Core',
         session1Days: 'Monday / Thursday',
@@ -1529,7 +1678,16 @@ const translations = {
         videoDescSession1: 'Complete guide for Session 1: Upper Body. Follow the video pace for optimal workout. Adjust intensity to your level.',
         videoDescSession2: 'Complete guide for Session 2: Lower Body. Perfect for legs, hips and mobility. Follow the pace and adjust intensity to your level.',
         videoDescSession3: 'Complete guide for Session 3: Full Body Dynamic. Total explosive workout. Follow the pace and adjust intensity to your level.',
-        selectVideo: 'Choose a video:'
+        selectVideo: 'Choose a video:',
+        tabOverview: '📋 Program',
+        tabData: '💾 Data & Backup',
+        dataBackupTitle: '💾 Data & Backup',
+        dataBackupDesc: 'Export or import your progress and sync with Google Drive (beta).',
+        backupNote: 'Tip: keep a backup also on email or cloud.',
+        navHome: '🏠 Home',
+        navProgram: '📋 Program',
+        navMusic: '🎵 Music',
+        navUpdate: '🔄 Update'
     }
 };
 
@@ -1678,37 +1836,51 @@ function switchVideo(sessionNum, videoIndex) {
     localStorage.setItem(`tabataVideoPreference${sessionNum}`, videoIndex);
 }
 
-function initializeVideoSelectors() {
-    [1, 2, 3].forEach(sessionNum => {
-        const playlist = videoPlaylists[`session${sessionNum}`];
-        if (!playlist) return;
-        
-        const session = document.getElementById(`sessione-${sessionNum}`);
-        if (!session) return;
-        
-        const videoSection = session.querySelector('.video-section');
-        if (!videoSection) return;
-        
-        // Create selector buttons
-        const selector = document.createElement('div');
-        selector.className = 'video-selector';
-        
-        playlist.forEach((video, idx) => {
-            const btn = document.createElement('button');
-            btn.className = 'video-option';
-            btn.textContent = `${idx + 1}. ${video.title}`;
-            btn.onclick = () => switchVideo(sessionNum, idx);
-            selector.appendChild(btn);
-        });
-        
-        // Insert selector before video container
-        const videoContainer = videoSection.querySelector('.video-container');
-        videoContainer.parentNode.insertBefore(selector, videoContainer);
-        
-        // Set default video
-        const savedPreference = parseInt(localStorage.getItem(`tabataVideoPreference${sessionNum}`)) || 0;
-        switchVideo(sessionNum, savedPreference);
+function buildVideoSelector(sessionNum) {
+    const playlist = videoPlaylists[`session${sessionNum}`];
+    if (!playlist) return;
+
+    const session = document.getElementById(`sessione-${sessionNum}`);
+    if (!session) return;
+    if (session.dataset.videoSelectorBuilt === '1') return; // avoid duplicate
+
+    const videoSection = session.querySelector('.video-section');
+    if (!videoSection) return;
+
+    // Optional label
+    const label = document.createElement('div');
+    label.className = 'video-selector-label';
+    label.setAttribute('data-i18n', 'selectVideo');
+    label.textContent = (translations[currentLang] && translations[currentLang].selectVideo) || 'Scegli un video:';
+
+    // Create selector buttons
+    const selector = document.createElement('div');
+    selector.className = 'video-selector';
+    
+    playlist.forEach((video, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'video-option';
+        btn.textContent = `${idx + 1}. ${video.title}`;
+        btn.addEventListener('click', () => switchVideo(sessionNum, idx));
+        selector.appendChild(btn);
     });
+
+    // Insert label and selector before video container
+    const videoContainer = videoSection.querySelector('.video-container');
+    videoContainer.parentNode.insertBefore(label, videoContainer);
+    videoContainer.parentNode.insertBefore(selector, videoContainer);
+
+    // Set default video
+    const savedPreference = Number.isInteger(parseInt(localStorage.getItem(`tabataVideoPreference${sessionNum}`)))
+        ? parseInt(localStorage.getItem(`tabataVideoPreference${sessionNum}`))
+        : 0;
+    switchVideo(sessionNum, savedPreference);
+
+    session.dataset.videoSelectorBuilt = '1';
+}
+
+function initializeVideoSelectors() {
+    [1, 2, 3].forEach(buildVideoSelector);
 }
 
 // Initialize on page load
