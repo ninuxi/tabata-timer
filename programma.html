@@ -330,6 +330,37 @@
         border-left: 3px solid var(--accent3);
     }
 
+    /* Video Selector */
+    .video-selector {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+        justify-content: center;
+    }
+    .video-option {
+        background: #222;
+        color: #fff;
+        border: 2px solid #444;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+    }
+    .video-option:hover {
+        border-color: var(--accent3);
+        transform: translateY(-2px);
+    }
+    .video-option.active {
+        background: var(--accent3);
+        color: #000;
+        border-color: var(--accent);
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    }
+
     @media (max-width:600px){
         header h1 { font-size:1.55rem; }
         .tabata-grid { grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); }
@@ -867,6 +898,17 @@
                     </div>
                 </details>
             </div>
+
+            <!-- Video YouTube -->
+            <div class="video-section">
+                <h3>🎥 Video Guida Allenamento</h3>
+                <div class="video-container">
+                    <iframe src="https://www.youtube-nocookie.com/embed/rBXmeNcDz1E" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div class="video-description" data-i18n="videoDescSession3">
+                    Guida completa per la Sessione 3: Full Body Dinamico. Allenamento totale esplosivo. Segui il ritmo e adatta l'intensità al tuo livello.
+                </div>
+            </div>
         </section>
 
         </section>
@@ -1402,7 +1444,9 @@ const translations = {
         goToHome: '🏠 Vai a Home',
         chooseMusic: '🎵 Scegli Musica',
         videoDescSession1: 'Guida completa per la Sessione 1: Upper Body. Segui il ritmo del video per un allenamento ottimale. Adatta l\'intensità al tuo livello.',
-        videoDescSession2: 'Guida completa per la Sessione 2: Lower Body. Perfetto per gambe, anche e mobilità. Segui il ritmo e adatta l\'intensità al tuo livello.'
+        videoDescSession2: 'Guida completa per la Sessione 2: Lower Body. Perfetto per gambe, anche e mobilità. Segui il ritmo e adatta l\'intensità al tuo livello.',
+        videoDescSession3: 'Guida completa per la Sessione 3: Full Body Dinamico. Allenamento totale esplosivo. Segui il ritmo e adatta l\'intensità al tuo livello.',
+        selectVideo: 'Scegli un video:'
     },
     en: {
         title: 'TABATA CALISTHENICS PROGRAM',
@@ -1465,8 +1509,29 @@ const translations = {
         goToHome: '🏠 Go to Home',
         chooseMusic: '🎵 Choose Music',
         videoDescSession1: 'Complete guide for Session 1: Upper Body. Follow the video pace for optimal workout. Adjust intensity to your level.',
-        videoDescSession2: 'Complete guide for Session 2: Lower Body. Perfect for legs, hips and mobility. Follow the pace and adjust intensity to your level.'
+        videoDescSession2: 'Complete guide for Session 2: Lower Body. Perfect for legs, hips and mobility. Follow the pace and adjust intensity to your level.',
+        videoDescSession3: 'Complete guide for Session 3: Full Body Dynamic. Total explosive workout. Follow the pace and adjust intensity to your level.',
+        selectVideo: 'Choose a video:'
     }
+};
+
+// Video Playlist Database
+const videoPlaylists = {
+    session1: [
+        { id: 'SEqetqEW5uU', title: 'Allenamento Upper Body', channel: 'Coach Tabata' },
+        { id: 'l7AmwQKLpDU', title: 'Push & Pull HIIT', channel: 'Fitness Extreme' },
+        { id: 'KZFIg1DTwJ4', title: 'Upper Body Power', channel: 'Calisthenic Masters' }
+    ],
+    session2: [
+        { id: 'hYlfKDKVWsQ', title: 'Lower Body Tabata', channel: 'HIIT Academy' },
+        { id: 'aPKe9wdVvdg', title: 'Leg Blast Workout', channel: 'Fitness Pro' },
+        { id: '0iVJLqPqJZU', title: 'Lower Body Strength', channel: 'Calisthenics Tribe' }
+    ],
+    session3: [
+        { id: 'rBXmeNcDz1E', title: 'Full Body HIIT', channel: 'Workout Generator' },
+        { id: 'pgJZkWa0EHk', title: 'Total Body Tabata', channel: 'Quick Fitness' },
+        { id: 'b9e-rGX8sW0', title: 'Full Body Power', channel: 'Fitness Channel' }
+    ]
 };
 
 let currentLang = localStorage.getItem('tabataLang') || 'it';
@@ -1573,6 +1638,64 @@ document.getElementById('exportCalendarBtn').addEventListener('click', () => {
 
 document.getElementById('importCalendarBtn').addEventListener('click', () => {
     document.getElementById('importFileInput').click();
+});
+
+// Video Selector Functions
+function switchVideo(sessionNum, videoIndex) {
+    const playlist = videoPlaylists[`session${sessionNum}`];
+    if (!playlist || !playlist[videoIndex]) return;
+    
+    const video = playlist[videoIndex];
+    const iframe = document.querySelector(`#sessione-${sessionNum} .video-container iframe`);
+    if (iframe) {
+        iframe.src = `https://www.youtube-nocookie.com/embed/${video.id}`;
+    }
+    
+    // Update button states
+    document.querySelectorAll(`#sessione-${sessionNum} .video-option`).forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === videoIndex);
+    });
+    
+    // Save preference
+    localStorage.setItem(`tabataVideoPreference${sessionNum}`, videoIndex);
+}
+
+function initializeVideoSelectors() {
+    [1, 2, 3].forEach(sessionNum => {
+        const playlist = videoPlaylists[`session${sessionNum}`];
+        if (!playlist) return;
+        
+        const session = document.getElementById(`sessione-${sessionNum}`);
+        if (!session) return;
+        
+        const videoSection = session.querySelector('.video-section');
+        if (!videoSection) return;
+        
+        // Create selector buttons
+        const selector = document.createElement('div');
+        selector.className = 'video-selector';
+        
+        playlist.forEach((video, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'video-option';
+            btn.textContent = `${idx + 1}. ${video.title}`;
+            btn.onclick = () => switchVideo(sessionNum, idx);
+            selector.appendChild(btn);
+        });
+        
+        // Insert selector before video container
+        const videoContainer = videoSection.querySelector('.video-container');
+        videoContainer.parentNode.insertBefore(selector, videoContainer);
+        
+        // Set default video
+        const savedPreference = parseInt(localStorage.getItem(`tabataVideoPreference${sessionNum}`)) || 0;
+        switchVideo(sessionNum, savedPreference);
+    });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initializeVideoSelectors, 100);
 });
 
 document.getElementById('importFileInput').addEventListener('change', (e) => {
