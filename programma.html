@@ -283,6 +283,53 @@
 
     footer { text-align:center; font-size:0.65rem; color:#666; margin:40px 0 120px; }
 
+    /* Video Section */
+    .video-section {
+        background: #141414;
+        border: 2px solid #222;
+        border-radius: 18px;
+        padding: 20px;
+        margin: 25px 0;
+    }
+    .video-section h3 {
+        margin: 0 0 15px;
+        font-size: 1.05rem;
+        letter-spacing: 1px;
+        font-family: var(--font-heading);
+        color: var(--accent2);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .video-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+        border-radius: 14px;
+        background: #000;
+        margin-bottom: 15px;
+    }
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 14px;
+    }
+    .video-description {
+        font-size: 0.9rem;
+        color: var(--muted);
+        line-height: 1.5;
+        padding: 10px;
+        background: #0a0a0a;
+        border-radius: 10px;
+        border-left: 3px solid var(--accent3);
+    }
+
     @media (max-width:600px){
         header h1 { font-size:1.55rem; }
         .tabata-grid { grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); }
@@ -550,6 +597,17 @@
                     </div>
                 </details>
             </div>
+
+            <!-- Video YouTube -->
+            <div class="video-section">
+                <h3>🎥 Video Guida Allenamento</h3>
+                <div class="video-container">
+                    <iframe src="https://www.youtube-nocookie.com/embed/SEqetqEW5uU" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div class="video-description" data-i18n="videoDescSession1">
+                    Guida completa per la Sessione 1: Upper Body. Segui il ritmo del video per un allenamento ottimale. Adatta l'intensità al tuo livello.
+                </div>
+            </div>
         </section>
 
         </section>
@@ -673,6 +731,17 @@
                         </figure>
                     </div>
                 </details>
+            </div>
+
+            <!-- Video YouTube -->
+            <div class="video-section">
+                <h3>🎥 Video Guida Allenamento</h3>
+                <div class="video-container">
+                    <iframe src="https://www.youtube-nocookie.com/embed/hYlfKDKVWsQ" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div class="video-description" data-i18n="videoDescSession2">
+                    Guida completa per la Sessione 2: Lower Body. Perfetto per gambe, anche e mobilità. Segui il ritmo e adatta l'intensità al tuo livello.
+                </div>
             </div>
         </section>
 
@@ -1331,7 +1400,9 @@ const translations = {
         duration30: '~30 minuti',
         backToProgram: '← Torna a Programma',
         goToHome: '🏠 Vai a Home',
-        chooseMusic: '🎵 Scegli Musica'
+        chooseMusic: '🎵 Scegli Musica',
+        videoDescSession1: 'Guida completa per la Sessione 1: Upper Body. Segui il ritmo del video per un allenamento ottimale. Adatta l\'intensità al tuo livello.',
+        videoDescSession2: 'Guida completa per la Sessione 2: Lower Body. Perfetto per gambe, anche e mobilità. Segui il ritmo e adatta l\'intensità al tuo livello.'
     },
     en: {
         title: 'TABATA CALISTHENICS PROGRAM',
@@ -1392,7 +1463,9 @@ const translations = {
         duration30: '~30 minutes',
         backToProgram: '← Back to Program',
         goToHome: '🏠 Go to Home',
-        chooseMusic: '🎵 Choose Music'
+        chooseMusic: '🎵 Choose Music',
+        videoDescSession1: 'Complete guide for Session 1: Upper Body. Follow the video pace for optimal workout. Adjust intensity to your level.',
+        videoDescSession2: 'Complete guide for Session 2: Lower Body. Perfect for legs, hips and mobility. Follow the pace and adjust intensity to your level.'
     }
 };
 
